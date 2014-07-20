@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="server-endpoints-android">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/server/build/libs/server-endpoints-android.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
