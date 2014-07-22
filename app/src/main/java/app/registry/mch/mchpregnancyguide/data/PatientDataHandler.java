@@ -52,7 +52,6 @@ public class PatientDataHandler extends SQLiteOpenHelper {
     }
 
     public void addRecommendation(Patient patient) {
-
         ContentValues values = new ContentValues();
         values.put(COLUMN_PATIENTID,patient.get_patientID());
         values.put(COLUMN_REGID, patient.get_regID());
@@ -62,14 +61,13 @@ public class PatientDataHandler extends SQLiteOpenHelper {
         values.put(COLUMN_FACILITYNAME, patient.get_facilityName());
         values.put(COLUMN_FACILITYPHONENUMBER, patient.get_facilityPhoneNumber());
 
-
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.insert(TABLE_PATIENT, null, values);
         db.close();
     }
 
-    public Patient findPatient() {
+    public Patient getPatient() {
         String query = "Select * FROM " + TABLE_PATIENT + " WHERE " + COLUMN_PATIENTID + " =  1";
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -97,29 +95,5 @@ public class PatientDataHandler extends SQLiteOpenHelper {
         return patient;
     }
 
-    public boolean deleteRecommendation(int recommendationDay) {
-
-
-        boolean result = false;
-        /**TODO
-
-        String query = "Select * FROM " + TABLE_RECOMMENDATIONS + " WHERE " + COLUMN_RECOMMENDATIONDAY + " =  \"" + Integer.toString(recommendationDay) + "\"";
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery(query, null);
-
-        Recommendation recommendation = new Recommendation();
-
-        if (cursor.moveToFirst()) {
-            recommendation.setID(Integer.parseInt(cursor.getString(0)));
-            db.delete(TABLE_RECOMMENDATIONS, COLUMN_ID + " = ?",
-                    new String[] { String.valueOf(recommendation.getID()) });
-            cursor.close();
-            result = true;
-        }
-        db.close();*/
-        return result;
-    }
 }
 

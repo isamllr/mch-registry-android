@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 /**
  * Created by Isa on 18.07.2014.
@@ -17,8 +20,8 @@ public class VisitDataHandler extends SQLiteOpenHelper {
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_VISITTEXT = "visittext";
-    public static final String COLUMN_VISITDAY = "visitday";
-    public static final String COLUMN_VISITFACILITY = "visitfacility";
+    public static final String COLUMN_RECEIVEDDATE = "visitfacility";
+    public static final String COLUMN_VISITDATE = "visitday";
 
     public VisitDataHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -30,8 +33,8 @@ public class VisitDataHandler extends SQLiteOpenHelper {
                 "CREATE TABLE " + TABLE_VISITS + "("
                         + COLUMN_ID + " INTEGER PRIMARY KEY,"
                         + COLUMN_VISITTEXT + " TEXT,"
-                        + COLUMN_VISITDAY + " TEXT"
-                        + COLUMN_VISITFACILITY + " TEXT,"
+                        + COLUMN_RECEIVEDDATE+ " TEXT,"
+                        + COLUMN_VISITDATE + " TEXT"
                         + ")";
         db.execSQL(CREATE_VISITS_TABLE);
     }
@@ -46,8 +49,8 @@ public class VisitDataHandler extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_VISITTEXT,visit.get_visitText());
-        values.put(COLUMN_VISITDAY, visit.get_visitDay());
-        values.put(COLUMN_VISITTEXT, visit.get_visitFacility());
+        values.put(COLUMN_RECEIVEDDATE, visit.get_receivedDate());
+        values.put(COLUMN_VISITDATE, visit.get_visitDate());
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -55,8 +58,8 @@ public class VisitDataHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Visit findRecommendation(int visitDay) {
-        String query = "Select * FROM " + TABLE_VISITS + " WHERE " + COLUMN_VISITDAY + " =  \"" + Integer.toString(visitDay) + "\"";
+    public Visit findVisit(int visitDate) {
+        String query = "Select * FROM " + TABLE_VISITS + " WHERE " + COLUMN_VISITDATE + " =  \"" + Integer.toString(visitDate) + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -68,8 +71,8 @@ public class VisitDataHandler extends SQLiteOpenHelper {
             cursor.moveToFirst();
             visit.setID(Integer.parseInt(cursor.getString(0)));
             visit.set_visitText(cursor.getString(1));
-            visit.set_visitDay(cursor.getString(2));
-            visit.set_visitFacility(cursor.getString(3));
+            visit.set_receivedDate(cursor.getString(2));
+            visit.set_visitDate(cursor.getString(3));
             cursor.close();
         } else {
             visit = null;
@@ -78,11 +81,11 @@ public class VisitDataHandler extends SQLiteOpenHelper {
         return visit;
     }
 
-    public boolean deleteVisit(int visitDay) {
+    public boolean deleteVisit(int visitID) {
 
         boolean result = false;
 
-        String query = "Select * FROM " + TABLE_VISITS + " WHERE " + COLUMN_VISITDAY + " =  \"" + Integer.toString(visitDay) + "\"";
+        String query = "Select * FROM " + TABLE_VISITS + " WHERE " + COLUMN_ID + " =  \"" + Integer.toString(visitID) + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -99,6 +102,36 @@ public class VisitDataHandler extends SQLiteOpenHelper {
         }
         db.close();
         return result;
+    }
+
+    public ArrayList<Visit> getAllVisits(){
+
+        String query = "Select * FROM " + TABLE_VISITS;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        ArrayList<Visit> resultList = new ArrayList<Visit>();
+        Visit visitRecord = new Visit();
+
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                try {
+                    visitRecord.setID(Integer.parseInt(cursor.getString(0)));
+                    visitRecord.set_visitText(cursor.getString(1));
+                    visitRecord.set_receivedDate(cursor.getString(2));
+                    visitRecord.set_visitDate(cursor.getString(3));
+                } catch (Exception e) {
+                    Log.e("SQLLite getVisit Error", "Error " + e.toString());
+                }
+                resultList.add(visitRecord);
+            }
+        }
+
+        cursor.close();
+        db.close();
+
+        return resultList;
     }
 
 }

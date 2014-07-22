@@ -6,23 +6,31 @@ package app.registry.mch.mchpregnancyguide.data;
 public class Visit {
     private int _id;
     private String _visitText;
-    private String _visitDay;
-    private String _visitFacility;
+    private String _receivedDate;
+    private String _visitDate;
 
     public Visit() {
     }
 
-    public Visit(int _id, String _visitText, String _visitDay, String _visitFacility) {
-        this._id = _id;
+    public Visit(String _visitText, String _receivedDate, int _id, String _visitDate) {
         this._visitText = _visitText;
-        this._visitDay = _visitDay;
-        this._visitFacility = _visitFacility;
+        this._receivedDate = _receivedDate;
+        this._id = _id;
+        this._visitDate = _visitDate;
     }
 
-    public Visit(String _visitText, String _visitDay, String _visitFacility) {
+    public Visit(String _visitText, String _receivedDate, String _visitDate) {
         this._visitText = _visitText;
-        this._visitDay = _visitDay;
-        this._visitFacility = _visitFacility;
+        this._receivedDate = _receivedDate;
+        this._visitDate = _visitDate;
+    }
+
+    public String get_receivedDate() {
+        return _receivedDate;
+    }
+
+    public void set_receivedDate(String _receivedDate) {
+        this._receivedDate = _receivedDate;
     }
 
     public String get_visitText() {
@@ -33,27 +41,19 @@ public class Visit {
         this._visitText = _visitText;
     }
 
-    public String get_visitDay() {
-        return _visitDay;
-    }
-
-    public void set_visitDay(String _visitDay) {
-        this._visitDay = _visitDay;
-    }
-
-    public String get_visitFacility() {
-        return _visitFacility;
-    }
-
-    public void set_visitFacility(String _visitFacility) {
-        this._visitFacility = _visitFacility;
-    }
-
     public void setID(int id) {
         this._id = id;
     }
 
     public int getID() {
         return this._id;
+    }
+
+    public String get_visitDate() {
+        return _visitDate;
+    }
+
+    public void set_visitDate(String _visitDate) {
+        this._visitDate = _visitDate;
     }
 }

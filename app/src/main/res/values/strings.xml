@@ -13,5 +13,8 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
+    <string name="title_activity_phone_number">PhoneNumberActivity</string>
+    <string name="enter_phone_number">Please enter your mobile phone number:</string>
+    <string name="phone_format">Example: +380 xx xxx-xx-xx for a Ukrainian number.</string>
 
 </resources>

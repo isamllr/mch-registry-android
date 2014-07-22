@@ -1,5 +1,7 @@
 package app.registry.mch.mchpregnancyguide.data;
 
+
+
 /**
  * Created by Isa on 18.07.2014.
  */
@@ -7,20 +9,23 @@ public class Recommendation {
 
     private int _id;
     private String _recommendationText;
+    private String _receivedDate;
     private int _recommendationDay;
 
     public Recommendation() {
     }
 
-    public Recommendation(int id, String recommendationText, int recommendationDay) {
-        this._id = id;
-        this._recommendationText = recommendationText;
-        this._recommendationDay = recommendationDay;
+    public Recommendation(int _id, String _recommendationText, String _receivedDate, int _recommendationDay) {
+        this._id = _id;
+        this._recommendationText = _recommendationText;
+        this._receivedDate = _receivedDate;
+        this._recommendationDay = _recommendationDay;
     }
 
-    public Recommendation(String recommendationText, int recommendationDay) {
-        this._recommendationText = recommendationText;
-        this._recommendationDay = recommendationDay;
+    public Recommendation(String _recommendationText, String _receivedDate, int _recommendationDay) {
+        this._recommendationText = _recommendationText;
+        this._receivedDate = _receivedDate;
+        this._recommendationDay = _recommendationDay;
     }
 
     public void setID(int id) {
@@ -45,5 +50,13 @@ public class Recommendation {
 
     public void set_recommendationDay(int _recommendationDay) {
         this._recommendationDay = _recommendationDay;
+    }
+
+    public String get_receivedDate() {
+        return _receivedDate;
+    }
+
+    public void set_receivedDate(String _receivedDate) {
+        this._receivedDate = _receivedDate;
     }
 }
