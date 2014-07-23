@@ -13,8 +13,13 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
-    <string name="title_activity_phone_number">PhoneNumberActivity</string>
-    <string name="enter_phone_number">Please enter your mobile phone number:</string>
-    <string name="phone_format">Example: +380 xx xxx-xx-xx for a Ukrainian number.</string>
+    <string name="title_activity_phone_number">Mobile Phone Number</string>
+    <string name="enter_phone_number">Your mobile phone number:</string>
+    <string name="phone_format">Format: +380 xx xxx xx xx for a Ukrainian number</string>
+    <string name="action_visits">Visits</string>
+    <string name="action_login">Login</string>
+    <string name="action_recommendations">Recommendations</string>
+    <string name="action_phonenumber">Mobile Number</string>
+    <string name="number_invalid">The phone number format is invalid, please try again</string>
 
 </resources>

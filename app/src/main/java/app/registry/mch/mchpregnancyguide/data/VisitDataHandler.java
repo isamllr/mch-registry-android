@@ -19,9 +19,9 @@ public class VisitDataHandler extends SQLiteOpenHelper {
     private static final String TABLE_VISITS = "visits";
 
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_VISITTEXT = "visittext";
-    public static final String COLUMN_RECEIVEDDATE = "visitfacility";
-    public static final String COLUMN_VISITDATE = "visitday";
+    public static final String COLUMN_VISITTEXT = "_visitText";
+    public static final String COLUMN_RECEIVEDDATE = "_visitFacility";
+    public static final String COLUMN_VISITDATE = "_visitDay";
 
     public VisitDataHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -33,8 +33,8 @@ public class VisitDataHandler extends SQLiteOpenHelper {
                 "CREATE TABLE " + TABLE_VISITS + "("
                         + COLUMN_ID + " INTEGER PRIMARY KEY,"
                         + COLUMN_VISITTEXT + " TEXT,"
-                        + COLUMN_RECEIVEDDATE+ " TEXT,"
-                        + COLUMN_VISITDATE + " TEXT"
+                        + COLUMN_RECEIVEDDATE+ " DATETIME,"
+                        + COLUMN_VISITDATE + " DATETIME"
                         + ")";
         db.execSQL(CREATE_VISITS_TABLE);
     }
@@ -65,20 +65,19 @@ public class VisitDataHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(query, null);
 
-        Visit visit = new Visit();
+        Visit visitRecord = new Visit();
 
         if (cursor.moveToFirst()) {
             cursor.moveToFirst();
-            visit.setID(Integer.parseInt(cursor.getString(0)));
-            visit.set_visitText(cursor.getString(1));
-            visit.set_receivedDate(cursor.getString(2));
-            visit.set_visitDate(cursor.getString(3));
+            visitRecord.setID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+            visitRecord.set_visitText(cursor.getString(cursor.getColumnIndex(COLUMN_VISITTEXT)));
+            visitRecord.set_receivedDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECEIVEDDATE)));
+            visitRecord.set_visitDate(cursor.getString(cursor.getColumnIndex(COLUMN_VISITDATE)));
             cursor.close();
-        } else {
-            visit = null;
         }
+
         db.close();
-        return visit;
+        return visitRecord;
     }
 
     public boolean deleteVisit(int visitID) {
@@ -114,18 +113,18 @@ public class VisitDataHandler extends SQLiteOpenHelper {
         ArrayList<Visit> resultList = new ArrayList<Visit>();
         Visit visitRecord = new Visit();
 
-        if (cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
+        if (cursor.moveToFirst()) {
+            do {
                 try {
-                    visitRecord.setID(Integer.parseInt(cursor.getString(0)));
-                    visitRecord.set_visitText(cursor.getString(1));
-                    visitRecord.set_receivedDate(cursor.getString(2));
-                    visitRecord.set_visitDate(cursor.getString(3));
+                    visitRecord.setID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+                    visitRecord.set_visitText(cursor.getString(cursor.getColumnIndex(COLUMN_VISITTEXT)));
+                    visitRecord.set_receivedDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECEIVEDDATE)));
+                    visitRecord.set_visitDate(cursor.getString(cursor.getColumnIndex(COLUMN_VISITDATE)));
+                    resultList.add(visitRecord);
                 } catch (Exception e) {
                     Log.e("SQLLite getVisit Error", "Error " + e.toString());
                 }
-                resultList.add(visitRecord);
-            }
+            }while (cursor.moveToNext());
         }
 
         cursor.close();

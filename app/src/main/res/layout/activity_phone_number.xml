@@ -41,6 +41,6 @@
         android:text="@string/phone_format"
         android:id="@+id/phone_format"
         android:layout_below="@+id/input_phone"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>

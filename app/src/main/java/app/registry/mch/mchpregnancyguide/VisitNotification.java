@@ -52,10 +52,8 @@ public class VisitNotification {
 
 
         final String ticker = exampleString;
-        final String title = res.getString(
-                R.string.visit_notification_title_template, exampleString);
-        final String text = res.getString(
-                R.string.visit_notification_placeholder_text_template, exampleString);
+        final String title = res.getString(R.string.visit_notification_title_template, exampleString);
+        final String text = res.getString(R.string.visit_notification_placeholder_text_template, exampleString);
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 

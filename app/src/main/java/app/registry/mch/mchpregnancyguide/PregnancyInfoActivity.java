@@ -2,6 +2,7 @@ package app.registry.mch.mchpregnancyguide;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,10 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import app.registry.mch.mchpregnancyguide.data.PatientDataHandler;
+
+import static android.widget.Toast.LENGTH_LONG;
+
 
 public class PregnancyInfoActivity extends Activity {
 
@@ -35,6 +40,13 @@ public class PregnancyInfoActivity extends Activity {
             new GcmRegistrationAsyncTask().execute(this);
         }else{
             // Otherwise, prompt user to get valid Play Services APK.
+        }
+
+        PatientDataHandler pdh = new PatientDataHandler(this, null, null, 1);
+
+        if(pdh.getPatient().get_mobileNumber().compareTo("mobileNumber")==0) {
+            Intent intent = new Intent(this, PhoneNumberActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -52,7 +64,25 @@ public class PregnancyInfoActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
             return true;
+        }
+        if(id == R.id.action_login){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+        if(id == R.id.action_recommendations){
+            Intent intent = new Intent(this, RecommendationsActivity.class);
+            startActivity(intent);
+        }
+        if(id == R.id.action_visits){
+            Intent intent = new Intent(this, VisitActivity.class);
+            startActivity(intent);
+        }
+        if(id == R.id.action_phonenumber){
+            Intent intent = new Intent(this, PhoneNumberActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -136,12 +166,13 @@ class GcmRegistrationAsyncTask extends AsyncTask<Context, Void, String> {
     }
 
     private void storeRegistrationId(String regId) {
-        //TODO
+        PatientDataHandler pdh = new PatientDataHandler(context, null, null, 1);
+        pdh.updateRegId(regId);
     }
 
     @Override
     protected void onPostExecute(String msg) {
-        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, msg, LENGTH_LONG).show();
         Logger.getLogger("REGISTRATION").log(Level.INFO, msg);
     }
 }

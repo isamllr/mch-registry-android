@@ -19,9 +19,9 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
     private static final String TABLE_RECOMMENDATIONS = "recommendations";
 
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_RECOMMENDATIONTEXT = "recomendationtext";
-    public static final String COLUMN_RECOMMENDATIONDAY = "day";
-    public static final String COLUMN_RECEIVEDDATE = "daterecieved";
+    public static final String COLUMN_RECOMMENDATIONTEXT = "_recomendationText";
+    public static final String COLUMN_RECOMMENDATIONDAY = "_recommendationDay";
+    public static final String COLUMN_RECEIVEDDATE = "_receivedDate";
 
     public RecommendationDataHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -34,7 +34,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
                 + COLUMN_ID + " INTEGER PRIMARY KEY,"
                 + COLUMN_RECOMMENDATIONTEXT + " TEXT,"
                 + COLUMN_RECOMMENDATIONDAY + " INTEGER,"
-                + COLUMN_RECEIVEDDATE + " TEXT"
+                + COLUMN_RECEIVEDDATE + " DATETIME"
                 + ")";
         db.execSQL(CREATE_RECOMMENDATIONS_TABLE);
     }
@@ -68,18 +68,18 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
         ArrayList<Recommendation> resultList = new ArrayList<Recommendation>();
         Recommendation recommendationRecord = new Recommendation();
 
-        if (cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
+        if (cursor.moveToFirst()) {
+            do {
                 try {
-                    recommendationRecord.setID(Integer.parseInt(cursor.getString(0)));
-                    recommendationRecord.set_recommendationText(cursor.getString(1));
-                    recommendationRecord.set_recommendationDay(Integer.parseInt(cursor.getString(2)));
-                    recommendationRecord.set_receivedDate(cursor.getString(3));
+                    recommendationRecord.setID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+                    recommendationRecord.set_recommendationText(cursor.getString(cursor.getColumnIndex(COLUMN_RECOMMENDATIONTEXT)));
+                    recommendationRecord.set_recommendationDay(cursor.getInt(cursor.getColumnIndex(COLUMN_RECOMMENDATIONDAY)));
+                    recommendationRecord.set_receivedDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECEIVEDDATE)));
+                    resultList.add(recommendationRecord);
                 } catch (Exception e) {
                     Log.e("SQLLite getRecommendation Error", "Error " + e.toString());
                 }
-                resultList.add(recommendationRecord);
-            }
+            }while (cursor.moveToNext());
         }
 
         cursor.close();
@@ -93,11 +93,8 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
         boolean result = false;
 
         String query = "Select * FROM " + TABLE_RECOMMENDATIONS + " WHERE " + COLUMN_ID + " =  \"" + Integer.toString(recommendationID) + "\"";
-
         SQLiteDatabase db = this.getWritableDatabase();
-
         Cursor cursor = db.rawQuery(query, null);
-
         Recommendation recommendation = new Recommendation();
 
         if (cursor.moveToFirst()) {
@@ -113,11 +110,8 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 
     public Recommendation findRecommendation(int recommendationID) {
         String query = "Select * FROM " + TABLE_RECOMMENDATIONS + " WHERE " + COLUMN_ID + " =  \"" + Integer.toString(recommendationID) + "\"";
-
         SQLiteDatabase db = this.getWritableDatabase();
-
         Cursor cursor = db.rawQuery(query, null);
-
         Recommendation recommendation = new Recommendation();
 
         if (cursor.moveToFirst()) {

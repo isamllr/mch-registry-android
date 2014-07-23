@@ -9,8 +9,8 @@ public class Recommendation {
 
     private int _id;
     private String _recommendationText;
-    private String _receivedDate;
     private int _recommendationDay;
+    private String _receivedDate;
 
     public Recommendation() {
     }

@@ -2,7 +2,9 @@ package app.registry.mch.mchpregnancyguide;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,32 +13,37 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import app.registry.mch.mchpregnancyguide.data.PatientDataHandler;
+
 import static android.widget.Toast.LENGTH_LONG;
 
 public class PhoneNumberActivity extends Activity implements View.OnClickListener{
 
     private Button btnOK;
-    private EditText mobilePhoneNumber = (EditText) findViewById(R.id.input_phone);
+    private EditText mobilePhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_number);
 
+        /* Load phone input field */
+        mobilePhoneNumber = (EditText) findViewById(R.id.input_phone);
         TelephonyManager tMgr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
-        String tmPhoneNumber = tMgr.getLine1Number();
-
-        mobilePhoneNumber.setText(tmPhoneNumber);
+        mobilePhoneNumber.setText(tMgr.getLine1Number());
         mobilePhoneNumber.requestFocus();
+        mobilePhoneNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
+        /* Load OK Button */
+        btnOK = (Button) findViewById(R.id.btnOK);
         btnOK.setOnClickListener(this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.phone_number, menu);
-        return true;
+        //getMenuInflater().inflate(R.menu.phone_number, menu);
+        return false;
     }
 
     @Override
@@ -53,9 +60,22 @@ public class PhoneNumberActivity extends Activity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
+        if(validatePhoneNumber(mobilePhoneNumber.getText().toString())){
+            PatientDataHandler pdh = new PatientDataHandler(this, null, null, 1);
+            pdh.updateMobilePhoneNumber(mobilePhoneNumber.getText().toString());
 
-        Toast.makeText(this, mobilePhoneNumber.getText() + " it is!", LENGTH_LONG);
-        //save phone number
+            //Start main activity
+            Intent intent = new Intent(this, PregnancyInfoActivity.class);
+            startActivity(intent);
+
+        }else{
+            Toast.makeText(this, getString(R.string.number_invalid), LENGTH_LONG);
+        }
+    }
+
+    private boolean validatePhoneNumber(String mobilePhoneNumber) {
+        //TODO: regex
+        return true;
     }
 
 

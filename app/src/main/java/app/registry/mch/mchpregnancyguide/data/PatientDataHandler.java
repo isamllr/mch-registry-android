@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by Isa on 18.07.2014.
@@ -16,18 +17,17 @@ public class PatientDataHandler extends SQLiteOpenHelper {
     private static final String TABLE_PATIENT = "patient";
 
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_PATIENTID = "patientid";
-    public static final String COLUMN_REGID = "reg";
-    public static final String COLUMN_MOBILENUMBER = "mobilenumber";
-    public static final String COLUMN_PATIENTNAME = "patientname";
-    public static final String COLUMN_EXPECTEDDELIVERY = "expecteddelivery";
-    public static final String COLUMN_FACILITYNAME = "facilityname";
-    public static final String COLUMN_FACILITYPHONENUMBER = "facilityphonenumber";
+    public static final String COLUMN_PATIENTID = "_patientID";
+    public static final String COLUMN_REGID = "_regID";
+    public static final String COLUMN_MOBILENUMBER = "_mobileNumber";
+    public static final String COLUMN_PATIENTNAME = "_patientName";
+    public static final String COLUMN_EXPECTEDDELIVERY = "_expectedDelivery";
+    public static final String COLUMN_FACILITYNAME = "_facilityName";
+    public static final String COLUMN_FACILITYPHONENUMBER = "_facilityPhoneNumber";
 
     public PatientDataHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
     }
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -35,14 +35,18 @@ public class PatientDataHandler extends SQLiteOpenHelper {
                 "CREATE TABLE " + TABLE_PATIENT + "("
                         + COLUMN_ID + " INTEGER PRIMARY KEY,"
                         + COLUMN_PATIENTID + " INTEGER,"
-                        + COLUMN_REGID + " TEXT"
-                        + COLUMN_MOBILENUMBER + " TEXT"
-                        + COLUMN_PATIENTNAME + " TEXT"
-                        + COLUMN_EXPECTEDDELIVERY + " TEXT"
-                        + COLUMN_FACILITYNAME + " TEXT"
+                        + COLUMN_REGID + " TEXT,"
+                        + COLUMN_MOBILENUMBER + " TEXT,"
+                        + COLUMN_PATIENTNAME + " TEXT,"
+                        + COLUMN_EXPECTEDDELIVERY + " DATETIME,"
+                        + COLUMN_FACILITYNAME + " TEXT,"
                         + COLUMN_FACILITYPHONENUMBER + " TEXT"
                         + ")";
         db.execSQL(CREATE_PATIENT_TABLE);
+
+        Patient patient = new Patient(1, "regID", "mobileNumber", "patientName", "1980-01-01", "facilityPhoneNumber", "facilityName");
+        this.addPatient(patient);
+
     }
 
     @Override
@@ -51,7 +55,7 @@ public class PatientDataHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addRecommendation(Patient patient) {
+    private void addPatient(Patient patient) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_PATIENTID,patient.get_patientID());
         values.put(COLUMN_REGID, patient.get_regID());
@@ -62,37 +66,78 @@ public class PatientDataHandler extends SQLiteOpenHelper {
         values.put(COLUMN_FACILITYPHONENUMBER, patient.get_facilityPhoneNumber());
 
         SQLiteDatabase db = this.getWritableDatabase();
-
         db.insert(TABLE_PATIENT, null, values);
         db.close();
     }
 
     public Patient getPatient() {
-        String query = "Select * FROM " + TABLE_PATIENT + " WHERE " + COLUMN_PATIENTID + " =  1";
+        String query = "Select * FROM " + TABLE_PATIENT;
 
         SQLiteDatabase db = this.getWritableDatabase();
-
         Cursor cursor = db.rawQuery(query, null);
-
         Patient patient = new Patient();
 
         if (cursor.moveToFirst()) {
             cursor.moveToFirst();
-            patient.setID(Integer.parseInt(cursor.getString(0)));
-            patient.set_patientID(Integer.parseInt(cursor.getString(1)));
-            patient.set_regID(cursor.getString(2));
-            patient.set_mobileNumber(cursor.getString(3));
-            patient.set_patientName(cursor.getString(4));
-            patient.set_expectedDelivery(cursor.getString(5));
-            patient.set_facilityName(cursor.getString(6));
-            patient.set_facilityPhoneNumber(cursor.getString(7));
+            patient.setID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+            patient.set_patientID(cursor.getInt(cursor.getColumnIndex(COLUMN_PATIENTID)));
+            patient.set_regID(cursor.getString(cursor.getColumnIndex(COLUMN_REGID)));
+            patient.set_mobileNumber(cursor.getString(cursor.getColumnIndex(COLUMN_MOBILENUMBER)));
+            patient.set_patientName(cursor.getString(cursor.getColumnIndex(COLUMN_PATIENTNAME)));
+            patient.set_expectedDelivery(cursor.getString(cursor.getColumnIndex(COLUMN_REGID)));
+            patient.set_facilityName(cursor.getString(cursor.getColumnIndex(COLUMN_FACILITYNAME)));
+            patient.set_facilityPhoneNumber(cursor.getString(cursor.getColumnIndex(COLUMN_FACILITYPHONENUMBER)));
             cursor.close();
-        } else {
-            patient = null;
         }
+
         db.close();
 
         return patient;
+    }
+
+    public boolean updateMobilePhoneNumber(String mobilePhoneNumber){
+
+        boolean result = false;
+
+        try{
+            SQLiteDatabase db = this.getWritableDatabase();
+            Patient patient = new Patient();
+            ContentValues cv = new ContentValues();
+            cv.put(COLUMN_MOBILENUMBER,mobilePhoneNumber);
+            db.update(TABLE_PATIENT, cv , "1=1", null);
+            db.close();
+            result = true;
+        }catch (Exception e) {
+            Log.e("DB Error", e.getMessage());
+            e.printStackTrace();
+            result = false;
+        }
+
+        return result;
+    }
+
+    public boolean updateRegId(String regID){
+
+        boolean result = false;
+
+        try{
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            Patient patient = new Patient();
+
+            ContentValues cv = new ContentValues();
+            cv.put(COLUMN_REGID,regID);
+            db.update(TABLE_PATIENT, cv , "1=1", null);
+
+            db.close();
+            result = true;
+        }catch (Exception e) {
+            Log.e("DB Error", e.getMessage());
+            e.printStackTrace();
+            result = false;
+        }
+
+        return result;
     }
 
 }
