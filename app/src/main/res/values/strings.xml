@@ -21,5 +21,6 @@
     <string name="action_recommendations">Recommendations</string>
     <string name="action_phonenumber">Mobile Number</string>
     <string name="number_invalid">The phone number format is invalid, please try again</string>
+    <string name="gcm_project_id">210193935586</string>
 
 </resources>

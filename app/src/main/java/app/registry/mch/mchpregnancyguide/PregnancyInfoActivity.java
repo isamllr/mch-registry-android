@@ -119,7 +119,7 @@ class GcmRegistrationAsyncTask extends AsyncTask<Context, Void, String> {
     private GoogleCloudMessaging gcm;
     private Context context;
 
-    private static final String SENDER_ID = "210193935586";
+    private static String SENDER_ID;
 
     public GcmRegistrationAsyncTask() {
         /*Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
@@ -143,19 +143,24 @@ class GcmRegistrationAsyncTask extends AsyncTask<Context, Void, String> {
     protected String doInBackground(Context... params) {
         context = params[0];
 
+        PatientDataHandler pdh = new PatientDataHandler(context, null, null, 1);
+        String senderId = pdh.getPatient().get_projectID();
+
         String msg = "";
         try {
             if (gcm == null) {
                 gcm = GoogleCloudMessaging.getInstance(context);
             }
-            String regId = gcm.register(SENDER_ID);
+            String regId = gcm.register(senderId);
             msg = "Device registered, registration ID=" + regId;
-            storeRegistrationId(regId);
+            //Save received regID
+            pdh.updateRegId(regId);
 
             // You should send the registration ID to your server over HTTP,
             // so it can use GCM/HTTP or CCS to send messages to your app.
             // The request to your server should be authenticated if your app
             // is using accounts.
+            //TODO: accounts, auth
             regService.register(regId).execute();
 
         } catch (IOException ex) {
@@ -163,11 +168,6 @@ class GcmRegistrationAsyncTask extends AsyncTask<Context, Void, String> {
             msg = "Error: " + ex.getMessage();
         }
         return msg;
-    }
-
-    private void storeRegistrationId(String regId) {
-        PatientDataHandler pdh = new PatientDataHandler(context, null, null, 1);
-        pdh.updateRegId(regId);
     }
 
     @Override

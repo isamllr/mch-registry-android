@@ -18,12 +18,14 @@ public class PatientDataHandler extends SQLiteOpenHelper {
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_PATIENTID = "_patientID";
-    public static final String COLUMN_REGID = "_regID";
+    public static final String COLUMN_PROJECTID = "_projectID"; //SenderID
+    public static final String COLUMN_MESSAGEID = "_messageID";
     public static final String COLUMN_MOBILENUMBER = "_mobileNumber";
     public static final String COLUMN_PATIENTNAME = "_patientName";
     public static final String COLUMN_EXPECTEDDELIVERY = "_expectedDelivery";
     public static final String COLUMN_FACILITYNAME = "_facilityName";
     public static final String COLUMN_FACILITYPHONENUMBER = "_facilityPhoneNumber";
+    public static final String COLUMN_REGID = "_regID";
 
     public PatientDataHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -35,16 +37,18 @@ public class PatientDataHandler extends SQLiteOpenHelper {
                 "CREATE TABLE " + TABLE_PATIENT + "("
                         + COLUMN_ID + " INTEGER PRIMARY KEY,"
                         + COLUMN_PATIENTID + " INTEGER,"
-                        + COLUMN_REGID + " TEXT,"
+                        + COLUMN_PROJECTID + " TEXT,"
+                        + COLUMN_MESSAGEID + " TEXT,"
                         + COLUMN_MOBILENUMBER + " TEXT,"
                         + COLUMN_PATIENTNAME + " TEXT,"
                         + COLUMN_EXPECTEDDELIVERY + " DATETIME,"
                         + COLUMN_FACILITYNAME + " TEXT,"
-                        + COLUMN_FACILITYPHONENUMBER + " TEXT"
+                        + COLUMN_FACILITYPHONENUMBER + " TEXT,"
+                        + COLUMN_MESSAGEID + " TEXT"
                         + ")";
         db.execSQL(CREATE_PATIENT_TABLE);
 
-        Patient patient = new Patient(1, "regID", "mobileNumber", "patientName", "1980-01-01", "facilityPhoneNumber", "facilityName");
+        Patient patient = new Patient(1, "regID", "210193935586", "mobileNumber", "patientName", "1980-01-01", "facilityPhoneNumber", "facilityName", "messageId");
         this.addPatient(patient);
 
     }
@@ -58,12 +62,14 @@ public class PatientDataHandler extends SQLiteOpenHelper {
     private void addPatient(Patient patient) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_PATIENTID,patient.get_patientID());
-        values.put(COLUMN_REGID, patient.get_regID());
+        values.put(COLUMN_PROJECTID, patient.get_projectID());
+        values.put(COLUMN_MESSAGEID, patient.get_latestMessageID());
         values.put(COLUMN_MOBILENUMBER, patient.get_mobileNumber());
         values.put(COLUMN_PATIENTNAME, patient.get_patientName());
         values.put(COLUMN_EXPECTEDDELIVERY, patient.get_expectedDelivery());
         values.put(COLUMN_FACILITYNAME, patient.get_facilityName());
         values.put(COLUMN_FACILITYPHONENUMBER, patient.get_facilityPhoneNumber());
+        values.put(COLUMN_REGID, patient.get_regID());
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_PATIENT, null, values);
@@ -82,6 +88,7 @@ public class PatientDataHandler extends SQLiteOpenHelper {
             patient.setID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
             patient.set_patientID(cursor.getInt(cursor.getColumnIndex(COLUMN_PATIENTID)));
             patient.set_regID(cursor.getString(cursor.getColumnIndex(COLUMN_REGID)));
+            patient.set_latestMessageID(cursor.getString(cursor.getColumnIndex(COLUMN_MESSAGEID)));
             patient.set_mobileNumber(cursor.getString(cursor.getColumnIndex(COLUMN_MOBILENUMBER)));
             patient.set_patientName(cursor.getString(cursor.getColumnIndex(COLUMN_PATIENTNAME)));
             patient.set_expectedDelivery(cursor.getString(cursor.getColumnIndex(COLUMN_REGID)));
@@ -133,12 +140,39 @@ public class PatientDataHandler extends SQLiteOpenHelper {
             result = true;
         }catch (Exception e) {
             Log.e("DB Error", e.getMessage());
-            e.printStackTrace();
             result = false;
         }
 
         return result;
     }
 
+    public boolean updateMessageId(String messageID){
+
+        boolean result = false;
+
+        try{
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+
+            cv.put(COLUMN_MESSAGEID, messageID);
+            db.update(TABLE_PATIENT, cv , "1=1", null);
+
+            db.close();
+            result = true;
+        }catch (Exception e) {
+            Log.e("DB Error", e.getMessage());
+            result = false;
+        }
+
+        return result;
+    }
+
+    public String createNextMessageID(){
+        ///TODO: Generate a messageid
+        String messageID = "todo";
+        this.updateMessageId(messageID);
+        return messageID;
+    }
 }
 

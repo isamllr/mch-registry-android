@@ -7,34 +7,56 @@ public class Patient {
     private int _id;
     private int _patientID;
     private String _regID;
+    private String _projectID;
     private String _mobileNumber;
     private String _patientName;
     private String _expectedDelivery;
     private String _facilityName;
     private String _facilityPhoneNumber;
+    private String _latestMessageID;
 
     public Patient() {
     }
 
-    public Patient(int _id, int _patientID, String _regID, String _mobileNumber, String _patientName, String _expectedDelivery, String _facilityName, String _facilityPhoneNumber) {
+    public Patient(int _patientID, String _regID, String _projectID, String _patientName, String _mobileNumber, String _expectedDelivery, String _facilityName, String _facilityPhoneNumber, String _latestMessageID) {
+        this._patientID = _patientID;
+        this._regID = _regID;
+        this._projectID = _projectID;
+        this._patientName = _patientName;
+        this._mobileNumber = _mobileNumber;
+        this._expectedDelivery = _expectedDelivery;
+        this._facilityName = _facilityName;
+        this._facilityPhoneNumber = _facilityPhoneNumber;
+        this._latestMessageID = _latestMessageID;
+    }
+
+    public Patient(int _id, int _patientID, String _regID, String _mobileNumber, String _projectID, String _patientName, String _expectedDelivery, String _facilityName, String _facilityPhoneNumber, String _latestMessageID) {
         this._id = _id;
         this._patientID = _patientID;
         this._regID = _regID;
         this._mobileNumber = _mobileNumber;
+        this._projectID = _projectID;
         this._patientName = _patientName;
         this._expectedDelivery = _expectedDelivery;
         this._facilityName = _facilityName;
         this._facilityPhoneNumber = _facilityPhoneNumber;
+        this._latestMessageID = _latestMessageID;
     }
 
-    public Patient(int _patientID, String _regID, String _mobileNumber, String _patientName, String _expectedDelivery, String _facilityPhoneNumber, String _facilityName) {
-        this._patientID = _patientID;
-        this._regID = _regID;
-        this._mobileNumber = _mobileNumber;
-        this._patientName = _patientName;
-        this._expectedDelivery = _expectedDelivery;
-        this._facilityPhoneNumber = _facilityPhoneNumber;
-        this._facilityName = _facilityName;
+    public String get_projectID() {
+        return _projectID;
+    }
+
+    public void set_projectID(String _projectID) {
+        this._projectID = _projectID;
+    }
+
+    public String get_latestMessageID() {
+        return _latestMessageID;
+    }
+
+    public void set_latestMessageID(String _latestMessageID) {
+        this._latestMessageID = _latestMessageID;
     }
 
     public String get_regID() {

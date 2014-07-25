@@ -2,7 +2,6 @@ package app.registry.mch.mchpregnancyguide;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.TelephonyManager;
@@ -29,10 +28,17 @@ public class PhoneNumberActivity extends Activity implements View.OnClickListene
 
         /* Load phone input field */
         mobilePhoneNumber = (EditText) findViewById(R.id.input_phone);
-        TelephonyManager tMgr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
-        mobilePhoneNumber.setText(tMgr.getLine1Number());
-        mobilePhoneNumber.requestFocus();
         mobilePhoneNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        mobilePhoneNumber.requestFocus();
+
+            PatientDataHandler pdh = new PatientDataHandler(getApplicationContext(), null, null, 1);
+
+            if(pdh.getPatient().get_mobileNumber().length()>0){
+                mobilePhoneNumber.setText(pdh.getPatient().get_mobileNumber());
+            }else{
+                TelephonyManager tMgr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+                mobilePhoneNumber.setText(tMgr.getLine1Number());
+            }
 
         /* Load OK Button */
         btnOK = (Button) findViewById(R.id.btnOK);
@@ -61,12 +67,37 @@ public class PhoneNumberActivity extends Activity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if(validatePhoneNumber(mobilePhoneNumber.getText().toString())){
-            PatientDataHandler pdh = new PatientDataHandler(this, null, null, 1);
+
+            PatientDataHandler pdh = new PatientDataHandler(getApplicationContext(), null, null, 1);
+
+            //Save phone number
             pdh.updateMobilePhoneNumber(mobilePhoneNumber.getText().toString());
+
+            //Send new phone number to server
+            String projectId = pdh.getPatient().get_projectID();
+            String nextMessageId = pdh.createNextMessageID();
+
+	        /*
+            //TODO: Send phone number to server with regID
+            try {
+                Bundle data = new Bundle();
+                // the account is used for keeping
+                // track of user notifications
+                data.putString("patientloginname", account);
+                // the action is used to distinguish different message types on the server
+                data.putString("updateMobilePhoneNumber", SyncStateContract.Constants.ACTION_REGISTER);
+                String msgId = nextMessageId;
+
+                GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
+                gcm.send(projectId + "@gcm.googleapis.com", msgId, SyncStateContract.Constants.GCM_DEFAULT_TTL, data);
+
+            } catch (IOException e) {
+                Log.e("ERROR", "IOException while sending registration id", e);
+            }
 
             //Start main activity
             Intent intent = new Intent(this, PregnancyInfoActivity.class);
-            startActivity(intent);
+            startActivity(intent);*/
 
         }else{
             Toast.makeText(this, getString(R.string.number_invalid), LENGTH_LONG);
