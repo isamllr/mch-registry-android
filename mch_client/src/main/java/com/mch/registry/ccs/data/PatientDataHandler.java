@@ -44,7 +44,7 @@ public class PatientDataHandler extends SQLiteOpenHelper {
                         + COLUMN_EXPECTEDDELIVERY + " DATETIME,"
                         + COLUMN_FACILITYNAME + " TEXT,"
                         + COLUMN_FACILITYPHONENUMBER + " TEXT,"
-                        + COLUMN_MESSAGEID + " TEXT,"
+                        + COLUMN_REGID + " TEXT,"
 		                + COLUMN_ACCOUNT + " TEXT,"
 		                + COLUMN_PASSWORD + " TEXT"
                         + ")";
@@ -52,19 +52,21 @@ public class PatientDataHandler extends SQLiteOpenHelper {
 
 	    String INSERT_PATIENT_TABLE =
 			    "INSERT INTO " + TABLE_PATIENT + "("
-					    + COLUMN_ID + " INTEGER PRIMARY KEY,"
-					    + COLUMN_PATIENTID + " INTEGER,"
-					    + COLUMN_MESSAGEID + " INTEGER,"
-					    + COLUMN_MOBILENUMBER + " TEXT,"
-					    + COLUMN_PATIENTNAME + " TEXT,"
-					    + COLUMN_EXPECTEDDELIVERY + " DATETIME,"
-					    + COLUMN_FACILITYNAME + " TEXT,"
-					    + COLUMN_FACILITYPHONENUMBER + " TEXT,"
-					    + COLUMN_MESSAGEID + " TEXT,"
-					    + COLUMN_ACCOUNT + " TEXT,"
-					    + COLUMN_PASSWORD + " TEXT"
-						+ ")VALUES(null, 0, 1, null, null, '2000-01-01', null, null, null, null, null);";
+					    + COLUMN_ID + ", "
+					    + COLUMN_PATIENTID + ", "
+					    + COLUMN_MESSAGEID + ", "
+					    + COLUMN_MOBILENUMBER + ", "
+					    + COLUMN_PATIENTNAME + ", "
+					    + COLUMN_EXPECTEDDELIVERY + ", "
+					    + COLUMN_FACILITYNAME + ", "
+					    + COLUMN_FACILITYPHONENUMBER + ", "
+					    + COLUMN_REGID + ", "
+					    + COLUMN_ACCOUNT + ", "
+					    + COLUMN_PASSWORD
+						+ ")VALUES(null, 1, 1, '', '', '2000-01-01', '', '', '', '', '');";
 	    db.execSQL(INSERT_PATIENT_TABLE);
+
+	    Log.i("Pregnancy Guide", "PatientDB created & patient inserted");
     }
 
     @Override
@@ -89,33 +91,37 @@ public class PatientDataHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_PATIENT, null, values);
         db.close();
+	    Log.i("Pregnancy Guide", "Patient added");
     }
 
     public Patient getPatient() {
         String query = "Select * FROM " + TABLE_PATIENT;
+	    Patient patient = new Patient();
+		try{
+	        SQLiteDatabase db = this.getWritableDatabase();
+	        Cursor cursor = db.rawQuery(query, null);
 
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        Patient patient = new Patient();
+	        if (cursor.moveToFirst()) {
+		        cursor.moveToFirst();
+		        patient.setID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+		        patient.set_patientID(cursor.getInt(cursor.getColumnIndex(COLUMN_PATIENTID)));
+		        patient.set_regID(cursor.getString(cursor.getColumnIndex(COLUMN_REGID)));
+		        patient.set_latestMessageID(cursor.getInt(cursor.getColumnIndex(COLUMN_MESSAGEID)));
+		        patient.set_mobileNumber(cursor.getString(cursor.getColumnIndex(COLUMN_MOBILENUMBER)));
+		        patient.set_patientName(cursor.getString(cursor.getColumnIndex(COLUMN_PATIENTNAME)));
+		        patient.set_expectedDelivery(cursor.getString(cursor.getColumnIndex(COLUMN_EXPECTEDDELIVERY)));
+		        patient.set_facilityName(cursor.getString(cursor.getColumnIndex(COLUMN_FACILITYNAME)));
+		        patient.set_facilityPhoneNumber(cursor.getString(cursor.getColumnIndex(COLUMN_FACILITYPHONENUMBER)));
+		        patient.set_account(cursor.getString(cursor.getColumnIndex(COLUMN_ACCOUNT)));
+		        patient.set_password(cursor.getString(cursor.getColumnIndex(COLUMN_PASSWORD)));
+		        cursor.close();
+	        }
 
-        if (cursor.moveToFirst()) {
-	        cursor.moveToFirst();
-	        patient.setID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
-	        patient.set_patientID(cursor.getInt(cursor.getColumnIndex(COLUMN_PATIENTID)));
-	        patient.set_regID(cursor.getString(cursor.getColumnIndex(COLUMN_REGID)));
-	        patient.set_latestMessageID(cursor.getInt(cursor.getColumnIndex(COLUMN_MESSAGEID)));
-	        patient.set_mobileNumber(cursor.getString(cursor.getColumnIndex(COLUMN_MOBILENUMBER)));
-	        patient.set_patientName(cursor.getString(cursor.getColumnIndex(COLUMN_PATIENTNAME)));
-	        patient.set_expectedDelivery(cursor.getString(cursor.getColumnIndex(COLUMN_REGID)));
-	        patient.set_facilityName(cursor.getString(cursor.getColumnIndex(COLUMN_FACILITYNAME)));
-	        patient.set_facilityPhoneNumber(cursor.getString(cursor.getColumnIndex(COLUMN_FACILITYPHONENUMBER)));
-	        patient.set_account(cursor.getString(cursor.getColumnIndex(COLUMN_ACCOUNT)));
-	        patient.set_password(cursor.getString(cursor.getColumnIndex(COLUMN_PASSWORD)));
-	        cursor.close();
-        }
-
-        db.close();
-
+	        db.close();
+    }catch(Exception e){
+			Log.e("DB Error", e.getMessage());
+	}
+	    Log.i("Pregnancy Guide", "get Patient");
         return patient;
     }
 
@@ -133,10 +139,10 @@ public class PatientDataHandler extends SQLiteOpenHelper {
             result = true;
         }catch (Exception e) {
             Log.e("DB Error", e.getMessage());
-            e.printStackTrace();
             result = false;
         }
 
+	    Log.i("Pregnancy Guide", "update Patient Mobile Phone Number");
         return result;
     }
 

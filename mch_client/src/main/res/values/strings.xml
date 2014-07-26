@@ -144,17 +144,14 @@
     </string-array>
 
     <string name="title_activity_pregnancy_guide">PregnancyGuide</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">Example action</string>
-    <string name="title_section_home">Home</string>
     <string name="title_section_visits">Visits</string>
-    <string name="title_section_recommendations">Recommendations</string>
+    <string name="title_section_recommendations">Tips</string>
     <string name="title_section_diary">Diary</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-	<string name="title_section_phone">Mobile Phone</string>
+    <string name="title_section_phone">Mobile Phone</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_informed_pregnancy">InformedPregnancy</string>
+    <string name="title_section_home">Home</string>
+    <string name="title_activity_main">Pregnancy Guide</string>
 
 </resources>

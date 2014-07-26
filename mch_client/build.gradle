@@ -23,12 +23,22 @@ dependencies {
     compile('de.keyboardsurfer.android.widget:crouton:1.8.4@aar') {
         exclude group: 'com.google.android', module: 'support-v4'
     }
-    compile 'com.google.android.gms:play-services:4.2.42'
-    compile 'com.android.support:appcompat-v7:19.+'
+    // You must install or update the Support Repository through the SDK manager to use this dependency.
+    // You must install or update the Support Repository through the SDK manager to use this dependency.
+    // You must install or update the Support Repository through the SDK manager to use this dependency.
+    // You must install or update the Support Repository through the SDK manager to use this dependency.
+    // You must install or update the Support Repository through the SDK manager to use this dependency.
+    compile 'com.google.android.gms:play-services:5.0.77'
+    compile 'com.android.support:appcompat-v7:19.1.+'
     // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.android.support:support-v4:19.1.+'
     compile 'de.greenrobot:eventbus:2.2.0'
+    // You must install or update the Support Repository through the SDK manager to use this dependency.
+    compile 'com.android.support:support-v13:19.+'
 }
+
+
+
 
 
 repositories {

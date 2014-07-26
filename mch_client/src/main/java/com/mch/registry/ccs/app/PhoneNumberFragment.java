@@ -237,7 +237,7 @@ public class PhoneNumberFragment extends Fragment implements View.OnClickListene
 		getActivity().startService(regIntent);
 	}
 
-	private static final String ARG_SECTION_NUMBER = "5";
+	private static final String ARG_SECTION_NUMBER = "3";
 
 	public static PhoneNumberFragment newInstance(int sectionNumber) {
 		PhoneNumberFragment fragment = new PhoneNumberFragment();
@@ -249,14 +249,8 @@ public class PhoneNumberFragment extends Fragment implements View.OnClickListene
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_pregnancy_guide, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_informed_pregnancy, container, false);
 		return rootView;
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		((PregnancyGuide) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
 	}
 
 }
