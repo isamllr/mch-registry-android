@@ -62,23 +62,23 @@ public class MySqlHandler{
 		try {
 			stmt = conn.createStatement();
 			String lastFullHalfHour = getLastFullHalfHour();
-			String statement = "SELECT NotificationQueueID, "
-					+ "MobilePhone, "
-					+ "NotificationText, "
-					+ "DateTimeToSend, "
-					+ "LatestBy "
-					+ "FROM notificationqueue WHERE "
-					+ "MobileApp = 1 "
-					+ "AND Date(LatestBY) >= curdate()"
-					+ "AND NotificationTypeID = " + notificationTypeID + " "
-					+ "AND ((DateTimeToSend >= '" + lastFullHalfHour + "' AND  DateTimeToSend <=  ADDTIME('" + lastFullHalfHour + "', '00:30:00')) "
-					+ "OR (DateTimeToSend >= DATE_SUB('" + lastFullHalfHour + "', INTERVAL 1 DAY) AND DateTimeToSend <=  DATE_SUB(ADDTIME('" + lastFullHalfHour + "', '00:30:00'), INTERVAL 1 DAY)) "
-					+ "OR (DateTimeToSend >= DATE_SUB('" + lastFullHalfHour + "', INTERVAL 2 DAY) AND DateTimeToSend <=  DATE_SUB(ADDTIME('" + lastFullHalfHour + "', '00:30:00'), INTERVAL 2 DAY)) "
-					+ "OR (DateTimeToSend >= DATE_SUB('" + lastFullHalfHour + "', INTERVAL 3 DAY) AND DateTimeToSend <=  DATE_SUB(ADDTIME('" + lastFullHalfHour + "', '00:30:00'), INTERVAL 3 DAY)) "
-					+ "OR (DateTimeToSend >= DATE_SUB('" + lastFullHalfHour + "', INTERVAL 4 DAY) AND DateTimeToSend <=  DATE_SUB(ADDTIME('" + lastFullHalfHour + "', '00:30:00'), INTERVAL 4 DAY)) "
-					+ "OR (DateTimeToSend >= DATE_SUB('" + lastFullHalfHour + "', INTERVAL 5 DAY) AND DateTimeToSend <=  DATE_SUB(ADDTIME('" + lastFullHalfHour + "', '00:30:00'), INTERVAL 5 DAY)) "
-					+ "OR (DateTimeToSend >= DATE_SUB('" + lastFullHalfHour + "', INTERVAL 6 DAY) AND DateTimeToSend <=  DATE_SUB(ADDTIME('" + lastFullHalfHour + "', '00:30:00'), INTERVAL 6 DAY)) "
-					+ "OR (DateTimeToSend >= DATE_SUB('" + lastFullHalfHour + "', INTERVAL 7 DAY) AND DateTimeToSend <=  DATE_SUB(ADDTIME('" + lastFullHalfHour + "', '00:30:00'), INTERVAL 7 DAY))) "
+			String statement = "SELECT "
+					+ "nq.NotificationQueueID, "
+					+ "nq.NotificationText, "
+					+ "nar.GCMRegistrationID "
+					+ "FROM notificationqueue nq "
+					+ "JOIN notificationappregistration nar on nq.MobilePhone = nar.MobilePhone "
+					+ "WHERE nq.MobileApp = 1 "
+					+ "AND Date(nq.LatestBy) >= curdate() "
+					+ "AND nq.NotificationTypeID = " + notificationTypeID + " "
+					+ "AND ((nq.DateTimeToSend >= '" + lastFullHalfHour + "' AND  nq.DateTimeToSend <=  ADDTIME('" + lastFullHalfHour + "', '00:30:00')) "
+					+ "OR (nq.DateTimeToSend >= DATE_SUB('" + lastFullHalfHour + "', INTERVAL 1 DAY) AND nq.DateTimeToSend <=  DATE_SUB(ADDTIME('" + lastFullHalfHour + "', '00:30:00'), INTERVAL 1 DAY)) "
+					+ "OR (nq.DateTimeToSend >= DATE_SUB('" + lastFullHalfHour + "', INTERVAL 2 DAY) AND nq.DateTimeToSend <=  DATE_SUB(ADDTIME('" + lastFullHalfHour + "', '00:30:00'), INTERVAL 2 DAY)) "
+					+ "OR (nq.DateTimeToSend >= DATE_SUB('" + lastFullHalfHour + "', INTERVAL 3 DAY) AND nq.DateTimeToSend <=  DATE_SUB(ADDTIME('" + lastFullHalfHour + "', '00:30:00'), INTERVAL 3 DAY)) "
+					+ "OR (nq.DateTimeToSend >= DATE_SUB('" + lastFullHalfHour + "', INTERVAL 4 DAY) AND nq.DateTimeToSend <=  DATE_SUB(ADDTIME('" + lastFullHalfHour + "', '00:30:00'), INTERVAL 4 DAY)) "
+					+ "OR (nq.DateTimeToSend >= DATE_SUB('" + lastFullHalfHour + "', INTERVAL 5 DAY) AND nq.DateTimeToSend <=  DATE_SUB(ADDTIME('" + lastFullHalfHour + "', '00:30:00'), INTERVAL 5 DAY)) "
+					+ "OR (nq.DateTimeToSend >= DATE_SUB('" + lastFullHalfHour + "', INTERVAL 6 DAY) AND nq.DateTimeToSend <=  DATE_SUB(ADDTIME('" + lastFullHalfHour + "', '00:30:00'), INTERVAL 6 DAY)) "
+					+ "OR (nq.DateTimeToSend >= DATE_SUB('" + lastFullHalfHour + "', INTERVAL 7 DAY) AND nq.DateTimeToSend <=  DATE_SUB(ADDTIME('" + lastFullHalfHour + "', '00:30:00'), INTERVAL 7 DAY))) "
 					+ "ORDER BY DateTimeToSend ASC;";
 
 			if (stmt.execute(statement)) {
@@ -87,8 +87,8 @@ public class MySqlHandler{
 
 			while(rs.next()){
 				//Retrieve by column name
+				notification.setGcmRegID(rs.getString("GCMRegistrationID"));
 				notification.setNotificationQueueID(rs.getInt("NotificationQueueID"));
-				notification.setMobilePhone(rs.getString("MobilePhone"));
 				notification.setNotificationText(rs.getString("NotificationText"));
 				notificationQueue.add(notification);
 			}
@@ -121,7 +121,7 @@ public class MySqlHandler{
 		return notificationQueue;
 	}
 
-	private boolean moveNotificationToHistory(int notificationQueueID){
+	public boolean moveNotificationToHistory(int notificationQueueID){
 		boolean status = false;
 
 		String statementReplace ="REPLACE INTO notificationqueuehistory "
@@ -177,7 +177,7 @@ public class MySqlHandler{
 		return status;
 	}
 
-	private boolean prepareNotificationForTheNextDay(int notificationQueueID){
+	public boolean prepareNotificationForTheNextDay(int notificationQueueID){
 		boolean status = false;
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar cal = Calendar.getInstance();

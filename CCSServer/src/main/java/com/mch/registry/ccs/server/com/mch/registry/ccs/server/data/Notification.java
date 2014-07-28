@@ -7,23 +7,24 @@ public class Notification {
 
 	private int notificationQueueID;
 	private String notificationText;
-	private String mobilePhone;
+	private String gcmRegID;
 
-	public void NotificationQueue(){
+
+	public Notification(){
 	}
 
-	public void NotificationQueue(int notificationQueueID, String notificationText, String mobilePhone) {
-		this.notificationQueueID = notificationQueueID;
+	public Notification(String gcmRegID, String notificationText, int notificationQueueID) {
+		this.gcmRegID = gcmRegID;
 		this.notificationText = notificationText;
-		this.mobilePhone = mobilePhone;
+		this.notificationQueueID = notificationQueueID;
 	}
 
-	public String getMobilePhone() {
-		return mobilePhone;
+	public String getGcmRegID() {
+		return gcmRegID;
 	}
 
-	public void setMobilePhone(String mobilePhone) {
-		this.mobilePhone = mobilePhone;
+	public void setGcmRegID(String gcmRegID) {
+		this.gcmRegID = gcmRegID;
 	}
 
 	public String getNotificationText() {
