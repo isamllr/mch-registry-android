@@ -17,6 +17,8 @@
  */
 package com.mch.registry.ccs.server;
 
+import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.MySqlHandler;
+
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
 import org.jivesoftware.smack.ConnectionListener;
@@ -479,6 +481,11 @@ public class CcsClient {
 
 	    //***Preparing downstream message
 	    String toRegId = args[0];
+
+
+	    //Read from mysql database
+	    MySqlHandler mysql = new MySqlHandler();
+	    mysql.getReminderQueue();
 
 	    //The registration id of the recipient
 	    //toRegId = "APA91bEPjC9VKg5vNgoZuqfxVUAXQh-Zeu7-LVOR3OPLHT3QFFAQsXGfVBlbhUWv6tuDtNXOBsK5DselVGVuzV378BmDZsyOUWS5Jya_SxqDafbphxOKRlG2Wqa7wsfN5Y1TY8w8n-wRglSoOXT8mlK2oET9ibPP-03XFtiH8pwM1cw0D7w7EDc";

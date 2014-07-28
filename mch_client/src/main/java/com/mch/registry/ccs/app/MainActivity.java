@@ -75,7 +75,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
 
 	public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
-		tab.setText(mCollectionPagerAdapter.getPageTitle(tab.getPosition()));
+		mViewPager.setCurrentItem(tab.getPosition());
+		//MainFragmentActivity.disableBookmarkFlag = MainFragmentActivity.disableShareFlag = true;
+		invalidateOptionsMenu();
 	}
 
 	public void onTabUnselected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
