@@ -3,7 +3,6 @@ package com.mch.registry.ccs.app;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 
@@ -25,9 +24,8 @@ public class SMSReceiver extends BroadcastReceiver {
 		String msgBody = msg.getMessageBody();
 	}
 
-	@Override
 	public void onCreate() {
-		Context.registerReceiver(myBroadcast, new IntentFilter("android.provider.Telephony.SMS_RECEIVED").setPriority(999));
+		//Context.registerReceiver(myBroadcast, new IntentFilter("android.provider.Telephony.SMS_RECEIVED").setPriority(999));
 
 	}
 }

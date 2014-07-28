@@ -1,1 +1,1 @@
-include ':mch_client', ':app', ':CCSServer', 'server'
+include ':mch_client', ':CCSServer', 'server'
