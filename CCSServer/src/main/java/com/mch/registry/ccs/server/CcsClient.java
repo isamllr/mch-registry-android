@@ -47,6 +47,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -499,6 +500,7 @@ public class CcsClient {
 
 		final Runnable sendNotifications = new Runnable() {
 			public void run() {
+				try{
 				logger.log(Level.INFO, "working queue!");
 				if (!isOffHours()) {
 
@@ -562,10 +564,17 @@ public class CcsClient {
 						}
 					}
 				}
+			} catch (Exception e) {
+				logger.log(Level.WARNING, "Exception ", e);
+			}
 			}
 		};
 
-		new ExtendedScheduledThreadPoolExecutor(1).scheduleAtFixedRate(sendNotifications, 0, 30, TimeUnit.MINUTES);
+		final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+		ScheduledFuture task = executor.scheduleAtFixedRate(sendNotifications, 0, 30, TimeUnit.MINUTES);
+
+		task.cancel(false);
+		executor.shutdown();
 
 		//TODO: STOP correctly (take arg)
 	}

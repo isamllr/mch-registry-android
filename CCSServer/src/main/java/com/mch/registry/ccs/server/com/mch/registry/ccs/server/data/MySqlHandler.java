@@ -5,6 +5,9 @@ package com.mch.registry.ccs.server.com.mch.registry.ccs.server.data;
  */
 
 // Do not import com.mysql.jdbc.*!
+
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -18,6 +21,7 @@ import java.util.Calendar;
 public class MySqlHandler{
 
 	private static Connection conn = null;
+	private SecureRandom random = new SecureRandom();
 
 	public static void MySqlHandler(){
 		try {
@@ -223,6 +227,134 @@ public class MySqlHandler{
 		return status;
 	}
 
+	public boolean saveNewRegID(String gcmRegId){
+		boolean status = false;
+
+		String statement = "INSERT INTO notificationappregistration"
+		+ " (NotificationAppRegistrationID,"
+				+ " GCMRegistrationID,"
+				+ " PregnancyID,"
+				+ " MobilePhoneVerified,"
+				+ " ActivationCode)"
+				+ " VALUES"
+				+ " (null,"
+				+ " " + gcmRegId + ","
+				+ " null,"
+				+ " 0,"
+				+ " '" + this.createActivationCode() + "';";
+
+		this.connect();
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.createStatement();
+			stmt.execute(statement);
+			status = true;
+		}
+		catch (SQLException ex){
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		}
+		finally {
+
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				rs = null;
+			}
+
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				stmt = null;
+			}
+		}
+
+		this.close();
+		return status;
+	}
+
+	public Pregnancy getPregnancyInfo(String mobilePhone){
+		Pregnancy pregnancy = new Pregnancy();
+
+		String statement = "SELECT nar.NotificationAppRegistrationID, "
+				+ " nar.GCMRegistrationID,"
+				+ " nar.PregnancyID,"
+				+ " nar.ActivationCode,"
+				+ " preg.MobileApp,"
+				+ " pat.MobilePhone,"
+				+ " pat.GivenName as SurName,"
+				+ " pat.FamilyName as LastName,"
+				+ " preg.Calc_DeliveryDate,"
+				+ " f.FacilityName,"
+				+ " f.Phone as FacilityPhoneNumber"
+				+ " FROM notificationappregistration nar"
+				+ " JOIN pregnancy preg on preg.PregnancyID = nar.PregnancyID"
+				+ " JOIN patient pat on pat.PatientID = preg.PatientID"
+				+ " JOIN facilities f on preg.FacilityID = f.FacilityID"
+				+ " WHERE pat.MobilePhone = '" + mobilePhone + "';";
+
+
+		this.connect();
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.createStatement();
+
+			if (stmt.execute(statement)) {
+				rs = stmt.getResultSet();
+			}
+
+			while(rs.next()){
+				//Retrieve by column name
+				pregnancy.setPregnancyId(rs.getInt("PregnancyID"));
+				pregnancy.setNotificationAppRegistrationId(rs.getInt("NotificationAppRegistrationID"));
+				pregnancy.setgcmRegistrationId(rs.getString("GCMRegistrationID"));
+				pregnancy.setMobileApp(rs.getInt("MobileApp"));
+				pregnancy.setActivationCode(rs.getString("ActivationCode"));
+				pregnancy.setMobilePhone(rs.getString("MobilePhone"));
+				pregnancy.setPatientSurName(rs.getString("SurName"));
+				pregnancy.setPatientLastName(rs.getString("LastName"));
+				pregnancy.setExpectedDelivery(rs.getString("Calc_DeliveryDate"));
+				pregnancy.setFacilityName(rs.getString("FacilityName"));
+				pregnancy.setFacilityPhoneNumber(rs.getString("FacilityPhoneNumber"));
+			}
+		}
+		catch (SQLException ex){
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		}
+		finally {
+
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				rs = null;
+			}
+
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				stmt = null;
+			}
+		}
+
+		this.close();
+		return pregnancy;
+	}
+
 	private static String getLastFullHalfHour() {
 
 		String lastFullHalfHour;
@@ -247,5 +379,7 @@ public class MySqlHandler{
 		return lastFullHalfHour;
 	}
 
-
+	private String createActivationCode() {
+		return new BigInteger(130, random).toString(32);
+	}
 }
