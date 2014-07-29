@@ -501,7 +501,7 @@ public class CcsClient {
 		final Runnable sendNotifications = new Runnable() {
 			public void run() {
 				try{
-				logger.log(Level.INFO, "working queue!");
+				logger.log(Level.INFO, "Working queue!");
 				if (!isOffHours()) {
 
 					//Prepare downstream message
@@ -570,7 +570,7 @@ public class CcsClient {
 			}
 		};
 
-		final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 		ScheduledFuture task = executor.scheduleAtFixedRate(sendNotifications, 0, 30, TimeUnit.MINUTES);
 
 		task.cancel(false);

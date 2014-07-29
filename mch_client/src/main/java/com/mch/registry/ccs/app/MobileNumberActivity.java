@@ -3,8 +3,10 @@ package com.mch.registry.ccs.app;
 import android.accounts.AccountManager;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +37,8 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 	private Constants.State mState = Constants.State.UNREGISTERED;
 	private static final int RC_RES_REQUEST = 100;
 	private static final int RC_SELECT_ACCOUNT = 200;
+
+	private BroadcastReceiver smsReceiver = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,19 +138,31 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 				registerDevice();
 				break;
 			default:
-				Log.e("PregnancyGuide", "default click event, don't know what to do");
 				break;
 		}
 
+		PatientDataHandler pdh = new PatientDataHandler(this, null, null, 1);
+		Patient patient = new Patient();
+		patient = pdh.getPatient();
 		String mobileNumber = mobilePhoneNumber.getText().toString().replaceAll("\\s","");
-		if(validatePhoneNumber(mobileNumber)){
-			PatientDataHandler pdh = new PatientDataHandler(this, null, null, 1);
+
+		if (patient.get_mobileNumber().compareTo(mobileNumber)==0){
+			Crouton.showText(this, getString(R.string.number_same), Style.INFO);
+		}else{
+			if(validatePhoneNumber(mobileNumber)){
+
 			//Save phone number
 			pdh.updateMobilePhoneNumber(mobilePhoneNumber.getText().toString());
 			//Send new phone number to server
-			sendMessage();
-		}else{
-			Crouton.showText(this, getString(R.string.number_invalid), Style.ALERT);
+			this.sendPhoneMessage();
+			smsReceiver = new SMSReceiver();
+			getApplicationContext().registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+			//wait until sms has arrived (new STATE!!)
+			getApplicationContext().unregisterReceiver(smsReceiver);
+
+			}else{
+				Crouton.showText(this, getString(R.string.number_invalid), Style.ALERT);
+			}
 		}
 	}
 
@@ -170,12 +186,12 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 		startActivityForResult(selectAccount, RC_SELECT_ACCOUNT);
 	}
 
-	private void sendMessage() {
+	private void sendPhoneMessage() {
 		Intent msgIntent = new Intent(this, GcmIntentService.class);
 		msgIntent.setAction(Constants.ACTION_ECHO);
-		String msg = mobilePhoneNumber.getText().toString();
+		String msg = "Phone: " + mobilePhoneNumber.getText().toString();
 
-		String msgTxt = getString(R.string.msg_sent, msg);
+		String msgTxt = getString(R.string.phone_number_sent, msg);
 		Crouton.showText(this, msgTxt, Style.INFO);
 		msgIntent.putExtra(Constants.KEY_MESSAGE_TXT, msg);
 		this.startService(msgIntent);
@@ -241,15 +257,4 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 		regIntent.setAction(Constants.ACTION_REGISTER);
 		getApplicationContext().startService(regIntent);
 	}
-
-	private static final String ARG_SECTION_NUMBER = "3";
-
-	public static PhoneNumberFragment newInstance(int sectionNumber) {
-		PhoneNumberFragment fragment = new PhoneNumberFragment();
-		Bundle args = new Bundle();
-		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-		fragment.setArguments(args);
-		return fragment;
-	}
-
 }

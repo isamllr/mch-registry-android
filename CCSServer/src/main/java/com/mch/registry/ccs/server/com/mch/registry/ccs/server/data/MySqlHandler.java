@@ -17,8 +17,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MySqlHandler{
+
+	public static final Logger logger = Logger.getLogger(MySqlHandler.class.getName());
 
 	private static Connection conn = null;
 	private SecureRandom random = new SecureRandom();
@@ -95,6 +99,7 @@ public class MySqlHandler{
 				notification.setNotificationQueueID(rs.getInt("NotificationQueueID"));
 				notification.setNotificationText(rs.getString("NotificationText"));
 				notificationQueue.add(notification);
+				logger.log(Level.INFO, "getnotifiactionqueue");
 			}
 		}
 		catch (SQLException ex){
@@ -152,6 +157,7 @@ public class MySqlHandler{
 			stmt.execute(statementReplace);
 			stmt.execute(statementDelete);
 			status = true;
+			logger.log(Level.INFO, "moved notification to history");
 		}
 		catch (SQLException ex){
 			System.out.println("SQLException: " + ex.getMessage());
@@ -198,6 +204,281 @@ public class MySqlHandler{
 			stmt = conn.createStatement();
 			stmt.execute(statement);
 			status = true;
+			logger.log(Level.INFO, "not prepared for next day");
+		}
+		catch (SQLException ex){
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		}
+		finally {
+
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				rs = null;
+			}
+
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				stmt = null;
+			}
+		}
+
+		this.close();
+		return status;
+	}
+
+	public boolean updateRegID(int pregnancyID, String newRegID){
+		boolean status = false;
+
+		String statement = "UPDATE notificationappregistration"
+				+ " SET"
+				+ " GCMRegistrationID = '" + newRegID +  "'"
+				+ " WHERE PregnancyID` = "+ pregnancyID +";";
+
+		this.connect();
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.createStatement();
+			stmt.execute(statement);
+			status = true;
+			logger.log(Level.INFO, "regid updated");
+		}
+		catch (SQLException ex){
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		}
+		finally {
+
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				rs = null;
+			}
+
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				stmt = null;
+			}
+		}
+
+		this.close();
+		return status;
+	}
+
+	public boolean findRegID(String regID){
+		boolean regIDFound = false;
+
+		String statement = "SELECT GCMRegistrationID"
+		+ " FROM notificationappregistration"
+		+ " WHERE GCMRegistrationID = '" + regID + "';";
+
+		this.connect();
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.createStatement();
+
+			if (stmt.execute(statement)) {
+				rs = stmt.getResultSet();
+			}
+
+			if(rs.next()){
+				regIDFound = true;
+				logger.log(Level.INFO, "regid found");
+			}
+		}
+		catch (SQLException ex){
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		}
+		finally {
+
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				rs = null;
+			}
+
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				stmt = null;
+			}
+		}
+
+		this.close();
+		return regIDFound;
+
+	}
+
+	public boolean findMobilePhoneDoNotUse(String mobilePhone){
+		boolean mobilePhoneFound = false;
+
+		Pregnancy pregnancy = new Pregnancy();
+
+		String statement = "SELECT nar.NotificationAppRegistrationID, "
+				+ " nar.GCMRegistrationID,"
+				+ " nar.PregnancyID,"
+				+ " nar.ActivationCode,"
+				+ " preg.MobileApp,"
+				+ " pat.MobilePhone,"
+				+ " pat.GivenName as SurName,"
+				+ " pat.FamilyName as LastName,"
+				+ " preg.Calc_DeliveryDate,"
+				+ " f.FacilityName,"
+				+ " f.Phone as FacilityPhoneNumber"
+				+ " FROM notificationappregistration nar"
+				+ " JOIN pregnancy preg on preg.PregnancyID = nar.PregnancyID"
+				+ " JOIN patient pat on pat.PatientID = preg.PatientID"
+				+ " JOIN facilities f on preg.FacilityID = f.FacilityID"
+				+ " WHERE pat.MobilePhone = '" + mobilePhone + "';";
+
+
+		this.connect();
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.createStatement();
+
+			if (stmt.execute(statement)) {
+				rs = stmt.getResultSet();
+			}
+
+			if(rs.next()){
+				mobilePhoneFound = true;
+				logger.log(Level.INFO, "mobile phone found");
+			}
+		}
+		catch (SQLException ex){
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		}
+		finally {
+
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				rs = null;
+			}
+
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				stmt = null;
+			}
+		}
+
+		this.close();
+
+		return mobilePhoneFound;
+
+	}
+
+	public boolean findPregnancyIdInNarTable(int pregnancyId){
+		boolean pregnancyIdFound = false;
+
+		Pregnancy pregnancy = new Pregnancy();
+
+		String statement = "SELECT nar.NotificationAppRegistrationID, "
+				+ " FROM notificationappregistration nar"
+				+ " WHERE nar.PregnancyID = " + pregnancyId + ";";
+
+
+		this.connect();
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.createStatement();
+
+			if (stmt.execute(statement)) {
+				rs = stmt.getResultSet();
+			}
+
+			if(rs.next()){
+				pregnancyIdFound = true;
+			}
+		}
+		catch (SQLException ex){
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		}
+		finally {
+
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				rs = null;
+			}
+
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				stmt = null;
+			}
+		}
+
+		this.close();
+
+		logger.log(Level.INFO, "pregnancy in NAR table found.");
+		return pregnancyIdFound;
+
+	}
+
+	public boolean updateAllPregnancyInfos(String mobilePhone){
+		boolean status = false;
+		Pregnancy pregnancy = new Pregnancy();
+		pregnancy = this.getPregnancyInfo(mobilePhone);
+
+		String statement = "UPDATE notificationappregistration"
+				+ " SET "
+				+ " PregnancyID =  " + pregnancy.getPregnancyID()
+				+ " MobilePhoneVerified = 0"
+				+ " ActivationCode = " + this.createActivationCode()
+				+ " WHERE NotificationAppRegistrationID = " + pregnancy.notificationAppRegistrationID + ";";
+
+		this.connect();
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.createStatement();
+			stmt.execute(statement);
+			status = true;
+			logger.log(Level.INFO, "pregnancyinfos updated in NAR table.");
+
 		}
 		catch (SQLException ex){
 			System.out.println("SQLException: " + ex.getMessage());
@@ -238,10 +519,10 @@ public class MySqlHandler{
 				+ " ActivationCode)"
 				+ " VALUES"
 				+ " (null,"
-				+ " " + gcmRegId + ","
-				+ " null,"
+				+ " '" + gcmRegId  + "',"
 				+ " 0,"
-				+ " '" + this.createActivationCode() + "';";
+				+ " 0,"
+				+ " null);";
 
 		this.connect();
 		Statement stmt = null;
@@ -251,6 +532,8 @@ public class MySqlHandler{
 			stmt = conn.createStatement();
 			stmt.execute(statement);
 			status = true;
+			logger.log(Level.INFO, "New regId saved.");
+
 		}
 		catch (SQLException ex){
 			System.out.println("SQLException: " + ex.getMessage());
@@ -280,7 +563,7 @@ public class MySqlHandler{
 		return status;
 	}
 
-	public Pregnancy getPregnancyInfo(String mobilePhone){
+	public Pregnancy getPregnancyInfo(String pregnancyId){
 		Pregnancy pregnancy = new Pregnancy();
 
 		String statement = "SELECT nar.NotificationAppRegistrationID, "
@@ -298,7 +581,7 @@ public class MySqlHandler{
 				+ " JOIN pregnancy preg on preg.PregnancyID = nar.PregnancyID"
 				+ " JOIN patient pat on pat.PatientID = preg.PatientID"
 				+ " JOIN facilities f on preg.FacilityID = f.FacilityID"
-				+ " WHERE pat.MobilePhone = '" + mobilePhone + "';";
+				+ " WHERE preg.PregnancyID = " + pregnancyId + ";";
 
 
 		this.connect();
@@ -325,6 +608,7 @@ public class MySqlHandler{
 				pregnancy.setExpectedDelivery(rs.getString("Calc_DeliveryDate"));
 				pregnancy.setFacilityName(rs.getString("FacilityName"));
 				pregnancy.setFacilityPhoneNumber(rs.getString("FacilityPhoneNumber"));
+				logger.log(Level.INFO, "get PregnancyInfo.");
 			}
 		}
 		catch (SQLException ex){
@@ -352,6 +636,7 @@ public class MySqlHandler{
 		}
 
 		this.close();
+
 		return pregnancy;
 	}
 
@@ -376,6 +661,7 @@ public class MySqlHandler{
 			}
 		}
 
+		logger.log(Level.INFO, "lastFullHalfHour: " + lastFullHalfHour);
 		return lastFullHalfHour;
 	}
 

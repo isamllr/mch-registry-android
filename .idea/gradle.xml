@@ -9,9 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/CCSServer" />
-            <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/mch_client" />
-            <option value="$PROJECT_DIR$/server" />
           </set>
         </option>
       </GradleProjectSettings>

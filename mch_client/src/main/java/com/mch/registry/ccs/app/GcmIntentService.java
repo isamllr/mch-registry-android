@@ -32,6 +32,8 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.mch.registry.ccs.app.Constants.EventbusMessageType;
 import com.mch.registry.ccs.app.Constants.State;
 import com.mch.registry.ccs.data.PatientDataHandler;
+import com.mch.registry.ccs.data.RecommendationDataHandler;
+import com.mch.registry.ccs.data.VisitDataHandler;
 
 import java.io.IOException;
 
@@ -48,7 +50,7 @@ public class GcmIntentService extends IntentService {
 
    @Override
    protected void onHandleIntent(Intent intent) {
-      mSenderId = Constants.PROJECT_ID; //"210193935586";
+      mSenderId = Constants.PROJECT_ID;
       GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
 
       // action handling for actions of the activity
@@ -70,32 +72,38 @@ public class GcmIntentService extends IntentService {
          // received in your BroadcastReceiver.
          String messageType = gcm.getMessageType(intent);
 
-         if (extras != null && !extras.isEmpty()) { // has effect of
-                                                    // unparcelling Bundle
+         if (extras != null && !extras.isEmpty()) { // has effect of unparcelling Bundle
             /*
              * Filter messages based on message type. Since it is likely that
              * GCM will be extended in the future with new message types, just
              * ignore any message types you're not interested in, or that you
              * don't recognize.
              */
-            if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR
-                  .equals(messageType)) {
+            if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
                sendNotification("Send error: " + extras.toString());
-            } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED
-                  .equals(messageType)) {
-               sendNotification("Deleted messages on server: "
-                     + extras.toString());
+            } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
+               sendNotification("Deleted messages on server: " + extras.toString());
                // If it's a regular GCM message, do some work.
-            } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE
-                  .equals(messageType)) {
+            } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                // Post notification of received message.
                String msg = extras.getString("message");
-               if (TextUtils.isEmpty(msg)) {
-                  msg = "empty message";
-               }
-               sendNotification(msg);
-               Log.i("PregnancyGuide", "Received: " + extras.toString()
-                     + ", sent: " + msg);
+	           String handledMsg = "";
+
+	                if (TextUtils.isEmpty(msg)){
+		                handledMsg = "empty message";
+	                }else if(msg.matches("^R: ")){
+		                handledMsg = msg.replaceAll("^R: ","");
+		                RecommendationDataHandler rdh = new RecommendationDataHandler(this,"Msg received",null, 1);
+		                rdh.addRecommendation(handledMsg);
+		                //TODO: Create notification
+		            }else if(msg.matches("^V: ")){
+		                handledMsg = msg.replaceAll("^V: ","");
+		                VisitDataHandler vdh = new VisitDataHandler(this,"Msg received",null, 1);
+		                vdh.addVisit(handledMsg);
+		                //TODO: Create notification
+		            }
+
+               Log.i("PregnancyGuide", "Received: " + extras.toString());
             }
          }
       } finally {
@@ -106,9 +114,9 @@ public class GcmIntentService extends IntentService {
 
    private void unregister(GoogleCloudMessaging gcm, Intent intent) {
       try {
-         Log.v("PregnancyGuide", "about to unregister...");
+         Log.v("PregnancyGuide", "About to unregister...");
          gcm.unregister();
-         Log.v("PregnancyGuide", "device unregistered");
+         Log.v("PregnancyGuide", "Device unregistered.");
 
          removeRegistrationId();
          Bundle bundle = new Bundle();
@@ -124,9 +132,9 @@ public class GcmIntentService extends IntentService {
 
    private void register(GoogleCloudMessaging gcm, Intent intent) {
       try {
-         Log.v("PregnancyGuide", "about to register...");
+         Log.v("PregnancyGuide", "About to register...");
          String regid = gcm.register(mSenderId);
-         Log.v("PregnancyGuide", "device registered: " + regid);
+         Log.v("PregnancyGuide", "Device registered: " + regid);
 
          String account = intent.getStringExtra(Constants.KEY_ACCOUNT);
          sendRegistrationIdToBackend(gcm, regid, account);

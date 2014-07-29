@@ -30,8 +30,10 @@
     <orderEntry type="library" exported="" name="mysql-connector-java-5.1.31-bin" level="project" />
     <orderEntry type="library" exported="" name="ormlite-core-4.46" level="project" />
     <orderEntry type="library" exported="" name="ormlite-jdbc-4.46" level="project" />
+    <orderEntry type="library" exported="" name="slf4j-simple-1.0-beta4" level="project" />
     <orderEntry type="library" exported="" name="smack" level="project" />
     <orderEntry type="library" exported="" name="smackx" level="project" />
+    <orderEntry type="library" exported="" name="smsj-20051126" level="project" />
     <orderEntry type="library" exported="" name="sqlite-jdbc-3.7.2" level="project" />
     <orderEntry type="library" exported="" name="xmlpull_1_0_5" level="project" />
   </component>

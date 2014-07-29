@@ -153,5 +153,7 @@
     <string name="title_activity_informed_pregnancy">InformedPregnancy</string>
     <string name="title_section_home">Home</string>
     <string name="title_activity_main">Pregnancy Guide</string>
+	<string name="number_same">The number has not changed.</string>
+	<string name="phone_number_sent">Thank you. We will now verify you phone number by SMS.</string>
 
 </resources>

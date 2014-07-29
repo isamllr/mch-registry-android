@@ -16,16 +16,21 @@
 
 package com.mch.registry.ccs.server;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Handles a user registration.
  */
 public class RegisterProcessor implements PayloadProcessor{
 
+	public static final Logger logger = Logger.getLogger(RegisterProcessor.class.getName());
 	//TODO
     @Override
     public void handleMessage(CcsMessage msg) {
         String accountName = msg.getPayload().get("account");
         PseudoDao.getInstance().addRegistration(msg.getFrom(), accountName);
+	    logger.log(Level.INFO, "registerprocessor is registering");
     }
 
 }

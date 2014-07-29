@@ -7,7 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Isa on 18.07.2014.
@@ -45,18 +50,30 @@ public class VisitDataHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addVisit(Visit visit) {
+    public void addVisit(String visitText) {
+
+	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss");
+	    Calendar cal = Calendar.getInstance();
 
         ContentValues values = new ContentValues();
-        values.put(COLUMN_VISITTEXT,visit.get_visitText());
-        values.put(COLUMN_RECEIVEDDATE, visit.get_receivedDate());
-        values.put(COLUMN_VISITDATE, visit.get_visitDate());
+        values.put(COLUMN_VISITTEXT, visitText);
+        values.put(COLUMN_RECEIVEDDATE,  dateFormat.format(cal.getTime()).toString());
+        values.put(COLUMN_VISITDATE, extractDate(visitText));
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.insert(TABLE_VISITS, null, values);
         db.close();
     }
+
+	private static String extractDate(String visitText) {
+		int count = 0;
+		String match = "";
+		Matcher m = Pattern.compile("(0[1-9]|1[012])[- ..](0[1-9]|[12][0-9]|3[01])[- ..](19|20)\\d\\d").matcher(visitText);
+		m.find();
+		match = m.group();
+		return match;
+	}
 
     public Visit findVisit(int visitDate) {
         String query = "Select * FROM " + TABLE_VISITS + " WHERE " + COLUMN_VISITDATE + " =  \"" + Integer.toString(visitDate) + "\"";

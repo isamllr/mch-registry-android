@@ -42,7 +42,7 @@ public interface Constants {
     // action for notification intent
     String NOTIFICATION_ACTION = PACKAGE + ".NOTIFICATION";
     
-    String DEFAULT_USER = "fakeUser";
+    String DEFAULT_USER = ""; //should be pregnancyID later
 
     enum EventbusMessageType {
        REGISTRATION_FAILED, REGISTRATION_SUCCEEDED, UNREGISTRATION_SUCCEEDED, UNREGISTRATION_FAILED;

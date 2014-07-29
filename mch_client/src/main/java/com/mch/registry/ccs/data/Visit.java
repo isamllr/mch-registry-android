@@ -1,8 +1,5 @@
 package com.mch.registry.ccs.data;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Created by Isa on 18.07.2014.
  */
@@ -52,21 +49,11 @@ public class Visit {
         return this._id;
     }
 
-    public String get_visitDate() {
-        return _visitDate;
-    }
+	public String get_visitDate() {
+		return _visitDate;
+	}
 
-    public void set_visitDate(String _visitText) {
-
-        this._visitDate = this.getDateFromVisit(_visitText);
-    }
-
-    private static String getDateFromVisit(String desc) {
-        int count=0;
-        String match = "";
-        Matcher m = Pattern.compile("(0[1-9]|1[012])[- ..](0[1-9]|[12][0-9]|3[01])[- ..](19|20)\\d\\d").matcher(desc);
-        m.find();
-        match = m.group();
-        return match;
-    }
+	public void set_visitDate(String _visitDate) {
+		this._visitDate = _visitDate;
+	}
 }

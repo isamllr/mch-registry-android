@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="smsj-20051126">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/CCSServer/libs/smsj-20051126.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

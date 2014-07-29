@@ -7,7 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Isa on 18.07.2014.
@@ -45,12 +50,15 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public void addRecommendation(Recommendation recommendation) {
+    public void addRecommendation(String recommendationText) {
+
+	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss");
+	    Calendar cal = Calendar.getInstance();
 
         ContentValues values = new ContentValues();
-        values.put(COLUMN_RECOMMENDATIONTEXT,recommendation.get_recommendationText());
-        values.put(COLUMN_RECOMMENDATIONDAY, recommendation.get_recommendationDay());
-        values.put(COLUMN_RECEIVEDDATE, recommendation.get_receivedDate());
+        values.put(COLUMN_RECOMMENDATIONTEXT,recommendationText);
+        values.put(COLUMN_RECOMMENDATIONDAY, calculateRecommendationDay(cal.getTime()));
+        values.put(COLUMN_RECEIVEDDATE, dateFormat.format(cal.getTime()).toString());
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -58,7 +66,31 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
         db.close();
     }
 
-    public ArrayList<Recommendation> getAllRecommendations(){
+	private int calculateRecommendationDay(Date today) {
+		PatientDataHandler pdh = new PatientDataHandler(null, "Recommendation", null, 1);
+		pdh.getPatient();
+		Patient patient = new Patient();
+
+		DateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+
+		String truncatedDateString1 = formatter.format(today);
+		Date truncatedDate1 = null;
+		String truncatedDateString2 = formatter.format(patient.get_expectedDelivery());
+		Date truncatedDate2 = null;
+		try {
+			truncatedDate1 = formatter.parse(truncatedDateString1);
+			truncatedDate2 = formatter.parse(truncatedDateString2);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		long timeDifference = truncatedDate2.getTime()- truncatedDate1.getTime();
+		long daysInBetween = timeDifference / (24*60*60*1000);
+		
+		return ((int) daysInBetween);
+	}
+
+	public ArrayList<Recommendation> getAllRecommendations(){
 
         String query = "Select * FROM " + TABLE_RECOMMENDATIONS;
 

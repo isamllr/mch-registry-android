@@ -15,33 +15,21 @@
  */
 package com.mch.registry.ccs.server;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.MySqlHandler;
+
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-
-/**
- * This class acts as a DAO replacement. There is no
- * persistent state. As soon as you kill the server, all state will
- * be lost.
- * 
- * You have to take care of persisting messages as well as
- * recipients for proper apps!
- */
-
-//TODO
 
 public class PseudoDao {
     
     private final static PseudoDao instance = new PseudoDao();
     private final static Random sRandom = new Random();
     private final Set<Integer> mMessageIds = new HashSet<Integer>();
-    private final Map<String, List<String>> mUserMap = new HashMap<String, List<String>>();
-    private final List<String> mRegisteredUsers = new ArrayList<String>();
+    //private final Map<String, List<String>> mUserMap = new HashMap<String, List<String>>();
+    //private final List<String> mRegisteredUsers = new ArrayList<String>();
     private final Map<String, String> mNotificationKeyMap = new HashMap<String, String>();
     
     private PseudoDao() {        
@@ -51,35 +39,31 @@ public class PseudoDao {
         return instance;
     }
     
-    public void addRegistration(String regId, String accountName) {
-        synchronized(mRegisteredUsers) {
-            if (!mRegisteredUsers.contains(regId)) {
-                mRegisteredUsers.add(regId);
-            }
-            if (accountName != null) {
-                List<String> regIdList = mUserMap.get(accountName);
-                if (regIdList == null) {
-                    regIdList = new ArrayList<String>();
-                    mUserMap.put(accountName, regIdList);
-                }
-                if (!regIdList.contains(regId)) {
-                    regIdList.add(regId);
-                }
-            }
+    public void addRegistration(String regId, String pregnancyID) {
+	    MySqlHandler mysql = new MySqlHandler();
+
+	    if (!mysql.findRegID(regId)) {
+		    mysql.saveNewRegID(regId);
         }
+
+	    if (pregnancyID != null) { //PregID is only available if verified before
+		    if (mysql.findPregnancyIdInNarTable(Integer.parseInt(pregnancyID))) {
+			    mysql.updateRegID(Integer.parseInt(pregnancyID), regId);
+		    }
+	    }
     }
     
-    public List<String> getAllRegistrationIds() {
+    /*public List<String> getAllRegistrationIds() {
         return Collections.unmodifiableList(mRegisteredUsers);
-    }
+    }*/
     
-    public List<String> getAllRegistrationIdsForAccount(String account) {
+    /*public List<String> getAllRegistrationIdsForAccount(String account) {
         List<String> regIds = mUserMap.get(account);
         if (regIds != null) {
            return Collections.unmodifiableList(regIds);
         }
         return null;
-    }
+    }*/
     
     public String getNotificationKeyName(String accountName) {
         return mNotificationKeyMap.get(accountName);
@@ -89,9 +73,9 @@ public class PseudoDao {
         mNotificationKeyMap.put(accountName, notificationKeyName);
     }
     
-    public Set<String> getAccounts() {
+    /*public Set<String> getAccounts() {
         return Collections.unmodifiableSet(mUserMap.keySet());
-    }
+    }*/
     
     public String getUniqueMessageId() {
         int nextRandom = sRandom.nextInt();
