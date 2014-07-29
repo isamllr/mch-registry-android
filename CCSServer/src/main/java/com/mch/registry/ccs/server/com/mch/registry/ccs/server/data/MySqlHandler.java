@@ -460,12 +460,11 @@ public class MySqlHandler{
 	public boolean updateAllPregnancyInfos(String mobilePhone){
 		boolean status = false;
 		Pregnancy pregnancy = new Pregnancy();
-		pregnancy = this.getPregnancyInfo(mobilePhone);
+		pregnancy = this.getPregnancyInfoByMobilePhone(mobilePhone);
 
 		String statement = "UPDATE notificationappregistration"
 				+ " SET "
 				+ " PregnancyID =  " + pregnancy.getPregnancyID()
-				+ " MobilePhoneVerified = 0"
 				+ " ActivationCode = " + this.createActivationCode()
 				+ " WHERE NotificationAppRegistrationID = " + pregnancy.notificationAppRegistrationID + ";";
 
@@ -515,7 +514,6 @@ public class MySqlHandler{
 		+ " (NotificationAppRegistrationID,"
 				+ " GCMRegistrationID,"
 				+ " PregnancyID,"
-				+ " MobilePhoneVerified,"
 				+ " ActivationCode)"
 				+ " VALUES"
 				+ " (null,"
@@ -563,7 +561,7 @@ public class MySqlHandler{
 		return status;
 	}
 
-	public Pregnancy getPregnancyInfo(String pregnancyId){
+	public Pregnancy getPregnancyInfoByGcmRegId(String gcmRegId){
 		Pregnancy pregnancy = new Pregnancy();
 
 		String statement = "SELECT nar.NotificationAppRegistrationID, "
@@ -581,7 +579,85 @@ public class MySqlHandler{
 				+ " JOIN pregnancy preg on preg.PregnancyID = nar.PregnancyID"
 				+ " JOIN patient pat on pat.PatientID = preg.PatientID"
 				+ " JOIN facilities f on preg.FacilityID = f.FacilityID"
-				+ " WHERE preg.PregnancyID = " + pregnancyId + ";";
+				+ " WHERE nar.GCMRegistrationID = " + gcmRegId + ";";
+
+
+		this.connect();
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.createStatement();
+
+			if (stmt.execute(statement)) {
+				rs = stmt.getResultSet();
+			}
+
+			pregnancy = null;
+			while(rs.next()){
+				//Retrieve by column name
+				pregnancy.setPregnancyId(rs.getInt("PregnancyID"));
+				pregnancy.setNotificationAppRegistrationId(rs.getInt("NotificationAppRegistrationID"));
+				pregnancy.setgcmRegistrationId(rs.getString("GCMRegistrationID"));
+				pregnancy.setMobileApp(rs.getInt("MobileApp"));
+				pregnancy.setActivationCode(rs.getString("ActivationCode"));
+				pregnancy.setMobilePhone(rs.getString("MobilePhone"));
+				pregnancy.setPatientSurName(rs.getString("SurName"));
+				pregnancy.setPatientLastName(rs.getString("LastName"));
+				pregnancy.setExpectedDelivery(rs.getString("Calc_DeliveryDate"));
+				pregnancy.setFacilityName(rs.getString("FacilityName"));
+				pregnancy.setFacilityPhoneNumber(rs.getString("FacilityPhoneNumber"));
+				logger.log(Level.INFO, "get PregnancyInfo.");
+			}
+		}
+		catch (SQLException ex){
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		}
+		finally {
+
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				rs = null;
+			}
+
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				stmt = null;
+			}
+		}
+
+		this.close();
+
+		return pregnancy;
+	}
+
+	public Pregnancy getPregnancyInfoByMobilePhone(String mobilePhone){
+		Pregnancy pregnancy = new Pregnancy();
+
+		String statement = "SELECT nar.NotificationAppRegistrationID, "
+				+ " nar.GCMRegistrationID,"
+				+ " nar.PregnancyID,"
+				+ " nar.ActivationCode,"
+				+ " preg.MobileApp,"
+				+ " pat.MobilePhone,"
+				+ " pat.GivenName as SurName,"
+				+ " pat.FamilyName as LastName,"
+				+ " preg.Calc_DeliveryDate,"
+				+ " f.FacilityName,"
+				+ " f.Phone as FacilityPhoneNumber"
+				+ " FROM notificationappregistration nar"
+				+ " JOIN pregnancy preg on preg.PregnancyID = nar.PregnancyID"
+				+ " JOIN patient pat on pat.PatientID = preg.PatientID"
+				+ " JOIN facilities f on preg.FacilityID = f.FacilityID"
+				+ " WHERE pat.MobilePhone = " + mobilePhone + ";";
 
 
 		this.connect();
@@ -667,5 +743,108 @@ public class MySqlHandler{
 
 	private String createActivationCode() {
 		return new BigInteger(130, random).toString(32);
+	}
+
+	public String getVerificationCode(String gcmRegId) {
+		String statement = "SELECT ActivationCode"
+		+ " FROM notificationappregistration"
+		+ " WHERE GCMRegistrationID = '" + gcmRegId + "';";
+
+		Pregnancy pregnancy = new Pregnancy();
+
+		this.connect();
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.createStatement();
+
+			if (stmt.execute(statement)) {
+				rs = stmt.getResultSet();
+			}
+
+			while(rs.next()){
+				pregnancy.setActivationCode(rs.getString("ActivationCode"));
+				logger.log(Level.INFO, "get ActivationCode for regid");
+			}
+		}
+		catch (SQLException ex){
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		}
+		finally {
+
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				rs = null;
+			}
+
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				stmt = null;
+			}
+		}
+
+		this.close();
+
+		return pregnancy.getActivationCode();
+	}
+
+	public boolean setVerified(String gcmRegId, boolean verificationAccepted) {
+		Pregnancy pregnancy = new Pregnancy();
+		pregnancy = getPregnancyInfoByGcmRegId(gcmRegId);
+		boolean status = false;
+
+		if (pregnancy!=null){
+			int accepted = ( verificationAccepted ? 1 : 0 );
+
+			String statement = "UPDATE pregnancy"
+					+ " SET MobileApp = " + accepted
+					+ " WHERE PregnancyID =" + pregnancy.getPregnancyID() + ";";
+
+			this.connect();
+			Statement stmt = null;
+			ResultSet rs = null;
+
+			try {
+				stmt = conn.createStatement();
+				stmt.execute(statement);
+				status = true;
+				logger.log(Level.INFO, "Verification " +  accepted + " for PregnancyID" + pregnancy.getPregnancyID());
+			}
+			catch (SQLException ex){
+				System.out.println("SQLException: " + ex.getMessage());
+				System.out.println("SQLState: " + ex.getSQLState());
+				System.out.println("VendorError: " + ex.getErrorCode());
+			}
+			finally {
+
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException sqlEx) { } // ignore
+
+					rs = null;
+				}
+
+				if (stmt != null) {
+					try {
+						stmt.close();
+					} catch (SQLException sqlEx) { } // ignore
+
+					stmt = null;
+				}
+			}
+
+			this.close();
+		}
+		return status;
 	}
 }

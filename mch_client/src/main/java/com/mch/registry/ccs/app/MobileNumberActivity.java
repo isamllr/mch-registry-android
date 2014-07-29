@@ -78,7 +78,7 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 		patient = pdh.getPatient();
 		String mobileNumber = patient.get_mobileNumber();
 
-		if(!mobileNumber.isEmpty()){
+		if(!(mobileNumber.compareTo("")==0)){
 			mobilePhoneNumber.setText(mobileNumber);
 		}else{
 			TelephonyManager tMgr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
@@ -158,7 +158,7 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 			smsReceiver = new SMSReceiver();
 			getApplicationContext().registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
 			//wait until sms has arrived (new STATE!!)
-			getApplicationContext().unregisterReceiver(smsReceiver);
+			//getApplicationContext().unregisterReceiver(smsReceiver);
 
 			}else{
 				Crouton.showText(this, getString(R.string.number_invalid), Style.ALERT);

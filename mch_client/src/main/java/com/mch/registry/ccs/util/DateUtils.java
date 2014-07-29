@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mch.registry.ccs.apputil;
+package com.mch.registry.ccs.util;
 
 import java.util.Date;
 

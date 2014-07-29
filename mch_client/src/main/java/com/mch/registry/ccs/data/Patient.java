@@ -13,56 +13,45 @@ public class Patient {
     private String _facilityName;
     private String _facilityPhoneNumber;
     private int _latestMessageID;
-	private String _account;
-	private String _password;
+	private int _isVerified;
 
     public Patient() {
     }
 
-	public Patient(int _patientID, String _regID, String _mobileNumber, int _id, String _patientName, String _facilityPhoneNumber, String _facilityName, String _expectedDelivery, int _latestMessageID, String _account, String _password) {
+	public Patient(int _patientID, String _regID, String _mobileNumber, String _facilityName, String _facilityPhoneNumber, String _expectedDelivery, String _patientName, int _latestMessageID, int _isVerified) {
 		this._patientID = _patientID;
 		this._regID = _regID;
 		this._mobileNumber = _mobileNumber;
+		this._facilityName = _facilityName;
+		this._facilityPhoneNumber = _facilityPhoneNumber;
+		this._expectedDelivery = _expectedDelivery;
+		this._patientName = _patientName;
+		this._latestMessageID = _latestMessageID;
+		this._isVerified = _isVerified;
+	}
+
+	public Patient(int _id, int _patientID, String _regID, String _patientName, String _mobileNumber, String _expectedDelivery, String _facilityName, String _facilityPhoneNumber, int _latestMessageID, int _isVerified) {
 		this._id = _id;
-		this._patientName = _patientName;
-		this._facilityPhoneNumber = _facilityPhoneNumber;
-		this._facilityName = _facilityName;
-		this._expectedDelivery = _expectedDelivery;
-		this._latestMessageID = _latestMessageID;
-		this._account = _account;
-		this._password = _password;
-	}
-
-	public Patient(int _patientID, String _regID, String _mobileNumber, String _password, String _account, int _latestMessageID, String _facilityPhoneNumber, String _facilityName, String _expectedDelivery, String _patientName) {
 		this._patientID = _patientID;
 		this._regID = _regID;
-		this._mobileNumber = _mobileNumber;
-		this._password = _password;
-		this._account = _account;
-		this._latestMessageID = _latestMessageID;
-		this._facilityPhoneNumber = _facilityPhoneNumber;
-		this._facilityName = _facilityName;
-		this._expectedDelivery = _expectedDelivery;
 		this._patientName = _patientName;
+		this._mobileNumber = _mobileNumber;
+		this._expectedDelivery = _expectedDelivery;
+		this._facilityName = _facilityName;
+		this._facilityPhoneNumber = _facilityPhoneNumber;
+		this._latestMessageID = _latestMessageID;
+		this._isVerified = _isVerified;
 	}
 
-	public String get_account() {
-		return _account;
+	public int get_isVerified() {
+		return _isVerified;
 	}
 
-	public void set_account(String _account) {
-		this._account = _account;
+	public void set_isVerified(int _isVerified) {
+		this._isVerified = _isVerified;
 	}
 
-	public String get_password() {
-		return _password;
-	}
-
-	public void set_password(String _password) {
-		this._password = _password;
-	}
-
-    public int get_latestMessageID() {
+	public int get_latestMessageID() {
         return _latestMessageID;
     }
 

@@ -30,7 +30,7 @@ public class SMSReceiver extends BroadcastReceiver{
 		Intent msgIntent = new Intent(context.getApplicationContext(), GcmIntentService.class);
 		msgIntent.setAction(Constants.ACTION_ECHO);
 		String msg = "Verify: " + verificationCode;
-		String msgTxt = "Checking verification code " + verificationCode + ".";
+		String msgTxt = "Checking verification code: " + verificationCode + ".";
 		msgIntent.putExtra(Constants.KEY_MESSAGE_TXT, msg);
 		context.getApplicationContext().startService(msgIntent);
 		return verificationCode;
