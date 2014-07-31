@@ -1,9 +1,10 @@
-package com.mch.registry.ccs.server.com.mch.registry.ccs.server.sms;
+package com.mch.registry.ccs.sms;
 
 /**
  * Created by Isa on 29.07.2014.
  */
 
+import com.mch.registry.ccs.server.MessageProcessor;
 import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.MySqlHandler;
 import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.Pregnancy;
 
@@ -15,13 +16,19 @@ import org.marre.sms.transport.SmsTransportManager;
 
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SendSMS {
+
+	public static final Logger logger = Logger.getLogger(MessageProcessor.class.getName());
 
 	void SendSMS() {
 	}
 
 	public static void sendActivationCode(String phoneNumber) {
+
+
 		// The username, password and apiid is sent to the clickatell transport
 		// in a Properties
 		Properties props = new Properties();
@@ -50,8 +57,7 @@ public class SendSMS {
 			e.printStackTrace();
 		}
 
-		String recipient = phoneNumber;
-
+		String recipient = phoneNumber.replaceAll("[+]", "");
 		// Create the sms message
 		MySqlHandler mysql = new MySqlHandler();
 		Pregnancy pregnancy = new Pregnancy();
@@ -59,7 +65,9 @@ public class SendSMS {
 		SmsTextMessage textMessage = new SmsTextMessage(pregnancy.getActivationCode());
 
 		try {
-			transport.send(textMessage, new SmsAddress(recipient.replaceAll("[+]", "")), new SmsAddress(sender));
+			transport.send(textMessage, new SmsAddress( recipient), new SmsAddress(sender));
+			logger.log(Level.INFO, "Code sent by SMS to " + recipient);
+
 		} catch (SmsException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

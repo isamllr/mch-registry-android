@@ -16,7 +16,6 @@
 package com.mch.registry.ccs.server;
 
 import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.MySqlHandler;
-import com.mch.registry.ccs.server.com.mch.registry.ccs.server.sms.SendSMS;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,8 +43,7 @@ public class EchoProcessor implements PayloadProcessor{
 			MySqlHandler mysql = new MySqlHandler();
 			mysql.setVerified(msg.getFrom(), false);
 			if(mysql.updateAllPregnancyInfos(phoneNumber)){
-				SendSMS sms = new SendSMS();
-				sms.sendActivationCode(phoneNumber);
+				client.sendActivationCodeBySms(phoneNumber);
 				logger.log(Level.INFO, "Activation code sent by SMS.");
 			}else{
 				sendPregnancyForMobileNumberNotFound(msg.getFrom());
@@ -91,8 +89,24 @@ public class EchoProcessor implements PayloadProcessor{
 	}
 
 	private void sendPregnancyInfos(String gcmRegId) {
-		logger.log(Level.INFO, "Sending pregnancy infos");
+
 		//TODO
+		//Check if verified
+		logger.log(Level.INFO, "Sending pregnancy infos");
+		Map<String, String> payload = new HashMap<String, String>();
+		String toRegId = gcmRegId;
+		String messageId = client.getRandomMessageId();
+		String message = "_PregnacyInfos";
+		payload = new HashMap<String, String>();
+		payload.put("message", message);
+
+		try {
+			// Send the downstream message to a device.
+			client.send(client.createJsonMessage(gcmRegId, messageId, payload, null, 10000L, true));
+			logger.log(Level.INFO, "PregnancyInfos sent. IRegID: " + toRegId + ", Text: " + message);
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "PregnancyInfos not sent message couldnot be sent! RegID: " + toRegId + ", Text: " + message);
+		}
 	}
 
 	private void sendVerificationMessage(String gcmRegId, boolean verificationAccepted) {

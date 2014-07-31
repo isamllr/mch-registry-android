@@ -510,7 +510,7 @@ public class MySqlHandler{
 				+ " JOIN patient pat on pat.PatientID = preg.PatientID"
 				+ " JOIN facilities f on preg.FacilityID = f.FacilityID"
 				+ " LEFT JOIN notificationappregistration nar on preg.PregnancyID = nar.PregnancyID"
-				+ " WHERE nar.GCMRegistrationID = " + gcmRegId + ";";
+				+ " WHERE nar.GCMRegistrationID = '" + gcmRegId + "';";
 
 
 		this.connect();
