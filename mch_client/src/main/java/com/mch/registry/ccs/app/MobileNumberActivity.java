@@ -45,6 +45,9 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_number);
 
+	    smsReceiver = new SMSReceiver();
+	    getApplicationContext().registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+
 		//TODO:check play services
 	    mState = getCurrState();
 
@@ -131,6 +134,12 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 	}
 
 	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		getApplicationContext().unregisterReceiver(smsReceiver);
+	}
+
+	@Override
 	public void onClick(View view) {
 		Log.v("PregnancyGuide", "onClick: " + view.getId());
 		switch (mState) {
@@ -146,28 +155,22 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 		patient = pdh.getPatient();
 		String mobileNumber = mobilePhoneNumber.getText().toString().replaceAll("\\s","");
 
-		if (patient.get_mobileNumber().compareTo(mobileNumber)==0){
+		if (patient.get_mobileNumber().compareTo(mobileNumber)==0 && patient.get_isVerified()==1){
 			Crouton.showText(this, getString(R.string.number_same), Style.INFO);
 		}else{
 			if(validatePhoneNumber(mobileNumber)){
-
 			//Save phone number
-			pdh.updateMobilePhoneNumber(mobilePhoneNumber.getText().toString());
+			pdh.updateMobilePhoneNumber(mobileNumber);
 			//Send new phone number to server
-			this.sendPhoneMessage();
-			smsReceiver = new SMSReceiver();
-			getApplicationContext().registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
-			//wait until sms has arrived (new STATE!!)
-			//getApplicationContext().unregisterReceiver(smsReceiver);
-
+			this.sendPhoneMessage(mobileNumber);
 			}else{
 				Crouton.showText(this, getString(R.string.number_invalid), Style.ALERT);
 			}
 		}
 	}
 
-	private boolean validatePhoneNumber(String mobilePhoneNumber) {
-		return mobilePhoneNumber.matches("[+]\\d{11,12}");
+	private boolean validatePhoneNumber(String mobileNumber) {
+		return mobileNumber.matches("[+]\\d{11,12}");
 	}
 
 	@TargetApi(value= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -186,10 +189,10 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 		startActivityForResult(selectAccount, RC_SELECT_ACCOUNT);
 	}
 
-	private void sendPhoneMessage() {
+	private void sendPhoneMessage(String mobileNumber) {
 		Intent msgIntent = new Intent(this, GcmIntentService.class);
 		msgIntent.setAction(Constants.ACTION_ECHO);
-		String msg = "Phone: " + mobilePhoneNumber.getText().toString();
+		String msg = "_Phone: " + mobileNumber;
 
 		String msgTxt = getString(R.string.phone_number_sent, msg);
 		Crouton.showText(this, msgTxt, Style.INFO);

@@ -73,10 +73,11 @@ public class MySqlHandler{
 			String statement = "SELECT "
 					+ "nq.NotificationQueueID, "
 					+ "nq.NotificationText, "
-					+ "nar.GCMRegistrationID "
+					+ "preg.GCMRegistrationID "
 					+ "FROM notificationqueue nq "
-					+ "JOIN notificationappregistration nar on nq.MobilePhone = nar.MobilePhone "
-					+ "WHERE nq.MobileApp = 1 "
+					+ "JOIN patient pat on nq.MobilePhone = pat.MobilePhone "
+					+ "JOIN pregnancy preg on preg.PregnancyID = pat.PregnancyID "
+					+ "WHERE preg.MobileApp = 1 "
 					+ "AND Date(nq.LatestBy) >= curdate() "
 					+ "AND nq.NotificationTypeID = " + notificationTypeID + " "
 					+ "AND ((nq.DateTimeToSend >= '" + lastFullHalfHour + "' AND  nq.DateTimeToSend <=  ADDTIME('" + lastFullHalfHour + "', '00:30:00')) "
@@ -332,75 +333,6 @@ public class MySqlHandler{
 
 	}
 
-	public boolean findMobilePhoneDoNotUse(String mobilePhone){
-		boolean mobilePhoneFound = false;
-
-		Pregnancy pregnancy = new Pregnancy();
-
-		String statement = "SELECT nar.NotificationAppRegistrationID, "
-				+ " nar.GCMRegistrationID,"
-				+ " nar.PregnancyID,"
-				+ " nar.ActivationCode,"
-				+ " preg.MobileApp,"
-				+ " pat.MobilePhone,"
-				+ " pat.GivenName as SurName,"
-				+ " pat.FamilyName as LastName,"
-				+ " preg.Calc_DeliveryDate,"
-				+ " f.FacilityName,"
-				+ " f.Phone as FacilityPhoneNumber"
-				+ " FROM notificationappregistration nar"
-				+ " JOIN pregnancy preg on preg.PregnancyID = nar.PregnancyID"
-				+ " JOIN patient pat on pat.PatientID = preg.PatientID"
-				+ " JOIN facilities f on preg.FacilityID = f.FacilityID"
-				+ " WHERE pat.MobilePhone = '" + mobilePhone + "';";
-
-
-		this.connect();
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		try {
-			stmt = conn.createStatement();
-
-			if (stmt.execute(statement)) {
-				rs = stmt.getResultSet();
-			}
-
-			if(rs.next()){
-				mobilePhoneFound = true;
-				logger.log(Level.INFO, "mobile phone found");
-			}
-		}
-		catch (SQLException ex){
-			System.out.println("SQLException: " + ex.getMessage());
-			System.out.println("SQLState: " + ex.getSQLState());
-			System.out.println("VendorError: " + ex.getErrorCode());
-		}
-		finally {
-
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException sqlEx) { } // ignore
-
-				rs = null;
-			}
-
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException sqlEx) { } // ignore
-
-				stmt = null;
-			}
-		}
-
-		this.close();
-
-		return mobilePhoneFound;
-
-	}
-
 	public boolean findPregnancyIdInNarTable(int pregnancyId){
 		boolean pregnancyIdFound = false;
 
@@ -464,8 +396,8 @@ public class MySqlHandler{
 
 		String statement = "UPDATE notificationappregistration"
 				+ " SET "
-				+ " PregnancyID =  " + pregnancy.getPregnancyID()
-				+ " ActivationCode = " + this.createActivationCode()
+				+ " PregnancyID = " + pregnancy.getPregnancyID() + ", "
+				+ " ActivationCode = '" + this.createActivationCode() + "'"
 				+ " WHERE NotificationAppRegistrationID = " + pregnancy.notificationAppRegistrationID + ";";
 
 		this.connect();
@@ -519,8 +451,7 @@ public class MySqlHandler{
 				+ " (null,"
 				+ " '" + gcmRegId  + "',"
 				+ " 0,"
-				+ " 0,"
-				+ " null);";
+				+ " '');";
 
 		this.connect();
 		Statement stmt = null;
@@ -564,21 +495,21 @@ public class MySqlHandler{
 	public Pregnancy getPregnancyInfoByGcmRegId(String gcmRegId){
 		Pregnancy pregnancy = new Pregnancy();
 
-		String statement = "SELECT nar.NotificationAppRegistrationID, "
+		String statement = "SELECT nar.NotificationAppRegistrationID,"
 				+ " nar.GCMRegistrationID,"
 				+ " nar.PregnancyID,"
+				+ " pat.MobilePhone,"
 				+ " nar.ActivationCode,"
 				+ " preg.MobileApp,"
-				+ " pat.MobilePhone,"
 				+ " pat.GivenName as SurName,"
 				+ " pat.FamilyName as LastName,"
 				+ " preg.Calc_DeliveryDate,"
 				+ " f.FacilityName,"
 				+ " f.Phone as FacilityPhoneNumber"
-				+ " FROM notificationappregistration nar"
-				+ " JOIN pregnancy preg on preg.PregnancyID = nar.PregnancyID"
+				+ " FROM pregnancy preg"
 				+ " JOIN patient pat on pat.PatientID = preg.PatientID"
 				+ " JOIN facilities f on preg.FacilityID = f.FacilityID"
+				+ " LEFT JOIN notificationappregistration nar on preg.PregnancyID = nar.PregnancyID"
 				+ " WHERE nar.GCMRegistrationID = " + gcmRegId + ";";
 
 
@@ -642,9 +573,9 @@ public class MySqlHandler{
 	public Pregnancy getPregnancyInfoByMobilePhone(String mobilePhone){
 		Pregnancy pregnancy = new Pregnancy();
 
-		String statement = "SELECT nar.NotificationAppRegistrationID, "
+		String statement = "SELECT nar.NotificationAppRegistrationID,"
 				+ " nar.GCMRegistrationID,"
-				+ " nar.PregnancyID,"
+				+ " preg.PregnancyID,"
 				+ " nar.ActivationCode,"
 				+ " preg.MobileApp,"
 				+ " pat.MobilePhone,"
@@ -653,12 +584,15 @@ public class MySqlHandler{
 				+ " preg.Calc_DeliveryDate,"
 				+ " f.FacilityName,"
 				+ " f.Phone as FacilityPhoneNumber"
-				+ " FROM notificationappregistration nar"
-				+ " JOIN pregnancy preg on preg.PregnancyID = nar.PregnancyID"
+				+ " FROM pregnancy preg"
+				+ " LEFT JOIN notificationappregistration nar on preg.PregnancyID = nar.PregnancyID"
 				+ " JOIN patient pat on pat.PatientID = preg.PatientID"
 				+ " JOIN facilities f on preg.FacilityID = f.FacilityID"
-				+ " WHERE pat.MobilePhone = " + mobilePhone + ";";
-
+				+ " LEFT JOIN delivery d ON preg.PregnancyID = d.PregnancyID"
+				+ " WHERE d.DeliveryID IS NULL"
+				+ " AND DATEDIFF(DATE_ADD(preg.Calc_DeliveryDate, INTERVAL 31 DAY), curdate()) >= 0"
+				+ " AND pat.discharged = 0"
+				+ " AND pat.MobilePhone = '" + mobilePhone + "';";
 
 		this.connect();
 		Statement stmt = null;

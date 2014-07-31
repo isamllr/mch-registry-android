@@ -23,10 +23,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.mch.registry.ccs.app.Constants.EventbusMessageType;
@@ -49,6 +51,7 @@ public class GcmIntentService extends IntentService {
    }
 
    @Override
+   ///New: Mueller
    protected void onHandleIntent(Intent intent) {
       mSenderId = Constants.PROJECT_ID;
       GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
@@ -80,37 +83,72 @@ public class GcmIntentService extends IntentService {
              * don't recognize.
              */
             if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-               sendNotification("Send error: " + extras.toString(), "Error");
+	            sendPhoneActivityNotification("Send error: " + extras.toString(), "Error");
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
-               sendNotification("Deleted messages on server: " + extras.toString(), "Deleted");
+	            sendPhoneActivityNotification("Deleted messages on server: " + extras.toString(), "Deleted");
                // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                // Post notification of received message.
                String msg = extras.getString("message");
-	           String handledMsg = "";
 
 	                if (TextUtils.isEmpty(msg)){
-		                handledMsg = "empty message";
-	                }else if(msg.matches("^R: ")){
-		                handledMsg = msg.replaceAll("^R: ","");
-		                RecommendationDataHandler rdh = new RecommendationDataHandler(this,"Msg received",null, 1);
-		                rdh.addRecommendation(handledMsg);
-		                sendNotification("Pregnancy Guide: Recommendation received!", "New recommendation");
-		            }else if(msg.matches("^V: ")){
-		                handledMsg = msg.replaceAll("^V: ","");
-		                VisitDataHandler vdh = new VisitDataHandler(this,"Msg received",null, 1);
-		                vdh.addVisit(handledMsg);
-		                sendNotification("Pregnancy Guide: Reminder received!", "New visit reminder");
-		            }else if(msg.matches("^[Verified]")){
-						PatientDataHandler pdh = new PatientDataHandler(this,"Msg received", null, 1);
-		                pdh.setVerified(true);
-		                sendNotification("Phone number verified!", "Phone verified");
-		                //make new status
-	                }else if(msg.matches("^[Not Verified]")){
-		                PatientDataHandler pdh = new PatientDataHandler(this,"Msg received", null, 1);
-		                pdh.setVerified(false);
-		                sendNotification("Failed to verifiy phone number.", "Phone not verified");
-		                //make new status
+	                }else if(msg.contains("_R: ")){
+		                final String recommendationMessage = msg.replaceAll("_R: ","");
+		                Handler mHandler = new Handler(getMainLooper());
+		                mHandler.post(new Runnable() {
+			                @Override
+			                public void run() {
+				                RecommendationDataHandler rdh = new RecommendationDataHandler(getApplicationContext(),"Msg received",null, 1);
+				                rdh.addRecommendation(recommendationMessage);
+				                sendNotification("Pregnancy Guide: Recommendation received!", "New recommendation");
+			                }
+		                });
+		            }else if(msg.contains("_V: ")){
+		                final String visitMessage = msg.replaceAll("_V: ","");
+		                Handler mHandler = new Handler(getMainLooper());
+		                mHandler.post(new Runnable() {
+			                @Override
+			                public void run() {
+				                VisitDataHandler vdh = new VisitDataHandler(getApplicationContext(),"Msg received",null, 1);
+				                vdh.addVisit(visitMessage);
+				                sendNotification("Pregnancy Guide: Reminder received!", "New visit reminder");
+			                }
+		                });
+		            }else if(msg.contains("_Verified")){
+		                Handler mHandler = new Handler(getMainLooper());
+		                mHandler.post(new Runnable() {
+			                @Override
+			                public void run() {
+				                PatientDataHandler pdh = new PatientDataHandler(getApplicationContext(),"Msg received", null, 1);
+				                Toast.makeText(getApplicationContext(),getString(R.string.number_verified), Toast.LENGTH_LONG).show();
+				                //Crouton.showText(this.getApplicationContext(), getString(R.id.number_verified), Style.CONFIRM);
+				                pdh.setVerified(true);
+				                Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+				                startActivity(mainIntent );
+			                }
+		                });
+	                }else if(msg.contains("_NotVerified")){
+		                Handler mHandler = new Handler(getMainLooper());
+		                mHandler.post(new Runnable() {
+			                @Override
+			                public void run() {
+				                PatientDataHandler pdh = new PatientDataHandler(getApplicationContext(),"not verified", null, 1);
+				                pdh.setVerified(false);
+				                Toast.makeText(getApplicationContext(), getString(R.string.number_not_verified), Toast.LENGTH_SHORT).show();
+				                //Crouton.showText(getApplicationContext(), R..number_not_verified, Style.CONFIRM);
+			                }
+		                });
+	                }else if(msg.contains("_PregnancyNotFound")){
+		                Handler mHandler = new Handler(getMainLooper());
+		                mHandler.post(new Runnable() {
+			                @Override
+			                public void run() {
+				                PatientDataHandler pdh = new PatientDataHandler(getApplicationContext(),"Msg received", null, 1);
+				                pdh.setVerified(false);
+				                Toast.makeText(getApplicationContext(),getString(R.string.number_not_found), Toast.LENGTH_LONG).show();
+				                //Crouton.showText(getApplicationContext(), R.id.number_not_found, Style.ALERT);
+			                }
+		                });
 	                }
 
                Log.i("PregnancyGuide", "Received: " + extras.toString());
@@ -229,10 +267,31 @@ public class GcmIntentService extends IntentService {
    // a GCM message.
 
 	///New: Mueller
+	private void sendPhoneActivityNotification(String msg, String title) {
+		mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+		Intent notificationIntent = new Intent(this, MobileNumberActivity.class);
+		notificationIntent.setAction(Constants.NOTIFICATION_ACTION);
+		notificationIntent.putExtra(Constants.KEY_MESSAGE_TXT, msg);
+		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+				.setSmallIcon(R.drawable.ic_stat_collections_cloud)
+				.setContentTitle(title)
+				.setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+				.setContentText(msg);
+
+		mBuilder.setContentIntent(contentIntent);
+		mNotificationManager.notify(Constants.NOTIFICATION_NR, mBuilder.build());
+	}
+
+	///New: Mueller
 	private void sendNotification(String msg, String title) {
 		mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		Intent notificationIntent = new Intent(this, GCMDemoActivity.class);
+		Intent notificationIntent = new Intent(this,MainActivity.class);
 		notificationIntent.setAction(Constants.NOTIFICATION_ACTION);
 		notificationIntent.putExtra(Constants.KEY_MESSAGE_TXT, msg);
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<item name="action_settings" type="id">Action Settings</item>
+	<item name="number_not_found" type="id">We can not find your number in our hospital database,
+		sorry.
+	</item>
+	<item name="number_verified" type="id">Your number was successfully verified.</item>
 </resources>

@@ -15,25 +15,103 @@
  */
 package com.mch.registry.ccs.server;
 
+import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.MySqlHandler;
+import com.mch.registry.ccs.server.com.mch.registry.ccs.server.sms.SendSMS;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Handles an echo request.
  */
 public class EchoProcessor implements PayloadProcessor{
 
-    @Override
-    public void handleMessage(CcsMessage msg) {
-        PseudoDao dao = PseudoDao.getInstance();
-        CcsClient client = CcsClient.getInstance();
-        String msgId = dao.getUniqueMessageId();
-        String jsonRequest = 
-                CcsClient.createJsonMessage(
-                        msg.getFrom(), 
-                        msgId, 
-                        msg.getPayload(), 
-                        null, 
-                        null, // TTL (null -> default-TTL) 
-                        false);
-        client.send(jsonRequest);
-    }
+	private CcsClient client = CcsClient.getInstance();
+	private PseudoDao dao = PseudoDao.getInstance();
+	public static final Logger logger = Logger.getLogger(MessageProcessor.class.getName());
+
+	@Override
+	public void handleMessage(CcsMessage msg) {
+
+		String txtMsg = msg.getPayload().get("message");
+		logger.log(Level.INFO, "Message received. Text: " + txtMsg);
+
+		if(txtMsg.contains("_Phone: ")){
+			String phoneNumber = txtMsg.replaceAll("_Phone: ","");
+			logger.log(Level.INFO, "Phone Number is: " + txtMsg);
+			MySqlHandler mysql = new MySqlHandler();
+			mysql.setVerified(msg.getFrom(), false);
+			if(mysql.updateAllPregnancyInfos(phoneNumber)){
+				SendSMS sms = new SendSMS();
+				sms.sendActivationCode(phoneNumber);
+				logger.log(Level.INFO, "Activation code sent by SMS.");
+			}else{
+				sendPregnancyForMobileNumberNotFound(msg.getFrom());
+				logger.log(Level.INFO, "Pregnancy not found");
+			}
+
+		}
+
+		if(txtMsg.contains("_Verify: ")){
+			txtMsg = txtMsg.replaceAll("_Verify: ","");
+			MySqlHandler mysql = new MySqlHandler();
+			//Compare codes
+			if (mysql.getVerificationCode(msg.getFrom()).compareTo(txtMsg)==0){
+				mysql.setVerified(msg.getFrom(), true);
+				sendVerificationMessage(msg.getFrom(), true);
+				logger.log(Level.INFO, "Verification ok");
+				sendPregnancyInfos(msg.getFrom());
+			}else{
+				mysql.setVerified(msg.getFrom(), true);
+				sendVerificationMessage(msg.getFrom(), true);
+				logger.log(Level.INFO, "Verification failed");
+			}
+		}
+	}
+
+	private void sendPregnancyForMobileNumberNotFound(String gcmRegId) {
+		Map<String, String> payload = new HashMap<String, String>();
+		String toRegId = gcmRegId;
+
+		String message = "_PregnancyNotFound";
+		String messageId = client.getRandomMessageId();
+
+		payload = new HashMap<String, String>();
+		payload.put("message", message);
+
+		try {
+			// Send the downstream message to a device.
+			client.send(client.createJsonMessage(gcmRegId, messageId, payload, null, 10000L, true));
+			logger.log(Level.INFO, "PregnancyNotFound message sent. IRegID: " + toRegId + ", Text: " + message);
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "PregnancyNotFound message could not be sent! RegID: " + toRegId + ", Text: " + message);
+		}
+	}
+
+	private void sendPregnancyInfos(String gcmRegId) {
+		logger.log(Level.INFO, "Sending pregnancy infos");
+		//TODO
+	}
+
+	private void sendVerificationMessage(String gcmRegId, boolean verificationAccepted) {
+		Map<String, String> payload = new HashMap<String, String>();
+		String toRegId = gcmRegId;
+
+		String message = ( verificationAccepted ? "_Verified" : "_NotVerified" );
+		String messageId = client.getRandomMessageId();
+
+		payload = new HashMap<String, String>();
+		payload.put("message", message);
+
+		try {
+			// Send the downstream message to a device.
+			client.send(client.createJsonMessage(gcmRegId, messageId, payload, null, 10000L, true));
+			logger.log(Level.INFO, "Verification message sent. IRegID: " + toRegId + ", Text: " + message);
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Verification message couldnot be sent! RegID: " + toRegId + ", Text: " + message);
+		}
+	}
 
 }

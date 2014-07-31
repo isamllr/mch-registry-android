@@ -28,10 +28,10 @@ public interface Constants {
     
     String ACTION = "action";
 
-    // TODO: very simply notification handling :-)
+    // TODO: very simply notification handling
     int NOTIFICATION_NR = 10;
 
-    long GCM_DEFAULT_TTL = 2 * 24 * 60 * 60 * 1000; // two days
+    long GCM_DEFAULT_TTL = 30 * 24 * 60 * 60 * 1000; // 30 days
     
     String PACKAGE = "com.mch.registry.ccs.app";
     // actions for server interaction
@@ -42,16 +42,14 @@ public interface Constants {
     // action for notification intent
     String NOTIFICATION_ACTION = PACKAGE + ".NOTIFICATION";
     
-    String DEFAULT_USER = ""; //should be pregnancyID later
+    String DEFAULT_USER = ""; //should be phonenumber
 
     enum EventbusMessageType {
        REGISTRATION_FAILED, REGISTRATION_SUCCEEDED, UNREGISTRATION_SUCCEEDED, UNREGISTRATION_FAILED;
     }
     
     enum State {
-       REGISTERED, UNREGISTERED;
-    }
-
-
+		REGISTERED, UNREGISTERED;
+	}
 
 }

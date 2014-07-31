@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mch.registry.ccs.data.PatientDataHandler;
+
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener{
 	CollectionPagerAdapter mCollectionPagerAdapter;
 	ViewPager mViewPager;
@@ -22,29 +24,34 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		mCollectionPagerAdapter = new CollectionPagerAdapter(getSupportFragmentManager());
+		PatientDataHandler pdh = new PatientDataHandler(this, null, null, 1);
+		if(pdh.getPatient().get_isVerified()==0){
+			Intent intent = new Intent(getApplicationContext(), MobileNumberActivity.class);
+			startActivity(intent);
+		}else{
+			mCollectionPagerAdapter = new CollectionPagerAdapter(getSupportFragmentManager());
 
-		final ActionBar actionBar = getActionBar();
-		actionBar.setHomeButtonEnabled(false);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mCollectionPagerAdapter);
-		mViewPager
-				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			final ActionBar actionBar = getActionBar();
+			actionBar.setHomeButtonEnabled(false);
+			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+			mViewPager = (ViewPager) findViewById(R.id.pager);
+			mViewPager.setAdapter(mCollectionPagerAdapter);
+			mViewPager
+					.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
-					@Override
+						@Override
 
-					public void onPageSelected(int position) {
-						actionBar.setSelectedNavigationItem(position);
-					}
+						public void onPageSelected(int position) {
+							actionBar.setSelectedNavigationItem(position);
+						}
 
-				});
-		for (int i = 0; i < mCollectionPagerAdapter.getCount(); i++) {
-			actionBar.addTab(actionBar.newTab()
-					.setText(mCollectionPagerAdapter.getPageTitle(i))
-					.setTabListener(this));
+					});
+			for (int i = 0; i < mCollectionPagerAdapter.getCount(); i++) {
+				actionBar.addTab(actionBar.newTab()
+						.setText(mCollectionPagerAdapter.getPageTitle(i))
+						.setTabListener(this));
+			}
 		}
-
 	}
 
 	@Override

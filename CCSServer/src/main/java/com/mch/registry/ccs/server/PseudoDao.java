@@ -39,18 +39,19 @@ public class PseudoDao {
         return instance;
     }
     
-    public void addRegistration(String regId, String pregnancyID) {
+    public void addRegistration(String regId, String mobilePhoneNumber) {
 	    MySqlHandler mysql = new MySqlHandler();
 
 	    if (!mysql.findRegID(regId)) {
 		    mysql.saveNewRegID(regId);
         }
 
-	    if (pregnancyID != null) { //PregID is only available if verified before
-		    if (mysql.findPregnancyIdInNarTable(Integer.parseInt(pregnancyID))) {
+	    //TODO
+	   /* if ( mobilePhoneNumber != null) { //Is only available if verified before
+		    if (mysql.findPregnancyIdInNarTable(mobilePhoneNumber)) {
 			    mysql.updateRegID(Integer.parseInt(pregnancyID), regId);
 		    }
-	    }
+	    }*/
     }
     
     /*public List<String> getAllRegistrationIds() {
