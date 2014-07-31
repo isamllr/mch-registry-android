@@ -4,7 +4,6 @@ package com.mch.registry.ccs.sms;
  * Created by Isa on 29.07.2014.
  */
 
-import com.mch.registry.ccs.server.MessageProcessor;
 import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.MySqlHandler;
 import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.Pregnancy;
 
@@ -21,13 +20,12 @@ import java.util.logging.Logger;
 
 public class SendSMS {
 
-	public static final Logger logger = Logger.getLogger(MessageProcessor.class.getName());
+	public static final Logger logger = Logger.getLogger(SendSMS.class.getName());
 
 	void SendSMS() {
 	}
 
 	public static void sendActivationCode(String phoneNumber) {
-
 
 		// The username, password and apiid is sent to the clickatell transport
 		// in a Properties
@@ -43,45 +41,47 @@ public class SendSMS {
 		try {
 			transport = SmsTransportManager.getTransport("org.marre.sms.transport.clickatell.ClickatellTransport", props);
 		} catch (SmsException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 
 		// Connect to clickatell
 		try {
 			transport.connect();
+			logger.log(Level.INFO, "Connected.");
 		} catch (SmsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 
-		String recipient = phoneNumber.replaceAll("[+]", "");
 		// Create the sms message
 		MySqlHandler mysql = new MySqlHandler();
 		Pregnancy pregnancy = new Pregnancy();
-		pregnancy = mysql.getPregnancyInfoByMobilePhone(recipient);
-		SmsTextMessage textMessage = new SmsTextMessage(pregnancy.getActivationCode());
+		logger.log(Level.INFO, "Phone number is " + phoneNumber);
+		pregnancy = mysql.getPregnancyInfoByMobilePhone(phoneNumber);
+		String code = pregnancy.getActivationCode();
+		SmsTextMessage textMessage = new SmsTextMessage(code);
+		logger.log(Level.INFO, "Code is " + code);
+		String recipient = phoneNumber.replaceAll("[+]", "");
+		logger.log(Level.INFO, "Recipient is " + recipient);
 
 		try {
-			transport.send(textMessage, new SmsAddress( recipient), new SmsAddress(sender));
-			logger.log(Level.INFO, "Code sent by SMS to " + recipient);
-
+			transport.send(textMessage, new SmsAddress(recipient), new SmsAddress(sender));
+			logger.log(Level.INFO, "Activation Code sent by SMS to " + recipient);
 		} catch (SmsException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 
 		// Disconnect from clickatell
 		try {
 			transport.disconnect();
-			System.out.println(" transport.disconnect();");
+			logger.log(Level.INFO, "Disconnected");
 		} catch (SmsException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 }

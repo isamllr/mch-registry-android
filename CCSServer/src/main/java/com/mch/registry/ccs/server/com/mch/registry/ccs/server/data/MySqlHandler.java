@@ -235,7 +235,7 @@ public class MySqlHandler{
 		return status;
 	}
 
-	public boolean updateRegID(int pregnancyID, String newRegID){
+	/*public boolean updateRegID(int pregnancyID, String newRegID){
 		boolean status = false;
 
 		String statement = "UPDATE notificationappregistration"
@@ -279,7 +279,7 @@ public class MySqlHandler{
 
 		this.close();
 		return status;
-	}
+	}*/
 
 	public boolean findRegID(String regID){
 		boolean regIDFound = false;
@@ -389,16 +389,19 @@ public class MySqlHandler{
 
 	}
 
-	public boolean updateAllPregnancyInfos(String mobilePhone){
-		boolean status = false;
-		Pregnancy pregnancy = new Pregnancy();
-		pregnancy = this.getPregnancyInfoByMobilePhone(mobilePhone);
+	public boolean updateAllPregnancyInfos(String mobilePhone, String gcmRegID){
+		boolean statusPregnancyFound = false;
+		int pregnancyID = 333333333;
 
-		String statement = "UPDATE notificationappregistration"
-				+ " SET "
-				+ " PregnancyID = " + pregnancy.getPregnancyID() + ", "
-				+ " ActivationCode = '" + this.createActivationCode() + "'"
-				+ " WHERE NotificationAppRegistrationID = " + pregnancy.notificationAppRegistrationID + ";";
+		String statement = "SELECT preg.PregnancyID"
+				+ " FROM pregnancy preg"
+				+ " JOIN patient pat on pat.PatientID = preg.PatientID"
+				+ " JOIN facilities f on preg.FacilityID = f.FacilityID"
+				+ " LEFT JOIN delivery d ON preg.PregnancyID = d.PregnancyID"
+				+ " WHERE d.DeliveryID IS NULL"
+				+ " AND DATEDIFF(DATE_ADD(preg.Calc_DeliveryDate, INTERVAL 31 DAY), curdate()) >= 0"
+				+ " AND pat.discharged = 0"
+				+ " AND pat.MobilePhone = '" + mobilePhone + "';";
 
 		this.connect();
 		Statement stmt = null;
@@ -406,9 +409,55 @@ public class MySqlHandler{
 
 		try {
 			stmt = conn.createStatement();
-			stmt.execute(statement);
-			status = true;
-			logger.log(Level.INFO, "pregnancyinfos updated in NAR table.");
+
+			if (stmt.execute(statement)) {
+				rs = stmt.getResultSet();
+			}
+
+			while(rs.next()){
+				//Retrieve by column name
+				pregnancyID = rs.getInt("PregnancyID");
+				logger.log(Level.INFO, "get PregnancyInfo by Mobile Phone. PregID: " + pregnancyID);
+				statusPregnancyFound = true;
+			}
+		}
+		catch (SQLException ex){
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		}
+		finally {
+
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				rs = null;
+			}
+
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException sqlEx) { } // ignore
+
+				stmt = null;
+			}
+		}
+
+		String statement2 = "UPDATE notificationappregistration"
+				+ " SET "
+				+ " PregnancyID = " + pregnancyID + ", "
+				+ " ActivationCode = '" + this.createActivationCode() + "'"
+				+ " WHERE GCMRegistrationID = '" + gcmRegID + "';";
+
+		stmt = null;
+		rs = null;
+
+		try {
+			stmt = conn.createStatement();
+			stmt.execute(statement2);
+			logger.log(Level.INFO, "pregnancyinfos updated in NAR table for found pregid" + pregnancyID);
 
 		}
 		catch (SQLException ex){
@@ -436,7 +485,8 @@ public class MySqlHandler{
 		}
 
 		this.close();
-		return status;
+
+		return statusPregnancyFound;
 	}
 
 	public boolean saveNewRegID(String gcmRegId){
@@ -497,20 +547,24 @@ public class MySqlHandler{
 
 		String statement = "SELECT nar.NotificationAppRegistrationID,"
 				+ " nar.GCMRegistrationID,"
-				+ " nar.PregnancyID,"
-				+ " pat.MobilePhone,"
+				+ " preg.PregnancyID,"
 				+ " nar.ActivationCode,"
 				+ " preg.MobileApp,"
+				+ " pat.MobilePhone,"
 				+ " pat.GivenName as SurName,"
 				+ " pat.FamilyName as LastName,"
 				+ " preg.Calc_DeliveryDate,"
 				+ " f.FacilityName,"
 				+ " f.Phone as FacilityPhoneNumber"
 				+ " FROM pregnancy preg"
+				+ " LEFT JOIN notificationappregistration nar on preg.PregnancyID = nar.PregnancyID"
 				+ " JOIN patient pat on pat.PatientID = preg.PatientID"
 				+ " JOIN facilities f on preg.FacilityID = f.FacilityID"
-				+ " LEFT JOIN notificationappregistration nar on preg.PregnancyID = nar.PregnancyID"
-				+ " WHERE nar.GCMRegistrationID = '" + gcmRegId + "';";
+				+ " LEFT JOIN delivery d ON preg.PregnancyID = d.PregnancyID"
+				+ " WHERE d.DeliveryID IS NULL"
+				+ " AND DATEDIFF(DATE_ADD(preg.Calc_DeliveryDate, INTERVAL 31 DAY), curdate()) >= 0"
+				+ " AND pat.discharged = 0"
+				+ " AND nar.GCMRegistrationID = '" + gcmRegId + "';";
 
 
 		this.connect();
@@ -527,9 +581,9 @@ public class MySqlHandler{
 			pregnancy = null;
 			while(rs.next()){
 				//Retrieve by column name
-				pregnancy.setPregnancyId(rs.getInt("PregnancyID"));
-				pregnancy.setNotificationAppRegistrationId(rs.getInt("NotificationAppRegistrationID"));
-				pregnancy.setgcmRegistrationId(rs.getString("GCMRegistrationID"));
+				pregnancy.setPregnancyID(rs.getInt("PregnancyID"));
+				pregnancy.setNotificationAppRegistrationID(rs.getInt("NotificationAppRegistrationID"));
+				pregnancy.setGcmRegistrationId(rs.getString("GCMRegistrationID"));
 				pregnancy.setMobileApp(rs.getInt("MobileApp"));
 				pregnancy.setActivationCode(rs.getString("ActivationCode"));
 				pregnancy.setMobilePhone(rs.getString("MobilePhone"));
@@ -538,7 +592,7 @@ public class MySqlHandler{
 				pregnancy.setExpectedDelivery(rs.getString("Calc_DeliveryDate"));
 				pregnancy.setFacilityName(rs.getString("FacilityName"));
 				pregnancy.setFacilityPhoneNumber(rs.getString("FacilityPhoneNumber"));
-				logger.log(Level.INFO, "get PregnancyInfo.");
+				logger.log(Level.INFO, "get PregnancyInfo by gcmregid.");
 			}
 		}
 		catch (SQLException ex){
@@ -607,9 +661,9 @@ public class MySqlHandler{
 
 			while(rs.next()){
 				//Retrieve by column name
-				pregnancy.setPregnancyId(rs.getInt("PregnancyID"));
-				pregnancy.setNotificationAppRegistrationId(rs.getInt("NotificationAppRegistrationID"));
-				pregnancy.setgcmRegistrationId(rs.getString("GCMRegistrationID"));
+				pregnancy.setPregnancyID(rs.getInt("PregnancyID"));
+				pregnancy.setNotificationAppRegistrationID(rs.getInt("NotificationAppRegistrationID"));
+				pregnancy.setGcmRegistrationId(rs.getString("GCMRegistrationID"));
 				pregnancy.setMobileApp(rs.getInt("MobileApp"));
 				pregnancy.setActivationCode(rs.getString("ActivationCode"));
 				pregnancy.setMobilePhone(rs.getString("MobilePhone"));
@@ -618,7 +672,8 @@ public class MySqlHandler{
 				pregnancy.setExpectedDelivery(rs.getString("Calc_DeliveryDate"));
 				pregnancy.setFacilityName(rs.getString("FacilityName"));
 				pregnancy.setFacilityPhoneNumber(rs.getString("FacilityPhoneNumber"));
-				logger.log(Level.INFO, "get PregnancyInfo.");
+				logger.log(Level.INFO, "get PregnancyInfo by Mobile Phone.");
+				logger.log(Level.INFO, "The activation code is: " + pregnancy.getActivationCode());
 			}
 		}
 		catch (SQLException ex){
@@ -676,59 +731,9 @@ public class MySqlHandler{
 	}
 
 	private String createActivationCode() {
-		return new BigInteger(130, random).toString(32);
-	}
-
-	public String getVerificationCode(String gcmRegId) {
-		String statement = "SELECT ActivationCode"
-		+ " FROM notificationappregistration"
-		+ " WHERE GCMRegistrationID = '" + gcmRegId + "';";
-
-		Pregnancy pregnancy = new Pregnancy();
-
-		this.connect();
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		try {
-			stmt = conn.createStatement();
-
-			if (stmt.execute(statement)) {
-				rs = stmt.getResultSet();
-			}
-
-			while(rs.next()){
-				pregnancy.setActivationCode(rs.getString("ActivationCode"));
-				logger.log(Level.INFO, "get ActivationCode for regid");
-			}
-		}
-		catch (SQLException ex){
-			System.out.println("SQLException: " + ex.getMessage());
-			System.out.println("SQLState: " + ex.getSQLState());
-			System.out.println("VendorError: " + ex.getErrorCode());
-		}
-		finally {
-
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException sqlEx) { } // ignore
-
-				rs = null;
-			}
-
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException sqlEx) { } // ignore
-
-				stmt = null;
-			}
-		}
-
-		this.close();
-
-		return pregnancy.getActivationCode();
+		String activationCode = (new BigInteger(130, random).toString(32));
+		logger.log(Level.INFO, "Verification code created. " +  activationCode);
+		return activationCode;
 	}
 
 	public boolean setVerified(String gcmRegId, boolean verificationAccepted) {

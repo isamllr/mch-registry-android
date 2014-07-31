@@ -19,7 +19,6 @@ package com.mch.registry.ccs.server;
 
 import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.MySqlHandler;
 import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.Notification;
-import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.Pregnancy;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
@@ -38,20 +37,13 @@ import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.util.StringUtils;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
-import org.marre.sms.SmsAddress;
-import org.marre.sms.SmsException;
-import org.marre.sms.SmsTextMessage;
-import org.marre.sms.transport.SmsTransport;
-import org.marre.sms.transport.SmsTransportManager;
 import org.xmlpull.v1.XmlPullParser;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -95,27 +87,6 @@ public class CcsClient {
 		mProjectId = projectId;
 		mDebuggable = debuggable;
 	}
-
-	//TODO
-	PacketListener pl = new PacketListener() {
-
-		@Override
-		public void processPacket(Packet packet) {
-			logger.log(Level.INFO, "Received: " + packet.toXML());
-			Message incomingMessage = (Message) packet;
-			GcmPacketExtension gcmPacket = (GcmPacketExtension) incomingMessage.getExtension(GCM_NAMESPACE);
-			String json = gcmPacket.getJson();
-			try {
-				@SuppressWarnings("unchecked")
-				Map<String, Object> jsonMap = (Map<String, Object>) JSONValue.parseWithException(json);
-				handleMessage(jsonMap);
-			} catch (ParseException e) {
-				logger.log(Level.SEVERE, "Error parsing JSON " + json, e);
-			} catch (Exception e) {
-				logger.log(Level.SEVERE, "Couldn't send echo.", e);
-			}
-		}
-	};
 
 	private CcsClient() {
 		// Add GcmPacketExtension
@@ -363,10 +334,26 @@ public class CcsClient {
 			}
 		});
 
-		//TODO
-
 		// Handle incoming packets
-		connection.addPacketListener(pl, new PacketTypeFilter(Message.class));
+		connection.addPacketListener(new PacketListener() {
+
+			@Override
+			public void processPacket(Packet packet) {
+				logger.log(Level.INFO, "Received: " + packet.toXML());
+				Message incomingMessage = (Message) packet;
+				GcmPacketExtension gcmPacket = (GcmPacketExtension) incomingMessage.getExtension(GCM_NAMESPACE);
+				String json = gcmPacket.getJson();
+				try {
+					@SuppressWarnings("unchecked")
+					Map<String, Object> jsonMap = (Map<String, Object>) JSONValue.parseWithException(json);
+					handleMessage(jsonMap);
+				} catch (ParseException e) {
+					logger.log(Level.SEVERE, "Error parsing JSON " + json, e);
+				} catch (Exception e) {
+					logger.log(Level.SEVERE, "Couldn't send echo.", e);
+				}
+			}
+		}, new PacketTypeFilter(Message.class));
 
 		// Log all outgoing packets
 		connection.addPacketInterceptor(new PacketInterceptor() {
@@ -588,67 +575,4 @@ public class CcsClient {
 
 		//TODO: STOP correctly (take arg)
 	}
-
-	public void sendActivationCodeBySms(String phoneNumber) {
-
-		// The username, password and apiid is sent to the clickatell transport
-		// in a Properties
-		Properties props = new Properties();
-
-		props.setProperty("smsj.clickatell.username", "swisstph");
-		props.setProperty("smsj.clickatell.password", "eBFSBRKUaKgXaP");
-		props.setProperty("smsj.clickatell.apiid", "3475961"); //testing HTTP
-		String sender = "41767658011";
-
-		// Load the clickatell transport
-		SmsTransport transport = null;
-
-		connection.removePacketListener(pl);
-		try {
-			transport = SmsTransportManager.getTransport("org.marre.sms.transport.clickatell.ClickatellTransport", props);
-		} catch (SmsException e) {
-			e.printStackTrace();
-		}
-
-		// Connect to clickatell
-		try {
-			transport.connect();
-		} catch (SmsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		String recipient = phoneNumber.replaceAll("[+]", "");
-		// Create the sms message
-		MySqlHandler mysql = new MySqlHandler();
-		Pregnancy pregnancy = new Pregnancy();
-		pregnancy = mysql.getPregnancyInfoByMobilePhone(recipient);
-		SmsTextMessage textMessage = new SmsTextMessage(pregnancy.getActivationCode());
-
-		try {
-			transport.send(textMessage, new SmsAddress( recipient), new SmsAddress(sender));
-			logger.log(Level.INFO, "Code sent by SMS to " + recipient);
-
-		} catch (SmsException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		// Disconnect from clickatell
-		try {
-			transport.disconnect();
-			System.out.println(" transport.disconnect();");
-		} catch (SmsException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		connection.addPacketListener(pl, new PacketTypeFilter(Message.class));
-	}
-
 }

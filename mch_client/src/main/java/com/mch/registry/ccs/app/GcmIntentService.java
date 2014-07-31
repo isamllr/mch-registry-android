@@ -121,7 +121,6 @@ public class GcmIntentService extends IntentService {
 			                public void run() {
 				                PatientDataHandler pdh = new PatientDataHandler(getApplicationContext(),"Msg received", null, 1);
 				                Toast.makeText(getApplicationContext(),getString(R.string.number_verified), Toast.LENGTH_LONG).show();
-				                //Crouton.showText(this.getApplicationContext(), getString(R.id.number_verified), Style.CONFIRM);
 				                pdh.setVerified(true);
 				                Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
 				                startActivity(mainIntent );
@@ -135,7 +134,6 @@ public class GcmIntentService extends IntentService {
 				                PatientDataHandler pdh = new PatientDataHandler(getApplicationContext(),"not verified", null, 1);
 				                pdh.setVerified(false);
 				                Toast.makeText(getApplicationContext(), getString(R.string.number_not_verified), Toast.LENGTH_SHORT).show();
-				                //Crouton.showText(getApplicationContext(), R..number_not_verified, Style.CONFIRM);
 			                }
 		                });
 	                }else if(msg.contains("_PregnancyNotFound")){

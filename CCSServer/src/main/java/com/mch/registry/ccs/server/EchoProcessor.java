@@ -16,6 +16,8 @@
 package com.mch.registry.ccs.server;
 
 import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.MySqlHandler;
+import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.Pregnancy;
+import com.mch.registry.ccs.sms.SendSMS;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,11 +41,10 @@ public class EchoProcessor implements PayloadProcessor{
 
 		if(txtMsg.contains("_Phone: ")){
 			String phoneNumber = txtMsg.replaceAll("_Phone: ","");
-			logger.log(Level.INFO, "Phone Number is: " + txtMsg);
 			MySqlHandler mysql = new MySqlHandler();
 			mysql.setVerified(msg.getFrom(), false);
-			if(mysql.updateAllPregnancyInfos(phoneNumber)){
-				client.sendActivationCodeBySms(phoneNumber);
+			if(mysql.updateAllPregnancyInfos(phoneNumber, msg.getFrom())){
+				SendSMS.sendActivationCode(phoneNumber);
 				logger.log(Level.INFO, "Activation code sent by SMS.");
 			}else{
 				sendPregnancyForMobileNumberNotFound(msg.getFrom());
@@ -55,8 +56,10 @@ public class EchoProcessor implements PayloadProcessor{
 		if(txtMsg.contains("_Verify: ")){
 			txtMsg = txtMsg.replaceAll("_Verify: ","");
 			MySqlHandler mysql = new MySqlHandler();
+			Pregnancy pregnancy = new Pregnancy();
+			pregnancy = mysql.getPregnancyInfoByGcmRegId(msg.getFrom());
 			//Compare codes
-			if (mysql.getVerificationCode(msg.getFrom()).compareTo(txtMsg)==0){
+			if (pregnancy.getActivationCode().compareTo(txtMsg)==0){
 				mysql.setVerified(msg.getFrom(), true);
 				sendVerificationMessage(msg.getFrom(), true);
 				logger.log(Level.INFO, "Verification ok");
@@ -105,7 +108,7 @@ public class EchoProcessor implements PayloadProcessor{
 			client.send(client.createJsonMessage(gcmRegId, messageId, payload, null, 10000L, true));
 			logger.log(Level.INFO, "PregnancyInfos sent. IRegID: " + toRegId + ", Text: " + message);
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "PregnancyInfos not sent message couldnot be sent! RegID: " + toRegId + ", Text: " + message);
+			logger.log(Level.WARNING, "PregnancyInfos not sent message could not be sent! RegID: " + toRegId + ", Text: " + message);
 		}
 	}
 

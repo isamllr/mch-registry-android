@@ -16,22 +16,7 @@ public class Pregnancy {
 	String facilityName;
 	String facilityPhoneNumber;
 
-	public Pregnancy(int notificationAppRegistrationID, String facilityPhoneNumber, String facilityName, String expectedDelivery, String patientLastName, String patientSurName, String mobilePhone, int mobileApp, String activationCode, int pregnancyID, String gcmRegistrationId) {
-		this.notificationAppRegistrationID = notificationAppRegistrationID;
-		this.facilityPhoneNumber = facilityPhoneNumber;
-		this.facilityName = facilityName;
-		this.expectedDelivery = expectedDelivery;
-		this.patientLastName = patientLastName;
-		this.patientSurName = patientSurName;
-		this.mobilePhone = mobilePhone;
-		this.mobileApp = mobileApp;
-		this.activationCode = activationCode;
-		this.pregnancyID = pregnancyID;
-		this.gcmRegistrationId = gcmRegistrationId;
-	}
-
-	public Pregnancy(){
-	}
+	public Pregnancy(){}
 
 	public int getNotificationAppRegistrationID() {
 		return notificationAppRegistrationID;
@@ -39,58 +24,6 @@ public class Pregnancy {
 
 	public void setNotificationAppRegistrationID(int notificationAppRegistrationID) {
 		this.notificationAppRegistrationID = notificationAppRegistrationID;
-	}
-
-	public void setGcmRegistrationId(String gcmRegistrationId) {
-		this.gcmRegistrationId = gcmRegistrationId;
-	}
-
-	public String getMobilePhone() {
-		return mobilePhone;
-	}
-
-	public void setMobilePhone(String mobilePhone) {
-		this.mobilePhone = mobilePhone;
-	}
-
-	public int getPregnancyID() {
-		return pregnancyID;
-	}
-
-	public void setPregnancyID(int pregnancyID) {
-		this.pregnancyID = pregnancyID;
-	}
-
-	public String getPatientSurName() {
-		return patientSurName;
-	}
-
-	public void setPatientSurName(String patientSurName) {
-		this.patientSurName = patientSurName;
-	}
-
-	public String getPatientLastName() {
-		return patientLastName;
-	}
-
-	public void setPatientLastName(String patientLastName) {
-		this.patientLastName = patientLastName;
-	}
-
-	public String getExpectedDelivery() {
-		return expectedDelivery;
-	}
-
-	public void setExpectedDelivery(String expectedDelivery) {
-		this.expectedDelivery = expectedDelivery;
-	}
-
-	public String getFacilityName() {
-		return facilityName;
-	}
-
-	public void setFacilityName(String facilityName) {
-		this.facilityName = facilityName;
 	}
 
 	public String getFacilityPhoneNumber() {
@@ -101,12 +34,36 @@ public class Pregnancy {
 		this.facilityPhoneNumber = facilityPhoneNumber;
 	}
 
-	public String getActivationCode() {
-		return activationCode;
+	public String getFacilityName() {
+		return facilityName;
 	}
 
-	public void setActivationCode(String activationCode) {
-		activationCode = activationCode;
+	public void setFacilityName(String facilityName) {
+		this.facilityName = facilityName;
+	}
+
+	public String getExpectedDelivery() {
+		return expectedDelivery;
+	}
+
+	public void setExpectedDelivery(String expectedDelivery) {
+		this.expectedDelivery = expectedDelivery;
+	}
+
+	public String getPatientLastName() {
+		return patientLastName;
+	}
+
+	public void setPatientLastName(String patientLastName) {
+		this.patientLastName = patientLastName;
+	}
+
+	public String getMobilePhone() {
+		return mobilePhone;
+	}
+
+	public void setMobilePhone(String mobilePhone) {
+		this.mobilePhone = mobilePhone;
 	}
 
 	public int getMobileApp() {
@@ -114,31 +71,38 @@ public class Pregnancy {
 	}
 
 	public void setMobileApp(int mobileApp) {
-		mobileApp = mobileApp;
+		this.mobileApp = mobileApp;
 	}
 
-	public int getNotificationAppRegistrationId() {
-		return notificationAppRegistrationID;
+	public String getActivationCode() {
+		return activationCode;
 	}
 
-	public void setNotificationAppRegistrationId(int notificationAppRegistrationID) {
-		notificationAppRegistrationID = notificationAppRegistrationID;
+	public void setActivationCode(String activationCode) {
+		this.activationCode = activationCode;
+	}
+
+	public int getPregnancyID() {
+		return pregnancyID;
+	}
+
+	public void setPregnancyID(int pregnancyID) {
+		this.pregnancyID = pregnancyID;
 	}
 
 	public String getGcmRegistrationId() {
 		return gcmRegistrationId;
 	}
 
-	public void setgcmRegistrationId(String gcmRegistrationId) {
+	public void setGcmRegistrationId(String gcmRegistrationId) {
 		this.gcmRegistrationId = gcmRegistrationId;
 	}
 
-	public int getPregnancyId() {
-		return pregnancyID;
+	public String getPatientSurName() {
+		return patientSurName;
 	}
 
-	public void setPregnancyId(int pregnancyID) {
-		pregnancyID = pregnancyID;
+	public void setPatientSurName(String patientSurName) {
+		this.patientSurName = patientSurName;
 	}
-
 }
