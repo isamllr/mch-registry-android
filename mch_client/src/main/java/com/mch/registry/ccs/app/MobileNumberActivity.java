@@ -151,17 +151,14 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 		}
 
 		PatientDataHandler pdh = new PatientDataHandler(this, null, null, 1);
-		Patient patient = new Patient();
-		patient = pdh.getPatient();
+		Patient patient = pdh.getPatient();
 		String mobileNumber = mobilePhoneNumber.getText().toString().replaceAll("\\s","");
 
 		if (patient.get_mobileNumber().compareTo(mobileNumber)==0 && patient.get_isVerified()==1){
 			Crouton.showText(this, getString(R.string.number_same), Style.INFO);
 		}else{
 			if(validatePhoneNumber(mobileNumber)){
-			//Save phone number
 			pdh.updateMobilePhoneNumber(mobileNumber);
-			//Send new phone number to server
 			this.sendPhoneMessage(mobileNumber);
 			}else{
 				Crouton.showText(this, getString(R.string.number_invalid), Style.ALERT);

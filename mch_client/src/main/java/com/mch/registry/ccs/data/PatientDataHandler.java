@@ -99,7 +99,7 @@ public class PatientDataHandler extends SQLiteOpenHelper {
 
 	        if (cursor.moveToFirst()) {
 		        cursor.moveToFirst();
-		        patient.setID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+		        patient.set_id(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
 		        patient.set_patientID(cursor.getInt(cursor.getColumnIndex(COLUMN_PATIENTID)));
 		        patient.set_regID(cursor.getString(cursor.getColumnIndex(COLUMN_REGID)));
 		        patient.set_latestMessageID(cursor.getInt(cursor.getColumnIndex(COLUMN_MESSAGEID)));
@@ -116,7 +116,7 @@ public class PatientDataHandler extends SQLiteOpenHelper {
     }catch(Exception e){
 			Log.e("DB Error", e.getMessage());
 	}
-	    Log.i("Pregnancy Guide", "get Patient");
+	    Log.i("Pregnancy Guide", "get Patient. Mobile number: " +patient.get_mobileNumber() );
         return patient;
     }
 

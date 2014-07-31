@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.widget.Toast;
 
 public class SMSReceiver extends BroadcastReceiver{
 
@@ -23,16 +24,18 @@ public class SMSReceiver extends BroadcastReceiver{
 		SmsMessage msg = SmsMessage.createFromPdu((byte[]) pdus[0]);
 		String origNumber = msg.getOriginatingAddress();
 		String msgBody = msg.getMessageBody();
-		sendVerificationCodeToServer(msgBody, context, intent);
+		//TODO
+		if (origNumber.contains("767658011")){
+			sendVerificationCodeBackToServer(msgBody, context, intent);
+		}
 	}
 
-	private String sendVerificationCodeToServer(String verificationCode, Context context, Intent intent) {
+	private void sendVerificationCodeBackToServer(String verificationCode, Context context, Intent intent) {
+		Toast.makeText(context.getApplicationContext(), R.string.activation_code_received, Toast.LENGTH_LONG).show();
 		Intent msgIntent = new Intent(context.getApplicationContext(), GcmIntentService.class);
 		msgIntent.setAction(Constants.ACTION_ECHO);
 		String msg = "_Verify: " + verificationCode;
-		String msgTxt = "Checking verification code: " + verificationCode + ".";
 		msgIntent.putExtra(Constants.KEY_MESSAGE_TXT, msg);
 		context.getApplicationContext().startService(msgIntent);
-		return verificationCode;
 	}
 }

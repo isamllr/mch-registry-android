@@ -17,7 +17,7 @@ package com.mch.registry.ccs.server;
 
 import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.MySqlHandler;
 import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.Pregnancy;
-import com.mch.registry.ccs.sms.SendSMS;
+import com.mch.registry.ccs.server.sms.SendSMS;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class EchoProcessor implements PayloadProcessor{
 
 	private CcsClient client = CcsClient.getInstance();
 	private PseudoDao dao = PseudoDao.getInstance();
-	public static final Logger logger = Logger.getLogger(MessageProcessor.class.getName());
+	public static final Logger logger = Logger.getLogger(EchoProcessor.class.getName());
 
 	@Override
 	public void handleMessage(CcsMessage msg) {
@@ -45,21 +45,19 @@ public class EchoProcessor implements PayloadProcessor{
 			mysql.setVerified(msg.getFrom(), false);
 			if(mysql.updateAllPregnancyInfos(phoneNumber, msg.getFrom())){
 				logger.log(Level.INFO, "Trying to send activation code by SMS.");
-				SendSMS.sendActivationCode(phoneNumber);
+				SendSMS sms = new SendSMS();
+				sms.sendActivationCode(phoneNumber);
 			}else{
 				sendPregnancyForMobileNumberNotFound(msg.getFrom());
 				logger.log(Level.INFO, "Pregnancy not found");
 			}
-
-		}
-
-		if(txtMsg.contains("_Verify: ")){
-			txtMsg = txtMsg.replaceAll("_Verify: ","");
+		}else if(txtMsg.contains("_Verify: ")){
+			String code = txtMsg.replaceAll("_Verify: ","");
 			MySqlHandler mysql = new MySqlHandler();
-			Pregnancy pregnancy = new Pregnancy();
-			pregnancy = mysql.getPregnancyInfoByGcmRegId(msg.getFrom());
+			Pregnancy pregnancy = mysql.getPregnancyInfoByGcmRegId(msg.getFrom());
+			logger.log(Level.INFO, "Comparing: " + code + " and " + pregnancy.getActivationCode());
 			//Compare codes
-			if (pregnancy.getActivationCode().compareTo(txtMsg)==0){
+			if (pregnancy.getActivationCode().compareTo(code)==0){
 				mysql.setVerified(msg.getFrom(), true);
 				sendVerificationMessage(msg.getFrom(), true);
 				logger.log(Level.INFO, "Verification ok");

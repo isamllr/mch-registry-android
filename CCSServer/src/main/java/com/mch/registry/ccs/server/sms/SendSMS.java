@@ -1,4 +1,4 @@
-package com.mch.registry.ccs.sms;
+package com.mch.registry.ccs.server.sms;
 
 /**
  * Created by Isa on 29.07.2014.
@@ -22,10 +22,10 @@ public class SendSMS {
 
 	public static final Logger logger = Logger.getLogger(SendSMS.class.getName());
 
-	void SendSMS() {
+	public SendSMS() {
 	}
 
-	public static void sendActivationCode(String phoneNumber) {
+	public void sendActivationCode(String phoneNumber) {
 
 		// The username, password and apiid is sent to the clickatell transport
 		// in a Properties

@@ -158,5 +158,6 @@
 	<string name="number_not_found">The phone number you have entered was not registered with us, sorry. Did you hand out another number to the staff at the hospital?</string>
 	<string name="number_verified">Your number is now verified.</string>
 	<string name="number_not_verified">Your number could not be verified. Please try again or use another number. You should receive a SMS containing a code.</string>
+	<string name="activation_code_received">Activation code received. Checking...</string>
 
 </resources>

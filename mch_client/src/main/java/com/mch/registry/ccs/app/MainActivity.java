@@ -24,14 +24,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		final ActionBar actionBar = getActionBar();
+
 		PatientDataHandler pdh = new PatientDataHandler(this, null, null, 1);
 		if(pdh.getPatient().get_isVerified()==0){
+			actionBar.hide();
 			Intent intent = new Intent(getApplicationContext(), MobileNumberActivity.class);
 			startActivity(intent);
 		}else{
 			mCollectionPagerAdapter = new CollectionPagerAdapter(getSupportFragmentManager());
-
-			final ActionBar actionBar = getActionBar();
 			actionBar.setHomeButtonEnabled(false);
 			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 			mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -56,8 +57,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+
+		PatientDataHandler pdh = new PatientDataHandler(this, null, null, 1);
+		if(pdh.getPatient().get_isVerified()==1){
 		getMenuInflater().inflate(R.menu.main, menu);
+		}
 		return true;
 	}
 

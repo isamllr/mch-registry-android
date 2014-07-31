@@ -578,7 +578,6 @@ public class MySqlHandler{
 				rs = stmt.getResultSet();
 			}
 
-			pregnancy = null;
 			while(rs.next()){
 				//Retrieve by column name
 				pregnancy.setPregnancyID(rs.getInt("PregnancyID"));
