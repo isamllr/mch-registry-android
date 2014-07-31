@@ -27,7 +27,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		final ActionBar actionBar = getActionBar();
 
 		PregnancyDataHandler pdh = new PregnancyDataHandler(this, null, null, 1);
-		if(pdh.getPatient().get_isVerified()==0){
+		if(pdh.getPregnancy().get_isVerified()==0){
 			actionBar.hide();
 			Intent intent = new Intent(getApplicationContext(), MobileNumberActivity.class);
 			startActivity(intent);
@@ -57,11 +57,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
-		PregnancyDataHandler pdh = new PregnancyDataHandler(this, null, null, 1);
-		if(pdh.getPatient().get_isVerified()==1){
 		getMenuInflater().inflate(R.menu.main, menu);
-		}
 		return true;
 	}
 

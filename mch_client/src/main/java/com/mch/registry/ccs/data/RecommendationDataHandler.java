@@ -68,7 +68,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 
 	private int calculateRecommendationDay(Date today) {
 		PregnancyDataHandler pdh = new PregnancyDataHandler(null, "Recommendation", null, 1);
-		pdh.getPatient();
+		pdh.getPregnancy();
 		Pregnancy pregnancy = new Pregnancy();
 
 		DateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");

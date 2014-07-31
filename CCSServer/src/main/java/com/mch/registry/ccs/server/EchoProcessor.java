@@ -44,7 +44,7 @@ public class EchoProcessor implements PayloadProcessor{
 			MySqlHandler mysql = new MySqlHandler();
 			mysql.setVerified(msg.getFrom(), false);
 			if(mysql.updateAllPregnancyInfos(phoneNumber, msg.getFrom())){
-				logger.log(Level.INFO, "Trying to send activation code by SMS.");
+				logger.log(Level.INFO, "Trying to send activation code by SMS. ");
 				SendSMS sms = new SendSMS();
 				sms.sendActivationCode(phoneNumber);
 			}else{

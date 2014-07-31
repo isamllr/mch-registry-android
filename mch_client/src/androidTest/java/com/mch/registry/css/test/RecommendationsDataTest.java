@@ -2,8 +2,7 @@ package com.mch.registry.css.test;
 
 import android.test.AndroidTestCase;
 
-import app.registry.mch.mchpregnancyguide.data.Recommendation;
-import app.registry.mch.mchpregnancyguide.data.RecommendationDataHandler;
+import com.mch.registry.ccs.data.RecommendationDataHandler;
 
 /**
  * Created by Isa on 23.07.2014.
@@ -20,14 +19,11 @@ public class RecommendationsDataTest extends AndroidTestCase {
             int testDay = 29;
 
             RecommendationDataHandler rdh = new RecommendationDataHandler(getContext(), null, null,1);
-            Recommendation recommendation = new Recommendation(testText, testDate, testDay);
-            rdh.addRecommendation(recommendation);
+            rdh.addRecommendation(testText);
 
             //TODO: Complete tests
             //rdh.getRecommendation(); getEntry
 
-            assertEquals(testText, true);
-            assertEquals(testText, true);
             assertEquals(testText, true);
         }
 

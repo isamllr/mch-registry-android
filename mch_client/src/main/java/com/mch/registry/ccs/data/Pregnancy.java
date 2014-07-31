@@ -14,11 +14,12 @@ public class Pregnancy {
     private String _facilityPhoneNumber;
     private int _latestMessageID;
 	private int _isVerified;
+	private int _loadingProgress;
 
     public Pregnancy() {
     }
 
-	public Pregnancy(int _patientID, String _regID, String _mobileNumber, String _patientName, String _expectedDelivery, String _facilityName, String _facilityPhoneNumber, int _latestMessageID, int _isVerified) {
+	public Pregnancy(int _patientID, String _regID, String _mobileNumber, String _patientName, String _expectedDelivery, String _facilityName, String _facilityPhoneNumber, int _latestMessageID, int _isVerified, int _loadingProgress) {
 		this._patientID = _patientID;
 		this._regID = _regID;
 		this._mobileNumber = _mobileNumber;
@@ -28,19 +29,20 @@ public class Pregnancy {
 		this._facilityPhoneNumber = _facilityPhoneNumber;
 		this._latestMessageID = _latestMessageID;
 		this._isVerified = _isVerified;
+		this._loadingProgress = _loadingProgress;
 	}
 
-	public Pregnancy(int _id, int _patientID, String _mobileNumber, String _regID, String _patientName, String _expectedDelivery, String _facilityName, String _facilityPhoneNumber, int _latestMessageID, int _isVerified) {
-		this._id = _id;
+	public Pregnancy(int _patientID, String _regID, String _mobileNumber, String _patientName, String _expectedDelivery, int _latestMessageID, String _facilityPhoneNumber, String _facilityName, int _isVerified, int _loadingProgress) {
 		this._patientID = _patientID;
-		this._mobileNumber = _mobileNumber;
 		this._regID = _regID;
+		this._mobileNumber = _mobileNumber;
 		this._patientName = _patientName;
 		this._expectedDelivery = _expectedDelivery;
-		this._facilityName = _facilityName;
-		this._facilityPhoneNumber = _facilityPhoneNumber;
 		this._latestMessageID = _latestMessageID;
+		this._facilityPhoneNumber = _facilityPhoneNumber;
+		this._facilityName = _facilityName;
 		this._isVerified = _isVerified;
+		this._loadingProgress = _loadingProgress;
 	}
 
 	public int get_id() {
@@ -121,6 +123,14 @@ public class Pregnancy {
 
 	public void set_isVerified(int _isVerified) {
 		this._isVerified = _isVerified;
+	}
+
+	public int get_loadingProgress() {
+		return _loadingProgress;
+	}
+
+	public void set_loadingProgress(int _loadingProgress) {
+		this._loadingProgress = _loadingProgress;
 	}
 }
 

@@ -391,7 +391,7 @@ public class MySqlHandler{
 
 	public boolean updateAllPregnancyInfos(String mobilePhone, String gcmRegID){
 		boolean statusPregnancyFound = false;
-		int pregnancyID = 333333333;
+		int pregnancyID = 0;
 
 		String statement = "SELECT preg.PregnancyID"
 				+ " FROM pregnancy preg"
@@ -418,7 +418,7 @@ public class MySqlHandler{
 				//Retrieve by column name
 				pregnancyID = rs.getInt("PregnancyID");
 				logger.log(Level.INFO, "get PregnancyInfo by Mobile Phone. PregID: " + pregnancyID);
-				statusPregnancyFound = true;
+				if (pregnancyID>0){statusPregnancyFound = true;}
 			}
 		}
 		catch (SQLException ex){

@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.mch.registry.ccs.app.Constants.EventbusMessageType;
 import com.mch.registry.ccs.app.Constants.State;
+import com.mch.registry.ccs.data.Pregnancy;
 import com.mch.registry.ccs.data.PregnancyDataHandler;
 import com.mch.registry.ccs.data.RecommendationDataHandler;
 import com.mch.registry.ccs.data.VisitDataHandler;
@@ -122,6 +123,7 @@ public class GcmIntentService extends IntentService {
 				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"Msg received", null, 1);
 				                Toast.makeText(getApplicationContext(),getString(R.string.number_verified), Toast.LENGTH_LONG).show();
 				                pdh.setVerified(true);
+				                pdh.setLoadingProgress(pdh.getPregnancy().get_loadingProgress()+1);
 			                }
 		                });
 	                }else if(msg.contains("_NotVerified")){
@@ -152,7 +154,7 @@ public class GcmIntentService extends IntentService {
 			                public void run() {
 				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"fn received", null, 1);
 				                pdh.updateFacilityName(pInfoFN);
-				                Toast.makeText(getApplicationContext(),"facility name", Toast.LENGTH_LONG).show();
+				                pdh.setLoadingProgress(pdh.getPregnancy().get_loadingProgress() + 1);
 			                }
 		                });
 	                }else if(msg.contains("_PregnancyInfosFacilityPhone")){
@@ -163,7 +165,7 @@ public class GcmIntentService extends IntentService {
 			                public void run() {
 				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"fp recieved", null, 1);
 				                pdh.updateFacilityPhone(pInfoFP);
-				                Toast.makeText(getApplicationContext(),"facilityphone", Toast.LENGTH_LONG).show();
+				                pdh.setLoadingProgress(pdh.getPregnancy().get_loadingProgress() + 1);
 			                }
 		                });
 	                }else if(msg.contains("_PregnancyInfosExpectedDelivery")){
@@ -174,7 +176,7 @@ public class GcmIntentService extends IntentService {
 			                public void run() {
 				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"ed recieved", null, 1);
 				                pdh.updateExpectedDelivery(pInfoED);
-				                Toast.makeText(getApplicationContext(),"expecteddelivery", Toast.LENGTH_LONG).show();
+				                pdh.setLoadingProgress(pdh.getPregnancy().get_loadingProgress() + 1);
 			                }
 		                });
 	                }else if(msg.contains("_PregnancyInfosPatientName")){
@@ -185,16 +187,25 @@ public class GcmIntentService extends IntentService {
 			                public void run() {
 				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"pn recieved", null, 1);
 				                pdh.updatePatientName(pInfoPN);
-				                Toast.makeText(getApplicationContext(), "patientname", Toast.LENGTH_LONG).show();
+				                pdh.setLoadingProgress(pdh.getPregnancy().get_loadingProgress() + 1);
 			                }
 		                });
-
-
 	                }
 
                Log.i("PregnancyGuide", "Received: " + extras.toString());
+	            PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"pn check", null, 1);
+	            Pregnancy preg = pdh.getPregnancy();
+	            if(preg.get_loadingProgress()>=6 && preg.get_isVerified()==1){
+		            pdh.setLoadingProgress(0);
+		            Thread.sleep(2000);
+		            Intent dialogIntent = new Intent(getBaseContext(), MainActivity.class);
+		            dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		            getApplication().startActivity(dialogIntent);
+	            }
             }
          }
+      } catch (InterruptedException e) {
+	      e.printStackTrace();
       } finally {
          // Release the wake lock provided by the WakefulBroadcastReceiver.
          GcmBroadcastReceiver.completeWakefulIntent(intent);
@@ -240,13 +251,12 @@ public class GcmIntentService extends IntentService {
          // Require the user to click a button again, or perform
          // exponential back-off.
 
-         // I simply notify the user:
-	      //TODO: Try again button
+         // Simply notify the user:
          Bundle bundle = new Bundle();
          bundle.putInt(Constants.KEY_EVENT_TYPE,
                EventbusMessageType.REGISTRATION_FAILED.ordinal());
          EventBus.getDefault().post(bundle);
-         Log.e("PregnancyGuide", "Registration failed", e);
+         Log.e("PregnancyGuide", "Registration failed.", e);
       }
    }
 

@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -40,10 +41,21 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 
 	private BroadcastReceiver smsReceiver = null;
 
-    @Override
+	private static final int PROGRESS = 0x1;
+
+	private ProgressBar mProgress;
+	private int mProgressStatus = 0;
+
+	private Handler mHandler = new Handler();
+
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_number);
+
+		mProgress = (ProgressBar) findViewById(R.id.progressBar);
+		mProgress.setProgress(0);
+		mProgress.setMax(6);
 
 	    smsReceiver = new SMSReceiver();
 	    getApplicationContext().registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
@@ -77,8 +89,7 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 
 	private void loadMobilePhone(){
 		PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(), null, null, 1);
-		Pregnancy pregnancy = new Pregnancy();
-		pregnancy = pdh.getPatient();
+		Pregnancy pregnancy = pdh.getPregnancy();
 		String mobileNumber = pregnancy.get_mobileNumber();
 
 		if(!(mobileNumber.compareTo("")==0)){
@@ -91,7 +102,11 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+	    PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(), null, null, 1);
+	    Pregnancy pregnancy = pdh.getPregnancy();
+	    if (pregnancy.get_isVerified()==1){
+            getMenuInflater().inflate(R.menu.main, menu);
+	    }
         return true;
     }
 
@@ -141,6 +156,49 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 
 	@Override
 	public void onClick(View view) {
+
+		new Thread(new Runnable() {
+			public void run() {
+				PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(), "progressing...", null, 1);
+				Pregnancy preg = pdh.getPregnancy();
+
+				pdh.setLoadingProgress(1);
+
+				while (mProgressStatus < 6) {
+
+					// process some tasks
+					mProgressStatus = preg.get_loadingProgress();
+
+					// your computer is too fast, sleep 1 second
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+
+					// Update the progress bar
+					mHandler.post(new Runnable() {
+						public void run() {
+							mProgress.setProgress(mProgressStatus);
+						}
+					});
+				}
+
+				if (mProgressStatus >= 6) {
+
+					// sleep 2 seconds, so that you can see the 100%
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+
+					// close the progress bar dialog
+				}
+			}
+		}).start();
+
+
 		Log.v("PregnancyGuide", "onClick: " + view.getId());
 		switch (mState) {
 			case UNREGISTERED:
@@ -151,8 +209,10 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 		}
 
 		PregnancyDataHandler pdh = new PregnancyDataHandler(this, null, null, 1);
-		Pregnancy pregnancy = pdh.getPatient();
+
+		Pregnancy pregnancy = pdh.getPregnancy();
 		String mobileNumber = mobilePhoneNumber.getText().toString().replaceAll("\\s","");
+		pdh.setLoadingProgress(pdh.getPregnancy().get_loadingProgress()+1);
 
 		if (pregnancy.get_mobileNumber().compareTo(mobileNumber)==0 && pregnancy.get_isVerified()==1){
 			Crouton.showText(this, getString(R.string.number_same), Style.INFO);
@@ -165,6 +225,13 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 				Crouton.showText(this, getString(R.string.number_invalid), Style.ALERT);
 			}
 		}
+
+	/*	long waitTime = 3 * 60 * 1000;
+		new Handler().postDelayed(new Runnable() {
+			public void run() {
+				Toast.makeText(getApplicationContext(), getString(R.string.timeout), Toast.LENGTH_LONG).show();
+			}
+		}, waitTime);*/
 	}
 
 	private boolean validatePhoneNumber(String mobileNumber) {
@@ -258,4 +325,5 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 		regIntent.setAction(Constants.ACTION_REGISTER);
 		getApplicationContext().startService(regIntent);
 	}
+
 }
