@@ -33,7 +33,7 @@ import android.widget.Toast;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.mch.registry.ccs.app.Constants.EventbusMessageType;
 import com.mch.registry.ccs.app.Constants.State;
-import com.mch.registry.ccs.data.PatientDataHandler;
+import com.mch.registry.ccs.data.PregnancyDataHandler;
 import com.mch.registry.ccs.data.RecommendationDataHandler;
 import com.mch.registry.ccs.data.VisitDataHandler;
 
@@ -119,11 +119,9 @@ public class GcmIntentService extends IntentService {
 		                mHandler.post(new Runnable() {
 			                @Override
 			                public void run() {
-				                PatientDataHandler pdh = new PatientDataHandler(getApplicationContext(),"Msg received", null, 1);
+				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"Msg received", null, 1);
 				                Toast.makeText(getApplicationContext(),getString(R.string.number_verified), Toast.LENGTH_LONG).show();
 				                pdh.setVerified(true);
-				                Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
-				                startActivity(mainIntent );
 			                }
 		                });
 	                }else if(msg.contains("_NotVerified")){
@@ -131,7 +129,7 @@ public class GcmIntentService extends IntentService {
 		                mHandler.post(new Runnable() {
 			                @Override
 			                public void run() {
-				                PatientDataHandler pdh = new PatientDataHandler(getApplicationContext(),"not verified", null, 1);
+				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"not verified", null, 1);
 				                pdh.setVerified(false);
 				                Toast.makeText(getApplicationContext(), getString(R.string.number_not_verified), Toast.LENGTH_SHORT).show();
 			                }
@@ -141,12 +139,57 @@ public class GcmIntentService extends IntentService {
 		                mHandler.post(new Runnable() {
 			                @Override
 			                public void run() {
-				                PatientDataHandler pdh = new PatientDataHandler(getApplicationContext(),"Msg received", null, 1);
+				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"Msg received", null, 1);
 				                pdh.setVerified(false);
 				                Toast.makeText(getApplicationContext(),getString(R.string.number_not_found), Toast.LENGTH_LONG).show();
-				                //Crouton.showText(getApplicationContext(), R.id.number_not_found, Style.ALERT);
 			                }
 		                });
+	                }else if(msg.contains("_PregnancyInfosFacilityName")){
+		                final String pInfoFN = msg.replaceAll("_PregnancyInfosFacilityName: ","");
+		                Handler mHandler = new Handler(getMainLooper());
+		                mHandler.post(new Runnable() {
+			                @Override
+			                public void run() {
+				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"fn received", null, 1);
+				                pdh.updateFacilityName(pInfoFN);
+				                Toast.makeText(getApplicationContext(),"facility name", Toast.LENGTH_LONG).show();
+			                }
+		                });
+	                }else if(msg.contains("_PregnancyInfosFacilityPhone")){
+		                final String pInfoFP = msg.replaceAll("_PregnancyInfosFacilityPhone: ","");
+		                Handler mHandler = new Handler(getMainLooper());
+		                mHandler.post(new Runnable() {
+			                @Override
+			                public void run() {
+				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"fp recieved", null, 1);
+				                pdh.updateFacilityPhone(pInfoFP);
+				                Toast.makeText(getApplicationContext(),"facilityphone", Toast.LENGTH_LONG).show();
+			                }
+		                });
+	                }else if(msg.contains("_PregnancyInfosExpectedDelivery")){
+		                final String pInfoED = msg.replaceAll("_PregnancyInfosExpectedDelivery: ","");
+		                Handler mHandler = new Handler(getMainLooper());
+		                mHandler.post(new Runnable() {
+			                @Override
+			                public void run() {
+				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"ed recieved", null, 1);
+				                pdh.updateExpectedDelivery(pInfoED);
+				                Toast.makeText(getApplicationContext(),"expecteddelivery", Toast.LENGTH_LONG).show();
+			                }
+		                });
+	                }else if(msg.contains("_PregnancyInfosPatientName")){
+		                final String pInfoPN = msg.replaceAll("_PregnancyInfosPatientName: ","");
+		                Handler mHandler = new Handler(getMainLooper());
+		                mHandler.post(new Runnable() {
+			                @Override
+			                public void run() {
+				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"pn recieved", null, 1);
+				                pdh.updatePatientName(pInfoPN);
+				                Toast.makeText(getApplicationContext(), "patientname", Toast.LENGTH_LONG).show();
+			                }
+		                });
+
+
 	                }
 
                Log.i("PregnancyGuide", "Received: " + extras.toString());
@@ -208,7 +251,7 @@ public class GcmIntentService extends IntentService {
    }
 
    private void storeRegistrationId(String regId) {
-	  PatientDataHandler pdh = new PatientDataHandler(getApplicationContext(), null, null, 1);
+	  PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(), null, null, 1);
 	  pdh.updateRegId(regId);
       final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
       Log.i("PregnancyGuide", "Saving regId to prefs: " + regId);
@@ -220,7 +263,7 @@ public class GcmIntentService extends IntentService {
 
    private void removeRegistrationId() {
 	   //TODO account
-	  PatientDataHandler pdh = new PatientDataHandler(getApplicationContext(), null, null, 1);
+	  PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(), null, null, 1);
 	  pdh.updateRegId("null");
       final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
       Log.i("PregnancyGuide", "Removing regId from prefs");

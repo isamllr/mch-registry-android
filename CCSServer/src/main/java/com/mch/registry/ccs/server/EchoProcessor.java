@@ -61,7 +61,7 @@ public class EchoProcessor implements PayloadProcessor{
 				mysql.setVerified(msg.getFrom(), true);
 				sendVerificationMessage(msg.getFrom(), true);
 				logger.log(Level.INFO, "Verification ok");
-				sendPregnancyInfos(msg.getFrom());
+				preparePregnancyInfos(msg.getFrom());
 			}else{
 				mysql.setVerified(msg.getFrom(), true);
 				sendVerificationMessage(msg.getFrom(), true);
@@ -89,24 +89,29 @@ public class EchoProcessor implements PayloadProcessor{
 		}
 	}
 
-	private void sendPregnancyInfos(String gcmRegId) {
+	private void preparePregnancyInfos(String gcmRegId) {
+		MySqlHandler mysql = new MySqlHandler();
+		Pregnancy pregnancy = mysql.getPregnancyInfoByGcmRegId(gcmRegId);
 
-		//TODO
-		//Check if verified
-		logger.log(Level.INFO, "Sending pregnancy infos");
+		sendPregnancyInfos(gcmRegId, "_PregnancyInfosFacilityName: " + pregnancy.getFacilityName());
+		sendPregnancyInfos(gcmRegId, "_PregnancyInfosFacilityPhone: " + pregnancy.getFacilityPhoneNumber());
+		sendPregnancyInfos(gcmRegId, "_PregnancyInfosExpectedDelivery: " + pregnancy.getExpectedDelivery());
+		sendPregnancyInfos(gcmRegId, "_PregnancyInfosPatientName: " + pregnancy.getPatientSurName() + " " + pregnancy.getPatientLastName());
+	}
+
+	private void sendPregnancyInfos(String gcmRegId, String message){
+
 		Map<String, String> payload = new HashMap<String, String>();
-		String toRegId = gcmRegId;
 		String messageId = client.getRandomMessageId();
-		String message = "_PregnacyInfos";
 		payload = new HashMap<String, String>();
 		payload.put("message", message);
 
 		try {
 			// Send the downstream message to a device.
 			client.send(client.createJsonMessage(gcmRegId, messageId, payload, null, 10000L, true));
-			logger.log(Level.INFO, "PregnancyInfos sent. IRegID: " + toRegId + ", Text: " + message);
+			logger.log(Level.INFO, "PregnancyInfos sent. Text: " + message);
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "PregnancyInfos not sent message could not be sent! RegID: " + toRegId + ", Text: " + message);
+			logger.log(Level.WARNING, "PregnancyInfos not sent message could not be sent! RegID: " + gcmRegId + ", Text: " + message + " " + e.getMessage());
 		}
 	}
 

@@ -10,7 +10,7 @@ import android.util.Log;
 /**
  * Created by Isa on 18.07.2014.
  */
-public class PatientDataHandler extends SQLiteOpenHelper {
+public class PregnancyDataHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "registry.db";
@@ -27,7 +27,7 @@ public class PatientDataHandler extends SQLiteOpenHelper {
     public static final String COLUMN_REGID = "_regID";
 	public static final String COLUMN_VERIFIED = "_verified";
 
-    public PatientDataHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public PregnancyDataHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
     }
 
@@ -72,17 +72,17 @@ public class PatientDataHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    private void addPatient(Patient patient) {
+    private void addPatient(Pregnancy pregnancy) {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_PATIENTID,patient.get_patientID());
-        values.put(COLUMN_MESSAGEID, patient.get_latestMessageID());
-        values.put(COLUMN_MOBILENUMBER, patient.get_mobileNumber());
-        values.put(COLUMN_PATIENTNAME, patient.get_patientName());
-        values.put(COLUMN_EXPECTEDDELIVERY, patient.get_expectedDelivery());
-        values.put(COLUMN_FACILITYNAME, patient.get_facilityName());
-        values.put(COLUMN_FACILITYPHONENUMBER, patient.get_facilityPhoneNumber());
-        values.put(COLUMN_REGID, patient.get_regID());
-	    values.put(COLUMN_VERIFIED, patient.get_isVerified());
+        values.put(COLUMN_PATIENTID, pregnancy.get_patientID());
+        values.put(COLUMN_MESSAGEID, pregnancy.get_latestMessageID());
+        values.put(COLUMN_MOBILENUMBER, pregnancy.get_mobileNumber());
+        values.put(COLUMN_PATIENTNAME, pregnancy.get_patientName());
+        values.put(COLUMN_EXPECTEDDELIVERY, pregnancy.get_expectedDelivery());
+        values.put(COLUMN_FACILITYNAME, pregnancy.get_facilityName());
+        values.put(COLUMN_FACILITYPHONENUMBER, pregnancy.get_facilityPhoneNumber());
+        values.put(COLUMN_REGID, pregnancy.get_regID());
+	    values.put(COLUMN_VERIFIED, pregnancy.get_isVerified());
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_PATIENT, null, values);
@@ -90,25 +90,25 @@ public class PatientDataHandler extends SQLiteOpenHelper {
 	    Log.i("Pregnancy Guide", "Patient added");
     }
 
-    public Patient getPatient() {
+    public Pregnancy getPatient() {
         String query = "Select * FROM " + TABLE_PATIENT;
-	    Patient patient = new Patient();
+	    Pregnancy pregnancy = new Pregnancy();
 		try{
 	        SQLiteDatabase db = this.getWritableDatabase();
 	        Cursor cursor = db.rawQuery(query, null);
 
 	        if (cursor.moveToFirst()) {
 		        cursor.moveToFirst();
-		        patient.set_id(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
-		        patient.set_patientID(cursor.getInt(cursor.getColumnIndex(COLUMN_PATIENTID)));
-		        patient.set_regID(cursor.getString(cursor.getColumnIndex(COLUMN_REGID)));
-		        patient.set_latestMessageID(cursor.getInt(cursor.getColumnIndex(COLUMN_MESSAGEID)));
-		        patient.set_mobileNumber(cursor.getString(cursor.getColumnIndex(COLUMN_MOBILENUMBER)));
-		        patient.set_patientName(cursor.getString(cursor.getColumnIndex(COLUMN_PATIENTNAME)));
-		        patient.set_expectedDelivery(cursor.getString(cursor.getColumnIndex(COLUMN_EXPECTEDDELIVERY)));
-		        patient.set_facilityName(cursor.getString(cursor.getColumnIndex(COLUMN_FACILITYNAME)));
-		        patient.set_facilityPhoneNumber(cursor.getString(cursor.getColumnIndex(COLUMN_FACILITYPHONENUMBER)));
-		        patient.set_isVerified(cursor.getInt(cursor.getColumnIndex(COLUMN_VERIFIED)));
+		        pregnancy.set_id(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+		        pregnancy.set_patientID(cursor.getInt(cursor.getColumnIndex(COLUMN_PATIENTID)));
+		        pregnancy.set_regID(cursor.getString(cursor.getColumnIndex(COLUMN_REGID)));
+		        pregnancy.set_latestMessageID(cursor.getInt(cursor.getColumnIndex(COLUMN_MESSAGEID)));
+		        pregnancy.set_mobileNumber(cursor.getString(cursor.getColumnIndex(COLUMN_MOBILENUMBER)));
+		        pregnancy.set_patientName(cursor.getString(cursor.getColumnIndex(COLUMN_PATIENTNAME)));
+		        pregnancy.set_expectedDelivery(cursor.getString(cursor.getColumnIndex(COLUMN_EXPECTEDDELIVERY)));
+		        pregnancy.set_facilityName(cursor.getString(cursor.getColumnIndex(COLUMN_FACILITYNAME)));
+		        pregnancy.set_facilityPhoneNumber(cursor.getString(cursor.getColumnIndex(COLUMN_FACILITYPHONENUMBER)));
+		        pregnancy.set_isVerified(cursor.getInt(cursor.getColumnIndex(COLUMN_VERIFIED)));
 		        cursor.close();
 	        }
 
@@ -116,8 +116,8 @@ public class PatientDataHandler extends SQLiteOpenHelper {
     }catch(Exception e){
 			Log.e("DB Error", e.getMessage());
 	}
-	    Log.i("Pregnancy Guide", "get Patient. Mobile number: " +patient.get_mobileNumber() );
-        return patient;
+	    Log.i("Pregnancy Guide", "get Patient. Mobile number: " + pregnancy.get_mobileNumber() );
+        return pregnancy;
     }
 
     public boolean updateMobilePhoneNumber(String mobilePhoneNumber){
@@ -126,7 +126,7 @@ public class PatientDataHandler extends SQLiteOpenHelper {
 
         try{
             SQLiteDatabase db = this.getWritableDatabase();
-            Patient patient = new Patient();
+            Pregnancy pregnancy = new Pregnancy();
             ContentValues cv = new ContentValues();
             cv.put(COLUMN_MOBILENUMBER,mobilePhoneNumber);
             db.update(TABLE_PATIENT, cv , "1=1", null);
@@ -148,7 +148,7 @@ public class PatientDataHandler extends SQLiteOpenHelper {
         try{
 
             SQLiteDatabase db = this.getWritableDatabase();
-            Patient patient = new Patient();
+            Pregnancy pregnancy = new Pregnancy();
 
             ContentValues cv = new ContentValues();
             cv.put(COLUMN_REGID,regID);
@@ -167,9 +167,9 @@ public class PatientDataHandler extends SQLiteOpenHelper {
     public int getNextMessageId(){
 
         boolean result = false;
-		Patient patient = new Patient();
-	    patient = this.getPatient();
-	    int nextMessageId = this.createNextMessageID(patient.get_latestMessageID());
+		Pregnancy pregnancy = new Pregnancy();
+	    pregnancy = this.getPatient();
+	    int nextMessageId = this.createNextMessageID(pregnancy.get_latestMessageID());
 
         try{
             SQLiteDatabase db = this.getWritableDatabase();
@@ -196,10 +196,99 @@ public class PatientDataHandler extends SQLiteOpenHelper {
 		try{
 
 			SQLiteDatabase db = this.getWritableDatabase();
-			Patient patient = new Patient();
+			Pregnancy pregnancy = new Pregnancy();
 			int verified = (isVerified?1:0);
 			ContentValues cv = new ContentValues();
 			cv.put(COLUMN_VERIFIED, verified);
+			db.update(TABLE_PATIENT, cv , "1=1", null);
+
+			db.close();
+			result = true;
+		}catch (Exception e) {
+			Log.e("DB Error", e.getMessage());
+			result = false;
+		}
+
+		return result;
+	}
+
+	public boolean updateFacilityName(String pInfoFN) {
+
+			boolean result = false;
+
+			try{
+
+				SQLiteDatabase db = this.getWritableDatabase();
+				Pregnancy pregnancy = new Pregnancy();
+
+				ContentValues cv = new ContentValues();
+				cv.put(COLUMN_FACILITYNAME,pInfoFN);
+				db.update(TABLE_PATIENT, cv , "1=1", null);
+
+				db.close();
+				result = true;
+			}catch (Exception e) {
+				Log.e("DB Error", e.getMessage());
+				result = false;
+			}
+
+			return result;
+		}
+
+	public boolean updateFacilityPhone(String pInfoFP) {
+		boolean result = false;
+
+		try{
+
+			SQLiteDatabase db = this.getWritableDatabase();
+			Pregnancy pregnancy = new Pregnancy();
+
+			ContentValues cv = new ContentValues();
+			cv.put(COLUMN_FACILITYPHONENUMBER, pInfoFP);
+			db.update(TABLE_PATIENT, cv , "1=1", null);
+
+			db.close();
+			result = true;
+		}catch (Exception e) {
+			Log.e("DB Error", e.getMessage());
+			result = false;
+		}
+
+		return result;
+	}
+
+	public boolean updatePatientName(String pInfoPN) {
+		boolean result = false;
+
+		try{
+
+			SQLiteDatabase db = this.getWritableDatabase();
+			Pregnancy pregnancy = new Pregnancy();
+
+			ContentValues cv = new ContentValues();
+			cv.put(COLUMN_PATIENTNAME, pInfoPN);
+			db.update(TABLE_PATIENT, cv , "1=1", null);
+
+			db.close();
+			result = true;
+		}catch (Exception e) {
+			Log.e("DB Error", e.getMessage());
+			result = false;
+		}
+
+		return result;
+	}
+
+	public boolean updateExpectedDelivery(String pInfoED) {
+		boolean result = false;
+
+		try{
+
+			SQLiteDatabase db = this.getWritableDatabase();
+			Pregnancy pregnancy = new Pregnancy();
+
+			ContentValues cv = new ContentValues();
+			cv.put(COLUMN_EXPECTEDDELIVERY, pInfoED);
 			db.update(TABLE_PATIENT, cv , "1=1", null);
 
 			db.close();

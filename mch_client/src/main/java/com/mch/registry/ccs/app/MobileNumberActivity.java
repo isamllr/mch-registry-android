@@ -23,8 +23,8 @@ import android.widget.EditText;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.mch.registry.ccs.data.Patient;
-import com.mch.registry.ccs.data.PatientDataHandler;
+import com.mch.registry.ccs.data.Pregnancy;
+import com.mch.registry.ccs.data.PregnancyDataHandler;
 
 import de.greenrobot.event.EventBus;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -76,10 +76,10 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
     }
 
 	private void loadMobilePhone(){
-		PatientDataHandler pdh = new PatientDataHandler(getApplicationContext(), null, null, 1);
-		Patient patient = new Patient();
-		patient = pdh.getPatient();
-		String mobileNumber = patient.get_mobileNumber();
+		PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(), null, null, 1);
+		Pregnancy pregnancy = new Pregnancy();
+		pregnancy = pdh.getPatient();
+		String mobileNumber = pregnancy.get_mobileNumber();
 
 		if(!(mobileNumber.compareTo("")==0)){
 			mobilePhoneNumber.setText(mobileNumber);
@@ -150,15 +150,16 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 				break;
 		}
 
-		PatientDataHandler pdh = new PatientDataHandler(this, null, null, 1);
-		Patient patient = pdh.getPatient();
+		PregnancyDataHandler pdh = new PregnancyDataHandler(this, null, null, 1);
+		Pregnancy pregnancy = pdh.getPatient();
 		String mobileNumber = mobilePhoneNumber.getText().toString().replaceAll("\\s","");
 
-		if (patient.get_mobileNumber().compareTo(mobileNumber)==0 && patient.get_isVerified()==1){
+		if (pregnancy.get_mobileNumber().compareTo(mobileNumber)==0 && pregnancy.get_isVerified()==1){
 			Crouton.showText(this, getString(R.string.number_same), Style.INFO);
 		}else{
 			if(validatePhoneNumber(mobileNumber)){
 			pdh.updateMobilePhoneNumber(mobileNumber);
+			pdh.setVerified(false);
 			this.sendPhoneMessage(mobileNumber);
 			}else{
 				Crouton.showText(this, getString(R.string.number_invalid), Style.ALERT);

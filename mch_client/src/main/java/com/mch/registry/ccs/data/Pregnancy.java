@@ -3,7 +3,7 @@ package com.mch.registry.ccs.data;
 /**
  * Created by Isa on 18.07.2014.
  */
-public class Patient {
+public class Pregnancy {
     private int _id;
     private int _patientID;
     private String _regID;
@@ -15,10 +15,10 @@ public class Patient {
     private int _latestMessageID;
 	private int _isVerified;
 
-    public Patient() {
+    public Pregnancy() {
     }
 
-	public Patient(int _patientID, String _regID, String _mobileNumber, String _patientName, String _expectedDelivery, String _facilityName, String _facilityPhoneNumber, int _latestMessageID, int _isVerified) {
+	public Pregnancy(int _patientID, String _regID, String _mobileNumber, String _patientName, String _expectedDelivery, String _facilityName, String _facilityPhoneNumber, int _latestMessageID, int _isVerified) {
 		this._patientID = _patientID;
 		this._regID = _regID;
 		this._mobileNumber = _mobileNumber;
@@ -30,7 +30,7 @@ public class Patient {
 		this._isVerified = _isVerified;
 	}
 
-	public Patient(int _id, int _patientID, String _mobileNumber, String _regID, String _patientName, String _expectedDelivery, String _facilityName, String _facilityPhoneNumber, int _latestMessageID, int _isVerified) {
+	public Pregnancy(int _id, int _patientID, String _mobileNumber, String _regID, String _patientName, String _expectedDelivery, String _facilityName, String _facilityPhoneNumber, int _latestMessageID, int _isVerified) {
 		this._id = _id;
 		this._patientID = _patientID;
 		this._mobileNumber = _mobileNumber;

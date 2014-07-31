@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mch.registry.ccs.data.PatientDataHandler;
+import com.mch.registry.ccs.data.PregnancyDataHandler;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener{
 	CollectionPagerAdapter mCollectionPagerAdapter;
@@ -26,7 +26,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		final ActionBar actionBar = getActionBar();
 
-		PatientDataHandler pdh = new PatientDataHandler(this, null, null, 1);
+		PregnancyDataHandler pdh = new PregnancyDataHandler(this, null, null, 1);
 		if(pdh.getPatient().get_isVerified()==0){
 			actionBar.hide();
 			Intent intent = new Intent(getApplicationContext(), MobileNumberActivity.class);
@@ -58,7 +58,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		PatientDataHandler pdh = new PatientDataHandler(this, null, null, 1);
+		PregnancyDataHandler pdh = new PregnancyDataHandler(this, null, null, 1);
 		if(pdh.getPatient().get_isVerified()==1){
 		getMenuInflater().inflate(R.menu.main, menu);
 		}

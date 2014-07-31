@@ -67,15 +67,15 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
     }
 
 	private int calculateRecommendationDay(Date today) {
-		PatientDataHandler pdh = new PatientDataHandler(null, "Recommendation", null, 1);
+		PregnancyDataHandler pdh = new PregnancyDataHandler(null, "Recommendation", null, 1);
 		pdh.getPatient();
-		Patient patient = new Patient();
+		Pregnancy pregnancy = new Pregnancy();
 
 		DateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
 
 		String truncatedDateString1 = formatter.format(today);
 		Date truncatedDate1 = null;
-		String truncatedDateString2 = formatter.format(patient.get_expectedDelivery());
+		String truncatedDateString2 = formatter.format(pregnancy.get_expectedDelivery());
 		Date truncatedDate2 = null;
 		try {
 			truncatedDate1 = formatter.parse(truncatedDateString1);
