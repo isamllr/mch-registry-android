@@ -54,7 +54,7 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
         setContentView(R.layout.activity_phone_number);
 
 		if(!checkPlayServices()){
-			Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+			Intent intent = new Intent(getApplicationContext(), NoGooglePlayServicesActivity.class);
 			startActivity(intent);
 		}
 

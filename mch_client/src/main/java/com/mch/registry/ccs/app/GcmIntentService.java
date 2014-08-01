@@ -91,6 +91,8 @@ public class GcmIntentService extends IntentService {
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                // Post notification of received message.
                String msg = extras.getString("message");
+	           PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"fn received", null, 1);
+	           Pregnancy preg = pdh.getPregnancy();
 
 	                if (TextUtils.isEmpty(msg)){
 	                }else if(msg.contains("_R: ")){
@@ -147,60 +149,26 @@ public class GcmIntentService extends IntentService {
 			                }
 		                });
 	                }else if(msg.contains("_PregnancyInfosFacilityName")){
-		                final String pInfoFN = msg.replaceAll("_PregnancyInfosFacilityName: ","");
-		                Handler mHandler = new Handler(getMainLooper());
-		                mHandler.post(new Runnable() {
-			                @Override
-			                public void run() {
-				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"fn received", null, 1);
-				                pdh.updateFacilityName(pInfoFN);
-				                pdh.setLoadingProgress(pdh.getPregnancy().get_loadingProgress() + 1);
-			                }
-		                });
+		                String pInfoFN = msg.replaceAll("_PregnancyInfosFacilityName: ","");
+		                pdh.updateFacilityName(pInfoFN);
+		                pdh.setLoadingProgress(preg.get_loadingProgress() + 1);
 	                }else if(msg.contains("_PregnancyInfosFacilityPhone")){
-		                final String pInfoFP = msg.replaceAll("_PregnancyInfosFacilityPhone: ","");
-		                Handler mHandler = new Handler(getMainLooper());
-		                mHandler.post(new Runnable() {
-			                @Override
-			                public void run() {
-				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"fp recieved", null, 1);
-				                pdh.updateFacilityPhone(pInfoFP);
-				                pdh.setLoadingProgress(pdh.getPregnancy().get_loadingProgress() + 1);
-			                }
-		                });
+		                String pInfoFP = msg.replaceAll("_PregnancyInfosFacilityPhone: ","");
+		                pdh.updateFacilityPhone(pInfoFP);
+		                pdh.setLoadingProgress(preg.get_loadingProgress() + 1);
 	                }else if(msg.contains("_PregnancyInfosExpectedDelivery")){
-		                final String pInfoED = msg.replaceAll("_PregnancyInfosExpectedDelivery: ","");
-		                Handler mHandler = new Handler(getMainLooper());
-		                mHandler.post(new Runnable() {
-			                @Override
-			                public void run() {
-				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"ed recieved", null, 1);
-				                pdh.updateExpectedDelivery(pInfoED);
-				                pdh.setLoadingProgress(pdh.getPregnancy().get_loadingProgress() + 1);
-			                }
-		                });
+		                String pInfoED = msg.replaceAll("_PregnancyInfosExpectedDelivery: ","");
+		                pdh.updateExpectedDelivery(pInfoED);
+		                pdh.setLoadingProgress(preg.get_loadingProgress() + 1);
 	                }else if(msg.contains("_PregnancyInfosPatientName")){
-		                final String pInfoPN = msg.replaceAll("_PregnancyInfosPatientName: ","");
-		                Handler mHandler = new Handler(getMainLooper());
-		                mHandler.post(new Runnable() {
-			                @Override
-			                public void run() {
-				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"pn recieved", null, 1);
-				                pdh.updatePatientName(pInfoPN);
-				                pdh.setLoadingProgress(pdh.getPregnancy().get_loadingProgress() + 1);
-			                }
-		                });
+		                String pInfoPN = msg.replaceAll("_PregnancyInfosPatientName: ","");
+		                pdh.updatePatientName(pInfoPN);
+		                pdh.setLoadingProgress(preg.get_loadingProgress() + 1);
 	                }
 
                Log.i("PregnancyGuide", "Received: " + extras.toString());
-	            PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"pn check", null, 1);
-	            Pregnancy preg = pdh.getPregnancy();
 	            if(preg.get_loadingProgress()>=6 && preg.get_isVerified()==1){
-		            Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
-		            intent.setAction(Intent.ACTION_VIEW);
-		            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-		            getApplicationContext().startActivity(mainIntent);
+		            Toast.makeText(getApplicationContext(),getString(R.string.application_ready), Toast.LENGTH_LONG).show();
 	            }
             }
          }
@@ -340,7 +308,7 @@ public class GcmIntentService extends IntentService {
 	private void sendNotification(String msg, String title) {
 		mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		Intent notificationIntent = new Intent(this,MainActivity.class);
+		Intent notificationIntent = new Intent(this, MainActivity.class);
 		notificationIntent.setAction(Constants.NOTIFICATION_ACTION);
 		notificationIntent.putExtra(Constants.KEY_MESSAGE_TXT, msg);
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

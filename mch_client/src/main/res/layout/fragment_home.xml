@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+	<ImageView
+		android:id="@+id/imageView1"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentTop="true"
+		android:src="@drawable/mch"
+		android:scaleType="centerCrop"/>
+
+	<ImageView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_home"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/imageView"/>
+
+	<TableLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:shrinkColumns="*"
+		android:stretchColumns="*"
+		android:gravity="center|center_vertical|center_horizontal"
+		android:layout_centerInParent="true"
+		android:showDividers="beginning|end"
+		android:textAlignment="center">
+
+		<TableRow
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:gravity="center"
+			android:layout_marginTop="20dip">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:text="@string/textExpectedDelivery"
+				android:textStyle="bold"
+				android:id="@+id/textExpectedDelivery"
+				android:layout_marginLeft="20dip"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:text="Medium Text"
+				android:id="@+id/textExpectedDeliveryValue"
+				android:layout_marginLeft="20dip"
+				android:layout_marginRight="20dip"/>
+		</TableRow>
+
+		<TableRow
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:gravity="center"
+			android:layout_marginTop="20dip">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:text="@string/textPatientName"
+				android:textStyle="bold"
+				android:id="@+id/textPatientName"
+				android:layout_marginLeft="20dip"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:text="Medium Text"
+				android:id="@+id/textPatientNameValue"
+				android:layout_marginLeft="20dip"
+				android:layout_marginRight="20dip"/>
+		</TableRow>
+
+		<TableRow
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:gravity="center"
+			android:layout_marginTop="20dip"
+			>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:text="@string/textPhone"
+				android:textStyle="bold"
+				android:id="@+id/textPatientPhone"
+				android:layout_marginLeft="20dip"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:text="Medium Text"
+				android:id="@+id/textPatientPhoneValue"
+				android:layout_marginLeft="20dip"
+				android:layout_marginRight="20dip"/>
+		</TableRow>
+
+		<TableRow
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:gravity="center"
+			android:layout_marginTop="20dip">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:text="@string/textFacility"
+				android:textStyle="bold"
+				android:id="@+id/textFacilityName"
+				android:layout_marginLeft="20dip"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:text="Medium Text"
+				android:id="@+id/textFacilityNameValue"
+				android:layout_marginLeft="20dip"
+				android:layout_marginRight="20dip"/>
+		</TableRow>
+
+		<TableRow
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:gravity="center"
+			android:layout_marginTop="20dip"
+			>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:text="@string/textFacilityPhone"
+				android:textStyle="bold"
+				android:id="@+id/textFacilityPhone"
+				android:layout_marginLeft="20dip"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:text="Medium Text"
+				android:id="@+id/textFacilityPhoneValue"
+				android:layout_marginLeft="20dip"
+				android:layout_marginRight="20dip"/>
+		</TableRow>
+
+	</TableLayout>
+
+
+
+
+</RelativeLayout>

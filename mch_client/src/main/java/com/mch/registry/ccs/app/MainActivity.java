@@ -1,75 +1,124 @@
 package com.mch.registry.ccs.app;
 
-import android.app.ActionBar;
-import android.app.NotificationManager;
-import android.content.Context;
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
-import com.mch.registry.ccs.data.PregnancyDataHandler;
+import com.mch.registry.ccs.app.adapter.NavDrawerListAdapter;
+import com.mch.registry.ccs.app.model.NavDrawerItem;
 
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+import java.util.ArrayList;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener{
-	CollectionPagerAdapter mCollectionPagerAdapter;
-	ViewPager mViewPager;
+public class MainActivity extends Activity {
+	private DrawerLayout mDrawerLayout;
+	private ListView mDrawerList;
+	private ActionBarDrawerToggle mDrawerToggle;
 
-	public void onCreate(Bundle savedInstanceState) {
+	// nav drawer title
+	private CharSequence mDrawerTitle;
+
+	// used to store app title
+	private CharSequence mTitle;
+
+	// slide menu items
+	private String[] navMenuTitles;
+	private TypedArray navMenuIcons;
+
+	private ArrayList<NavDrawerItem> navDrawerItems;
+	private NavDrawerListAdapter adapter;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		final ActionBar actionBar = getActionBar();
+		mTitle = mDrawerTitle = getTitle();
 
-		PregnancyDataHandler pdh = new PregnancyDataHandler(this, null, null, 1);
-		if (pdh.getPregnancy().get_isVerified() == 0) {
-			actionBar.hide();
-			Intent intent = new Intent(getApplicationContext(), MobileNumberActivity.class);
-			startActivity(intent);
-		} else {
+		// load slide menu items
+		navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
 
-			final Intent intent = getIntent();
-			String msg = intent.getStringExtra(Constants.KEY_MESSAGE_TXT);
-			if (msg != null) {
-				final NotificationManager manager =
-						(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-				manager.cancel(Constants.NOTIFICATION_NR);
-				String msgTxt = getString(R.string.msg_received, msg);
-				Crouton.showText(this, msgTxt, Style.INFO);
+		// nav drawer icons from resources
+		navMenuIcons = getResources()
+				.obtainTypedArray(R.array.nav_drawer_icons);
+
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
+
+		navDrawerItems = new ArrayList<NavDrawerItem>();
+
+		// adding nav drawer items to array
+		// Home
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
+		// Visits
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1), true, "50+"));
+		// Recommendations
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1), true, "22"));
+		// Notes
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
+		// About
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
+
+		// Recycle the typed array
+		navMenuIcons.recycle();
+
+		mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+
+		// setting the nav drawer list adapter
+		adapter = new NavDrawerListAdapter(getApplicationContext(),
+				navDrawerItems);
+		mDrawerList.setAdapter(adapter);
+
+		// enabling action bar app icon and behaving it as toggle button
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
+
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+				R.drawable.ic_drawer, //nav menu toggle icon
+				R.string.app_name, // nav drawer open - description for accessibility
+				R.string.app_name // nav drawer close - description for accessibility
+		) {
+			public void onDrawerClosed(View view) {
+				getActionBar().setTitle(mTitle);
+				// calling onPrepareOptionsMenu() to show action bar icons
+				invalidateOptionsMenu();
 			}
 
-			mCollectionPagerAdapter = new CollectionPagerAdapter(getSupportFragmentManager());
-			actionBar.setHomeButtonEnabled(false);
-			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-			mViewPager = (ViewPager) findViewById(R.id.pager);
-			mViewPager.setAdapter(mCollectionPagerAdapter);
-			mViewPager
-					.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-
-						@Override
-
-						public void onPageSelected(int position) {
-							actionBar.setSelectedNavigationItem(position);
-						}
-
-					});
-			for (int i = 0; i < mCollectionPagerAdapter.getCount(); i++) {
-				actionBar.addTab(actionBar.newTab()
-						.setText(mCollectionPagerAdapter.getPageTitle(i))
-						.setTabListener(this));
+			public void onDrawerOpened(View drawerView) {
+				getActionBar().setTitle(mDrawerTitle);
+				// calling onPrepareOptionsMenu() to hide action bar icons
+				invalidateOptionsMenu();
 			}
+		};
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+		if (savedInstanceState == null) {
+			// on first time display view for first nav item
+			displayView(0);
+		}
+	}
+
+	/**
+	 * Slide menu item click listener
+	 * */
+	private class SlideMenuClickListener implements
+			ListView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			// display view for selected nav drawer item
+			displayView(position);
 		}
 	}
 
@@ -81,126 +130,85 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-			startActivity(intent);
+		// toggle nav drawer on selecting action bar app icon/title
+		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
+		int id = item.getItemId();
 		if (id == R.id.action_mobilephonenumber) {
 			Intent intent = new Intent(getApplicationContext(), MobileNumberActivity.class);
 			startActivity(intent);
 			return true;
 		}
-		if (id == R.id.about) {
-			showAboutDialog();
-			return true;
-		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
-		mViewPager.setCurrentItem(tab.getPosition());
-		//MainFragmentActivity.disableBookmarkFlag = MainFragmentActivity.disableShareFlag = true;
-		invalidateOptionsMenu();
+	/* *
+	 * Called when invalidateOptionsMenu() is triggered
+	 */
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		// if nav drawer is opened, hide the action items
+		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+		return super.onPrepareOptionsMenu(menu);
 	}
 
-	public void onTabUnselected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
+	private void displayView(int position) {
+		Fragment fragment = null;
+		switch (position) {
+		case 0:
+			fragment = new HomeFragment();
+			break;
+		case 1:
+			fragment = new VisitsFragment();
+			break;
+		case 2:
+			fragment = new RecommendationsFragment();
+			break;
+		case 3:
+			fragment = new NotesFragment();
+			break;
+		case 4:
+			fragment = new AboutFragment();
+			break;
 
+		default:
+			break;
+		}
+
+		if (fragment != null) {
+			FragmentManager fragmentManager = getFragmentManager();
+			fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
+
+			// update selected item and title, then close the drawer
+			mDrawerList.setItemChecked(position, true);
+			mDrawerList.setSelection(position);
+			setTitle(navMenuTitles[position]);
+			mDrawerLayout.closeDrawer(mDrawerList);
+		} else {
+			// error in creating fragment
+			Log.e("MainActivity", "Error in creating fragment");
+		}
 	}
 
-	public void onTabReselected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
-
+	@Override
+	public void setTitle(CharSequence title) {
+		mTitle = title;
+		getActionBar().setTitle(mTitle);
 	}
 
-	private void showAboutDialog() {
-		int[] resIds = new int[]{
-				-1,
-				-1,
-				R.string.common_about_text,
-				R.string.app_name,
-				R.string.gcm_demo_copyright,
-				R.string.repo_link};
-		DialogFragment newFragment = AboutFragment.newInstance(resIds, true);
-		newFragment.show(getSupportFragmentManager(), "dialog");
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// Sync the toggle state after onRestoreInstanceState has occurred.
+		mDrawerToggle.syncState();
 	}
 
-	public static class TabFragment extends Fragment {
-		public static final String ARG_OBJECT = "object";
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-			View view = inflater.inflate(R.layout.fragment_recommendation_list, container, false);
-
-
-
-			Bundle args = getArguments();
-			int position = args.getInt(ARG_OBJECT);
-			int tabLayout = 0;
-			switch (position) {
-				case 0:
-					tabLayout = R.layout.tab1;
-					break;
-				case 1:
-					tabLayout = R.layout.fragment_recommendation_grid;
-					break;
-				case 2:
-					tabLayout = R.layout.fragment_recommendation_list;
-					View view = inflater.inflate(R.layout.fragment_recommendation_list, container, false);
-					FragmentTransaction transaction = getFragmentManager().beginTransaction();
-					transaction.replace(R.id.root_frame, new FirstFragment());
-					transaction.commit();
-					break;
-				default:
-					tabLayout = R.layout.tab1;
-					break;
-			}
-
-			View rootView = inflater.inflate(tabLayout, container, false);
-			return rootView;
-		}
-
-	}
-
-	public class CollectionPagerAdapter extends FragmentPagerAdapter {
-
-		final int NUM_ITEMS = 3;
-
-		public CollectionPagerAdapter(FragmentManager fm) {
-			super(fm);
-		}
-
-		@Override
-		public Fragment getItem(int i) {
-			Fragment fragment = new TabFragment();
-			Bundle args = new Bundle();
-			args.putInt(TabFragment.ARG_OBJECT, i);
-			fragment.setArguments(args);
-			return fragment;
-		}
-
-		@Override
-		public int getCount() {
-			return NUM_ITEMS;
-		}
-
-		@Override
-		public CharSequence getPageTitle(int position) {
-			String tabLabel = null;
-			switch (position) {
-				case 0:
-					tabLabel = getString(R.string.title_section_home);
-					break;
-				case 1:
-					tabLabel = getString(R.string.title_section_visits);
-					break;
-				case 2:
-					tabLabel = getString(R.string.title_section_recommendations);
-					break;
-			}
-			return tabLabel;
-		}
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		// Pass any configuration change to the drawer toggls
+		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
 }
