@@ -20,7 +20,7 @@ import java.util.Date;
 public class RecommendationDataHandler extends SQLiteOpenHelper{
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "registry.db";
+    private static final String DATABASE_NAME = "recommendations.db";
     private static final String TABLE_RECOMMENDATIONS = "recommendations";
 
     public static final String COLUMN_ID = "_id";
@@ -42,6 +42,18 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
                 + COLUMN_RECEIVEDDATE + " DATETIME"
                 + ")";
         db.execSQL(CREATE_RECOMMENDATIONS_TABLE);
+
+	    String INSERT_RECOMMENDATION_TABLE =
+			    "INSERT INTO " + TABLE_RECOMMENDATIONS + "("
+					    + COLUMN_ID + ", "
+					    + COLUMN_RECOMMENDATIONTEXT + ","
+					    + COLUMN_RECOMMENDATIONDAY + ","
+					    + COLUMN_RECEIVEDDATE
+					    + " )VALUES(null, 'This is the very first recommendation. During your pregnancy, more will follow.', 1, '2000-01-01 10:00');";
+	    //TODO: replace by /@string
+	    db.execSQL(INSERT_RECOMMENDATION_TABLE);
+
+	    Log.i("Pregnancy Guide", "RecommendationDB created & 1 recommendation inserted");
     }
 
     @Override
@@ -94,7 +106,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 
         String query = "Select * FROM " + TABLE_RECOMMENDATIONS;
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
         ArrayList<Recommendation> resultList = new ArrayList<Recommendation>();

@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 public class VisitDataHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "registry.db";
+    private static final String DATABASE_NAME = "visits.db";
     private static final String TABLE_VISITS = "visits";
 
     public static final String COLUMN_ID = "_id";
