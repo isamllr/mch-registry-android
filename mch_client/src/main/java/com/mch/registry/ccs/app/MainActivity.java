@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,7 +23,7 @@ import com.mch.registry.ccs.data.PregnancyDataHandler;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener{
 	CollectionPagerAdapter mCollectionPagerAdapter;
 	ViewPager mViewPager;
 
@@ -80,10 +81,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
@@ -123,7 +120,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 				R.string.common_about_text,
 				R.string.app_name,
 				R.string.gcm_demo_copyright,
-				R.string.gcm_demo_repo_link};
+				R.string.repo_link};
 		DialogFragment newFragment = AboutFragment.newInstance(resIds, true);
 		newFragment.show(getSupportFragmentManager(), "dialog");
 	}
@@ -134,6 +131,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+			View view = inflater.inflate(R.layout.fragment_recommendation_list, container, false);
+
+
+
 			Bundle args = getArguments();
 			int position = args.getInt(ARG_OBJECT);
 			int tabLayout = 0;
@@ -142,13 +143,17 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					tabLayout = R.layout.tab1;
 					break;
 				case 1:
-					tabLayout = R.layout.tab2;
+					tabLayout = R.layout.fragment_recommendation_grid;
 					break;
 				case 2:
-					tabLayout = R.layout.tab3;
+					tabLayout = R.layout.fragment_recommendation_list;
+					View view = inflater.inflate(R.layout.fragment_recommendation_list, container, false);
+					FragmentTransaction transaction = getFragmentManager().beginTransaction();
+					transaction.replace(R.id.root_frame, new FirstFragment());
+					transaction.commit();
 					break;
-				case 3:
-					tabLayout = R.layout.tab4;
+				default:
+					tabLayout = R.layout.tab1;
 					break;
 			}
 
@@ -160,7 +165,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	public class CollectionPagerAdapter extends FragmentPagerAdapter {
 
-		final int NUM_ITEMS = 4; // number of tabs
+		final int NUM_ITEMS = 3;
 
 		public CollectionPagerAdapter(FragmentManager fm) {
 			super(fm);
@@ -192,9 +197,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					break;
 				case 2:
 					tabLabel = getString(R.string.title_section_recommendations);
-					break;
-				case 3:
-					tabLabel = getString(R.string.title_section_diary);
 					break;
 			}
 			return tabLabel;

@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="ormlite-jdbc-4.46">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/CCSServer/libs/ormlite-jdbc-4.46.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

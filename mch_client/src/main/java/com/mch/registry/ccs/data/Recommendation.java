@@ -11,7 +11,16 @@ public class Recommendation {
     private String _receivedDate;
 
     public Recommendation() {
-    }
+	}
+
+	public Recommendation(int _recommendationDay, String _recommendationTex) {
+		this._recommendationText = _recommendationText;
+		this._recommendationDay = _recommendationDay;
+	}
+
+	public String toString(){
+		return this._recommendationText;
+	}
 
     public Recommendation(int _id, String _recommendationText, String _receivedDate, int _recommendationDay) {
         this._id = _id;

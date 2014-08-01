@@ -50,7 +50,7 @@
     </string>
 
     <!-- about -->
-    <string name="gcm_demo_repo_link">https://bitbucket.org/grokkingandroid/cpsample</string>
+    <string name="repo_link">https://bitbucket.org/grokkingandroid/cpsample</string>
 
     <!-- ActionBar-Spinner -->
     <string-array name="gcm_demo_spinner_actionbar">

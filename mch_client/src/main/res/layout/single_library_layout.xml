@@ -19,7 +19,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_marginTop="20dp"
-    >
+    android:theme="@android:style/Theme.Holo.Light">
 
     <TextView 
         android:id="@+id/library_title"
