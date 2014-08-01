@@ -107,6 +107,15 @@ option is required to comply with the Google+ Sign-In developer policies
             android:enabled="true"
             android:exported="true" >
         </receiver>
+
+        <activity
+            android:name=".NoGooglePlayServices"
+            android:label="@string/title_activity_no_google_play_services" >
+        </activity>
+        <activity
+            android:name=".MyActivity"
+            android:label="@string/title_activity_my" >
+        </activity>
     </application>
 
 </manifest>

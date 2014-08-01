@@ -53,6 +53,11 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_number);
 
+		if(!checkPlayServices()){
+			Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+			startActivity(intent);
+		}
+
 		mProgress = (ProgressBar) findViewById(R.id.progressBar);
 		mProgress.setProgress(0);
 		mProgress.setMax(6);
@@ -60,7 +65,7 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 	    smsReceiver = new SMSReceiver();
 	    getApplicationContext().registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
 
-		//TODO:check play services
+
 	    mState = getCurrState();
 
 	    mobilePhoneNumber = (EditText) findViewById(R.id.input_phone);
@@ -102,11 +107,11 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-	    PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(), null, null, 1);
+	    /*PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(), null, null, 1);
 	    Pregnancy pregnancy = pdh.getPregnancy();
 	    if (pregnancy.get_isVerified()==1){
             getMenuInflater().inflate(R.menu.main, menu);
-	    }
+	    }*/
         return true;
     }
 
@@ -115,11 +120,22 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+	    /*int id = item.getItemId();
+	    if (id == R.id.action_settings) {
+		    Intent intent = tent(getApplicationContext(), SettingsActivity.class);
+		    startActivity(intent);
+		    return true;
+	    }
+	    if (id == R.id.action_mobilephonenumber) {
+		    Intent intent = new Intent(getApplicationContext(), MobileNumberActivity.class);
+		    startActivity(intent);
+		    return true;
+	    }
+	    if (id == R.id.about) {
+		    showAboutDialog();
+		    return true;
+	    }*/
+	    return super.onOptionsItemSelected(item);
     }
 
 	private Constants.State getCurrState() {

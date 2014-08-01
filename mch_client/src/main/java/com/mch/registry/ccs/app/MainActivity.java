@@ -1,8 +1,11 @@
 package com.mch.registry.ccs.app;
 
 import android.app.ActionBar;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -16,7 +19,10 @@ import android.view.ViewGroup;
 
 import com.mch.registry.ccs.data.PregnancyDataHandler;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener{
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 	CollectionPagerAdapter mCollectionPagerAdapter;
 	ViewPager mViewPager;
 
@@ -27,11 +33,22 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		final ActionBar actionBar = getActionBar();
 
 		PregnancyDataHandler pdh = new PregnancyDataHandler(this, null, null, 1);
-		if(pdh.getPregnancy().get_isVerified()==0){
+		if (pdh.getPregnancy().get_isVerified() == 0) {
 			actionBar.hide();
 			Intent intent = new Intent(getApplicationContext(), MobileNumberActivity.class);
 			startActivity(intent);
-		}else{
+		} else {
+
+			final Intent intent = getIntent();
+			String msg = intent.getStringExtra(Constants.KEY_MESSAGE_TXT);
+			if (msg != null) {
+				final NotificationManager manager =
+						(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+				manager.cancel(Constants.NOTIFICATION_NR);
+				String msgTxt = getString(R.string.msg_received, msg);
+				Crouton.showText(this, msgTxt, Style.INFO);
+			}
+
 			mCollectionPagerAdapter = new CollectionPagerAdapter(getSupportFragmentManager());
 			actionBar.setHomeButtonEnabled(false);
 			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -78,6 +95,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			startActivity(intent);
 			return true;
 		}
+		if (id == R.id.about) {
+			showAboutDialog();
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -92,6 +113,76 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
 
 	public void onTabReselected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
+
+	}
+
+	private void showAboutDialog() {
+		int[] resIds = new int[]{
+				getLibTitlesArrayId(),
+				getLibDescriptionsArrayId(),
+				getAboutTextId(),
+				getAppTitleResId(),
+				getCopyrightYearResId(),
+				getRepositoryLinkResId()};
+		DialogFragment newFragment = AboutFragment.newInstance(resIds, true);
+		newFragment.show(getSupportFragmentManager(), "dialog");
+	}
+
+	protected int getAppTitleResId() {
+		return R.string.gcm_demo_app_name;
+	}
+
+	protected int getCopyrightYearResId() {
+		return R.string.gcm_demo_copyright;
+	}
+
+	protected int getRepositoryLinkResId() {
+		return R.string.gcm_demo_repo_link;
+	}
+
+	protected int getLibTitlesArrayId() {
+		return -1;
+	}
+
+	protected int getLibDescriptionsArrayId() {
+		return -1;
+	}
+
+	protected int getAboutTextId() {
+		return R.string.common_about_text;
+	}
+
+	protected boolean getAddDefaultLibs() {
+		return true;
+	}
+
+	public static class TabFragment extends Fragment {
+		public static final String ARG_OBJECT = "object";
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+			Bundle args = getArguments();
+			int position = args.getInt(ARG_OBJECT);
+			int tabLayout = 0;
+			switch (position) {
+				case 0:
+					tabLayout = R.layout.tab1;
+					break;
+				case 1:
+					tabLayout = R.layout.tab2;
+					break;
+				case 2:
+					tabLayout = R.layout.tab3;
+					break;
+				case 3:
+					tabLayout = R.layout.tab4;
+					break;
+			}
+
+			View rootView = inflater.inflate(tabLayout, container, false);
+			return rootView;
+		}
 
 	}
 
@@ -136,36 +227,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			}
 			return tabLabel;
 		}
-	}
-
-	public static class TabFragment extends Fragment {
-		public static final String ARG_OBJECT = "object";
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-			Bundle args = getArguments();
-			int position = args.getInt(ARG_OBJECT);
-			int tabLayout = 0;
-			switch (position) {
-				case 0:
-					tabLayout = R.layout.tab1;
-					break;
-				case 1:
-					tabLayout = R.layout.tab2;
-					break;
-				case 2:
-					tabLayout = R.layout.tab3;
-					break;
-				case 3:
-					tabLayout = R.layout.tab4;
-					break;
-			}
-
-			View rootView = inflater.inflate(tabLayout, container, false);
-			return rootView;
-		}
-
 	}
 
 }

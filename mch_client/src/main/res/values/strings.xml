@@ -101,7 +101,7 @@
 <![CDATA[
         <strong>%1$s</strong>
         <br>
-        \u00a9 %2$s by Wolfram Rittmeyer
+        \u00a9 %2$s by Isabel Mueller
         <br>
         <a href="http://www.grokkingandroid.com">http://www.grokkingandroid.com</a>
         <br><br>
@@ -143,6 +143,23 @@
         </item>
     </string-array>
 
+    <string name="app_name">Pregnancy Guide</string>
+    <string name="title_activity_visit">VisitActivity</string>
+    <string name="visit_notification_title_template">Visit: %1$s</string>
+    <string name="visit_notification_placeholder_text_template">You said %1$s and lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis. Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec tortor.</string>
+    <string name="action_visits">Visits</string>
+    <string name="action_share">Share</string>
+    <string name="action_reply">Reply</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="title_activity_phone_number">Mobile Phone Number</string>
+    <string name="enter_phone_number">Your mobile phone number:</string>
+    <string name="phone_format">Format: +380xxxxxxxxx for a Ukrainian number</string>
+    <string name="action_phonenumber">Mobile Number</string>
+    <string name="number_invalid">The phone number format is invalid, please try again.</string>
+    <string name="title_activity_recommendations">Recommendations</string>
+    <string name="action_recommendations">Recommendations</string>
     <string name="title_activity_pregnancy_guide">PregnancyGuide</string>
     <string name="title_section_visits">Visits</string>
     <string name="title_section_recommendations">Tips</string>
@@ -153,12 +170,15 @@
     <string name="title_activity_informed_pregnancy">InformedPregnancy</string>
     <string name="title_section_home">Home</string>
     <string name="title_activity_main">Pregnancy Guide</string>
-	<string name="number_same">This number is already verified.</string>
-	<string name="phone_number_sent">Thank you. We will try to verify your phone number by SMS.</string>
-	<string name="number_not_found">The phone number you have entered was not registered with us, sorry. Did you hand out another number to the staff at the hospital?</string>
-	<string name="number_verified">Your number is now verified.</string>
-	<string name="number_not_verified">Your number could not be verified. Please try again or use another number. You should receive a SMS containing a code.</string>
-	<string name="activation_code_received">Activation code received. Checking...</string>
-	<string name="timeout">Sorry, the verification timed out. Please try again.</string>
+    <string name="number_same">This number is already verified.</string>
+    <string name="phone_number_sent">Thank you. We will try to verify your phone number by SMS.</string>
+    <string name="number_not_found">The phone number you have entered was not registered with us, sorry. Did you hand out another number to the staff at the hospital?</string>
+    <string name="number_verified">Your number is now verified.</string>
+    <string name="number_not_verified">Your number could not be verified. Please try again or use another number. You should receive a SMS containing a code.</string>
+    <string name="activation_code_received">Activation code received. Checking...</string>
+    <string name="timeout">Sorry, the verification timed out. Please try again.</string>
+    <string name="title_activity_no_google_play_services">NoGooglePlayServices</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_my">MyActivity</string>
 
 </resources>

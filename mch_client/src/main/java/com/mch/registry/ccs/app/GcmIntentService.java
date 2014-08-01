@@ -198,9 +198,11 @@ public class GcmIntentService extends IntentService {
 	            if(preg.get_loadingProgress()>=6 && preg.get_isVerified()==1){
 		            pdh.setLoadingProgress(0);
 		            Thread.sleep(2000);
-		            Intent dialogIntent = new Intent(getBaseContext(), MainActivity.class);
-		            dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		            getApplication().startActivity(dialogIntent);
+		            Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+		            intent.setAction(Intent.ACTION_VIEW);
+		            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+		            getApplicationContext().startActivity(mainIntent);
 	            }
             }
          }
