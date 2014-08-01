@@ -55,29 +55,10 @@ public class AboutFragment extends DialogFragment {
          libTitles = res.getStringArray(resIds[0]);
          libDescriptions = res.getStringArray(resIds[1]);
       }
-      if (getArguments().getBoolean(KEY_ADD_DEFAULT_LIBS, true)) {
-         if (resIds[0] == -1) {
-            libTitles = res.getStringArray(R.array.grokkingandroidsample_about_titles);
-            libDescriptions = res.getStringArray(R.array.grokkingandroidsample_about_contents);
-         }
-         else {
-            String[] defaultTitles = res.getStringArray(R.array.grokkingandroidsample_about_titles);
-            String[] target = new String[defaultTitles.length + libTitles.length];
-            System.arraycopy(libTitles, 0, target, 0, libTitles.length);
-            System.arraycopy(defaultTitles, 0, target, libTitles.length, defaultTitles.length);
-            libTitles = target;
-            String[] defaultDescriptions = res.getStringArray(R.array.grokkingandroidsample_about_contents);
-            target = new String[defaultDescriptions.length + libTitles.length];
-            System.arraycopy(libDescriptions, 0, target, 0, libDescriptions.length);
-            System.arraycopy(defaultDescriptions, 0, target, libDescriptions.length, defaultDescriptions.length);
-            libDescriptions = target;
-         }
-      }
-      String libraryPlural = res.getQuantityString(R.plurals.plural_libraries, libTitles.length);
       String appTitle = res.getString(resIds[3]);
       String copyrightYear = res.getString(resIds[4]);
       String repositoryLink = res.getString(resIds[5]);
-      String aboutText = res.getString(resIds[2], appTitle, copyrightYear, repositoryLink, libraryPlural);
+      String aboutText = res.getString(resIds[2], appTitle, copyrightYear, repositoryLink);
       Spanned spannedAboutText = Html.fromHtml(aboutText);
       TextView aboutTv = (TextView)libParent.findViewById(R.id.about_text);
       aboutTv.setText(spannedAboutText);

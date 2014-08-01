@@ -101,47 +101,20 @@
 <![CDATA[
         <strong>%1$s</strong>
         <br>
-        \u00a9 %2$s by Isabel Mueller
+        \u00a9 %2$s by Swiss TPH
         <br>
-        <a href="http://www.grokkingandroid.com">http://www.grokkingandroid.com</a>
+        <a href="http://www.swisstph.ch/>http://www.swisstph.ch/</a>
         <br><br>
-        You can find the code on the project page:<br>
-        <a href="%3$s">%3$s</a>
-        <br><br>
-        The code is licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache License Version 2.0</a>.
+        This app is part of the MCH-Registry by the Swiss TPH. If you would like to know more about the project, please visit
+        <a href="http://www.swisstph.ch/?id=1448">MCH-Registry</a>.
+        <br><br>MCH-Registry is an open source web-based software tool that supports health care providers in managing (high risk) pregnant women. The tool enables better decision-making, better quality of antenatal- and perinatal care and a reduction of neonatal and maternal mortality. Pregnancy related information is collected for visits to the facility, tests, medication prescribed, hospitalisations, and as well as on delivery and newborn.
+		<br><br>This application helps to deliver visit reminders and recommendations to pregnant women.
+        <br><br><em>The code is licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache License Version 2.0</a>.</em>
         <br><br><br>
-        <em><strong>This demo makes use of the following %4$s:</strong></em>
+        This software is based on Wolfram Rittmeyers <a href="https://github.com/writtmeyer/gcm_sample">GCM Sample</a> and <a href="https://github.com/writtmeyer/gcm_server">GCM Server</a>, both
+            licensed under the <a href="http://source.android.com/source/licenses.html">Apache License 2.0</a>.
         ]]>
     </string>
-
-    <string-array name="grokkingandroidsample_about_titles">
-        <item>Support Library</item>
-        <item>ActionBarCompat</item>
-    </string-array>
-    <string-array name="grokkingandroidsample_about_contents">
-        <item>
-<![CDATA[
-            The support library is provided by the Android Open Source Project
-            as a standard extension to Android. It helps with backwards
-            compatibility and also offers some additional stuff that is very 
-            useful but hasn\'t yet found its way into the official 
-            Android source.<br><br>
-            The support library is licensed under
-            the <a href="http://source.android.com/source/licenses.html">
-            Apache License 2.0</a>.
-            ]]>
-        </item>
-        <item>
-<![CDATA[
-            ActionBarCompat is provided by the Android Open Source Project
-            as a means to add the ActionBar even if you are targeting
-            older devices.<br><br>
-            ActionBarCompat is licensed under
-            the <a href="http://source.android.com/source/licenses.html">
-            Apache License 2.0</a>.
-            ]]>
-        </item>
-    </string-array>
 
     <string name="app_name">Pregnancy Guide</string>
     <string name="title_activity_visit">VisitActivity</string>

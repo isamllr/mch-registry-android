@@ -118,42 +118,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	private void showAboutDialog() {
 		int[] resIds = new int[]{
-				getLibTitlesArrayId(),
-				getLibDescriptionsArrayId(),
-				getAboutTextId(),
-				getAppTitleResId(),
-				getCopyrightYearResId(),
-				getRepositoryLinkResId()};
+				-1,
+				-1,
+				R.string.common_about_text,
+				R.string.gcm_demo_app_name,
+				R.string.gcm_demo_copyright,
+				R.string.gcm_demo_repo_link};
 		DialogFragment newFragment = AboutFragment.newInstance(resIds, true);
 		newFragment.show(getSupportFragmentManager(), "dialog");
-	}
-
-	protected int getAppTitleResId() {
-		return R.string.gcm_demo_app_name;
-	}
-
-	protected int getCopyrightYearResId() {
-		return R.string.gcm_demo_copyright;
-	}
-
-	protected int getRepositoryLinkResId() {
-		return R.string.gcm_demo_repo_link;
-	}
-
-	protected int getLibTitlesArrayId() {
-		return -1;
-	}
-
-	protected int getLibDescriptionsArrayId() {
-		return -1;
-	}
-
-	protected int getAboutTextId() {
-		return R.string.common_about_text;
-	}
-
-	protected boolean getAddDefaultLibs() {
-		return true;
 	}
 
 	public static class TabFragment extends Fragment {
