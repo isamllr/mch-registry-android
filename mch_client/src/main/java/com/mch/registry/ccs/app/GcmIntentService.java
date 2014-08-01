@@ -196,8 +196,6 @@ public class GcmIntentService extends IntentService {
 	            PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"pn check", null, 1);
 	            Pregnancy preg = pdh.getPregnancy();
 	            if(preg.get_loadingProgress()>=6 && preg.get_isVerified()==1){
-		            pdh.setLoadingProgress(0);
-		            Thread.sleep(2000);
 		            Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
 		            intent.setAction(Intent.ACTION_VIEW);
 		            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -206,8 +204,6 @@ public class GcmIntentService extends IntentService {
 	            }
             }
          }
-      } catch (InterruptedException e) {
-	      e.printStackTrace();
       } finally {
          // Release the wake lock provided by the WakefulBroadcastReceiver.
          GcmBroadcastReceiver.completeWakefulIntent(intent);
