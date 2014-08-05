@@ -1,4 +1,4 @@
-package com.mch.registry.ccs.app;
+package com.mch.registry.ccs.data.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

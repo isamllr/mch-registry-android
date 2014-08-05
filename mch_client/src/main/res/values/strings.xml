@@ -170,5 +170,6 @@
 	<string name="textPhone">Phone</string>
 	<string name="textFacility">Registration facility</string>
 	<string name="textFacilityPhone">Facility Phone</string>
+	<string name="pregnancy_week">Week </string>
 
 </resources>

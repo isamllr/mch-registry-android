@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.mch.registry.ccs.data.adapter.RecommendationArrayAdapter;
 import com.mch.registry.ccs.data.Recommendation;
 import com.mch.registry.ccs.data.RecommendationDataHandler;
 

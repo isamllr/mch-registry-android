@@ -1,4 +1,4 @@
-package com.mch.registry.ccs.app.model;
+package com.mch.registry.ccs.app.navigation;
 
 public class NavDrawerItem {
 	

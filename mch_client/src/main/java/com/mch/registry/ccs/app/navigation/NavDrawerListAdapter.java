@@ -1,4 +1,4 @@
-package com.mch.registry.ccs.app.adapter;
+package com.mch.registry.ccs.app.navigation;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mch.registry.ccs.app.R;
-import com.mch.registry.ccs.app.model.NavDrawerItem;
 
 import java.util.ArrayList;
 
