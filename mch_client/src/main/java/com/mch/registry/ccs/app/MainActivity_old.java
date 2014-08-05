@@ -108,8 +108,8 @@ public class MainActivity_old extends FragmentActivity implements ActionBar.TabL
 				-1,
 				R.string.common_about_text,
 				R.string.app_name,
-				R.string.gcm_demo_copyright,
-				R.string.repo_link};
+				0,
+				0};
 	}
 
 	public static class TabFragment extends Fragment {

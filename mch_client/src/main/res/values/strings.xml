@@ -2,6 +2,7 @@
 
 <resources>
 
+	<string name="app_name">Pregnancy Guide</string>
 	<!-- Nav Drawer Menu Items -->
 	<string-array name="nav_drawer_items">
 		<item >Home</item>
@@ -24,116 +25,44 @@
 	<!-- Content Description -->
 	<string name="desc_list_item_icon">Item Icon</string>
 
-		<string name="drawer_open">Open navigation drawer</string>
-		<string name="drawer_close">Close navigation drawer</string>
+	<string name="drawer_open">Open navigation drawer</string>
+	<string name="drawer_close">Close navigation drawer</string>
 
-    <!-- You have to substitute your keys here -->
-	<!--  <string name="gcm_project_id">210193935586</string>-->
-
-		<!-- gcm demo -->
-    <!-- general stuff -->
-    <string name="app_name">Pregnancy Guide</string>
-    <string name="gcm_demo_copyright">2014</string>
-
-    <!-- titles -->
-    <string name="gcm_demo_title_activity_gcm_demo">Pregnancy Guide</string>
-    <string name="gcm_demo_title_activity_description">Description</string>
-
-    <!-- demo descriptions -->
-    <string name="gcm_demo_demo_desc">
-<![CDATA[
-        This demo shows how to make use of Google Cloud Messaging with CCS. 
-        Press the register button to register. Once registered you can use 
-        the same button to unregister.
-        <br><br>
-        Use the \"Send message\" button to send a message to all
-        registered devices.
-        <br><br>
-        The Android client is only one part of the GCM experience. 
-        Much more interesting - especially with CCS - is the server part.
-        ]]>
-    </string>
-
-    <!-- content -->
-    <string name="btn_register">Register</string>
-    <string name="btn_unregister">Unregister</string>
-    <string name="btn_message">Send this message</string>
-    <string name="select">Select</string>
-    <string name="user_name">User name</string>
-    <string name="txt_message_hint">Your message</string>
-    <string name="txt_demo_header">GCM Demo</string>
-    <string name="no_message">No message entered</string>
     <string name="msg_received">Message received: %1$s</string>
     <string name="msg_sent">Message sent: %1$s</string>
     <string name="txt_no_play_services">
-<![CDATA[
+	<![CDATA[
         Either you do not have Google Play Services or your 
         Google Play Services package is not up to date. 
         Please download the app from Google Play or update 
         your existing app.
         ]]>
+
     </string>
-
-    <!-- about -->
-    <string name="repo_link">https://bitbucket.org/grokkingandroid/cpsample</string>
-
-    <!-- ActionBar-Spinner -->
-    <string-array name="gcm_demo_spinner_actionbar">
-        <item>TODO Add all demos here</item>
-    </string-array>
-
-    <!-- Blog links -->
-    <string-array name="gcm_demo_link_texts">
-        <item>TODO sample link text</item>
-    </string-array>
-    <string-array name="gcm_demo_link_targets">
-        <item>http://www.grokkingandroid.com/</item>
-    </string-array>
-
-    <!-- common stuff for all demos -->
-    <!-- common -->
     <string name="about">About</string>
-    <string name="search">Search</string>
-
-    <!-- menu -->
-    <string name="grokkingandroidsample_menu_description">Description</string>
-
-    <!-- Description -->
-    <string name="grokkingandroidsample_demo_description">Demo description</string>
-    <string name="grokkingandroidsample_blog_links">Blog links</string>
-
-    <!-- About Fragment -->
-    <plurals name="plural_libraries">
-        <item quantity="one">library</item>
-        <item quantity="other">libraries</item>
-    </plurals>
 
     <string name="common_about_text">
 <![CDATA[
-        <strong>%1$s</strong>
+        <strong>Pregnancy Guide</strong>
         <br>
-        \u00a9 %2$s by Swiss TPH
+        \u00a9 2014 by Swiss TPH
         <br>
         <a href="http://www.swisstph.ch/>http://www.swisstph.ch/</a>
         <br><br>
         This app is part of the MCH-Registry by the Swiss TPH. If you would like to know more about the project, please visit
         <a href="http://www.swisstph.ch/?id=1448">MCH-Registry</a>.
-        <br><br>MCH-Registry is an open source web-based software tool that supports health care providers in managing (high risk) pregnant women. The tool enables better decision-making, better quality of antenatal- and perinatal care and a reduction of neonatal and maternal mortality. Pregnancy related information is collected for visits to the facility, tests, medication prescribed, hospitalisations, and as well as on delivery and newborn.
-		<br><br>This application helps to deliver visit reminders and recommendations to pregnant women.
         <br><br><em>The code is licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache License Version 2.0</a>.</em>
         <br><br><br>
-        This software is based on Wolfram Rittmeyers <a href="https://github.com/writtmeyer/gcm_sample">GCM Sample</a> and <a href="https://github.com/writtmeyer/gcm_server">GCM Server</a>, both
-            licensed under the <a href="http://source.android.com/source/licenses.html">Apache License 2.0</a>.
+        <small>This software is based on Wolfram Rittmeyers <a href="https://github.com/writtmeyer/gcm_sample">GCM Sample</a> and <a href="https://github.com/writtmeyer/gcm_server">GCM Server</a>, both
+            licensed under the <a href="http://source.android.com/source/licenses.html">Apache License 2.0</a></small>.
         ]]>
     </string>
 
-    <string name="title_activity_visit">VisitActivity</string>
-    <string name="visit_notification_title_template">Visit: %1$s</string>
+     <string name="visit_notification_title_template">Visit: %1$s</string>
     <string name="visit_notification_placeholder_text_template">You said %1$s and lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis. Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec tortor.</string>
     <string name="action_visits">Visits</string>
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
-    <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
     <string name="title_activity_phone_number">Mobile Phone Number</string>
@@ -141,16 +70,11 @@
     <string name="phone_format">Format: +380xxxxxxxxx for a Ukrainian number</string>
     <string name="action_phonenumber">Mobile Number</string>
     <string name="number_invalid">The phone number format is invalid, please try again.</string>
-    <string name="title_activity_recommendations">Recommendations</string>
     <string name="action_recommendations">Recommendations</string>
-    <string name="title_activity_pregnancy_guide">PregnancyGuide</string>
     <string name="title_section_visits">Visits</string>
     <string name="title_section_recommendations">Tips</string>
     <string name="title_section_diary">Diary</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_section_phone">Mobile Phone</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_informed_pregnancy">InformedPregnancy</string>
     <string name="title_section_home">Home</string>
     <string name="title_activity_main">Pregnancy Guide</string>
     <string name="number_same">This number is already verified.</string>
@@ -162,14 +86,12 @@
     <string name="timeout">Sorry, the verification timed out. Please try again.</string>
     <string name="title_activity_no_google_play_services">NoGooglePlayServices</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_my">MyActivity</string>
 	<string name="application_ready">You can now start to use the app by pressing the back button in the upper left corner.</string>
 	<string name="textExpectedDelivery">Expected delivery</string>
 	<string name="textPatientName">Name</string>
-	<string name="textPhoney">Phone</string>
 	<string name="textPhone">Phone</string>
-	<string name="textFacility">Registration facility</string>
+	<string name="textFacility">Registration Facility</string>
 	<string name="textFacilityPhone">Facility Phone</string>
-	<string name="pregnancy_week">Week </string>
+	<string name="pregnancy_week">Week</string>
 
 </resources>

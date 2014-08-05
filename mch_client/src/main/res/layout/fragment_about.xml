@@ -4,12 +4,19 @@
     android:layout_height="match_parent"
     tools:context="com.mch.registry.ccs.app.AboutFragment">
 
+	<ScrollView
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:id="@+id/scrollView"
+		android:layout_gravity="center_horizontal|center_vertical">
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:text="@string/textExpectedDelivery"
 		android:id="@+id/about_text"
-		android:layout_marginLeft="20dip"/>
+		android:layout_margin="20dip"
+		android:autoLink="all"
+		android:linksClickable="true"/>
+	</ScrollView>
 
 </FrameLayout>

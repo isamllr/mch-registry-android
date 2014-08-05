@@ -2,6 +2,7 @@ package com.mch.registry.ccs.app;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ public class AboutFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_about, container, false);
 		TextView textAbout = (TextView)rootView.findViewById(R.id.about_text);
-		textAbout.setText(getString(R.string.common_about_text));
+		textAbout.setText(Html.fromHtml(getString(R.string.common_about_text)));
          
         return rootView;
     }
