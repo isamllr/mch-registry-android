@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -61,89 +60,87 @@ public class MainActivity extends Activity {
 		if (pdh.getPregnancy().get_isVerified() == 0) {
 			Intent intent = new Intent(getApplicationContext(), MobileNumberActivity.class);
 			startActivity(intent);
-		} else {
+		}
 
-			final Intent intent = getIntent();
-			String msg = intent.getStringExtra(Constants.KEY_MESSAGE_TXT);
-			if (msg != null) {
-				final NotificationManager manager =
-						(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-				manager.cancel(Constants.NOTIFICATION_NR);
-				String msgTxt = getString(R.string.msg_received, msg);
-				Crouton.showText(this, msgTxt, Style.INFO);
+		final Intent intent = getIntent();
+		String msg = intent.getStringExtra(Constants.KEY_MESSAGE_TXT);
+		if (msg != null) {
+			final NotificationManager manager =
+					(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			manager.cancel(Constants.NOTIFICATION_NR);
+			String msgTxt = getString(R.string.msg_received, msg);
+			Crouton.showText(this, msgTxt, Style.INFO);
+		}
+
+		mTitle = mDrawerTitle = getTitle();
+
+		// load slide menu items
+		navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+
+		// nav drawer icons from resources
+		navMenuIcons = getResources()
+				.obtainTypedArray(R.array.nav_drawer_icons);
+
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
+
+		navDrawerItems = new ArrayList<NavDrawerItem>();
+
+		//Handler hand = new Handler();
+		//hand.post(new Runnable() {
+		//	public void run() {
+				getVisitSize();
+				getRecommendationSize();
+		//	}
+		//});
+
+		// adding nav drawer items to array
+		// Home
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
+		// Visits
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1), true, visitSize));
+		// Recommendations
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1), true, recommendationSize));
+		// Notes
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
+		// About
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
+
+		// Recycle the typed array
+		navMenuIcons.recycle();
+
+		mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+
+		// setting the nav drawer list adapter
+		adapter = new NavDrawerListAdapter(getApplicationContext(), navDrawerItems);
+		mDrawerList.setAdapter(adapter);
+
+		// enabling action bar app icon and behaving it as toggle button
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
+
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+				R.drawable.ic_drawer, //nav menu toggle icon
+				R.string.app_name, // nav drawer open - description for accessibility
+				R.string.app_name // nav drawer close - description for accessibility
+		) {
+			public void onDrawerClosed(View view) {
+				getActionBar().setTitle(mTitle);
+				// calling onPrepareOptionsMenu() to show action bar icons
+				invalidateOptionsMenu();
 			}
 
-			mTitle = mDrawerTitle = getTitle();
-
-			// load slide menu items
-			navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
-
-			// nav drawer icons from resources
-			navMenuIcons = getResources()
-					.obtainTypedArray(R.array.nav_drawer_icons);
-
-			mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-			mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
-
-
-			navDrawerItems = new ArrayList<NavDrawerItem>();
-
-			Handler hand = new Handler();
-			hand.post(new Runnable() {
-				public void run() {
-					getVisitSize();
-					getRecommendationSize();
-				}
-			});
-
-			// adding nav drawer items to array
-			// Home
-			navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
-			// Visits
-			navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1), true, visitSize));
-			// Recommendations
-			navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1), true, recommendationSize));
-			// Notes
-			navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
-			// About
-			navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
-
-			// Recycle the typed array
-			navMenuIcons.recycle();
-
-			mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
-
-			// setting the nav drawer list adapter
-			adapter = new NavDrawerListAdapter(getApplicationContext(), navDrawerItems);
-			mDrawerList.setAdapter(adapter);
-
-			// enabling action bar app icon and behaving it as toggle button
-			getActionBar().setDisplayHomeAsUpEnabled(true);
-			getActionBar().setHomeButtonEnabled(true);
-
-			mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-					R.drawable.ic_drawer, //nav menu toggle icon
-					R.string.app_name, // nav drawer open - description for accessibility
-					R.string.app_name // nav drawer close - description for accessibility
-			) {
-				public void onDrawerClosed(View view) {
-					getActionBar().setTitle(mTitle);
-					// calling onPrepareOptionsMenu() to show action bar icons
-					invalidateOptionsMenu();
-				}
-
-				public void onDrawerOpened(View drawerView) {
-					getActionBar().setTitle(mDrawerTitle);
-					// calling onPrepareOptionsMenu() to hide action bar icons
-					invalidateOptionsMenu();
-				}
-			};
-			mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-			if (savedInstanceState == null) {
-				// on first time display view for first nav item
-				displayView(0);
+			public void onDrawerOpened(View drawerView) {
+				getActionBar().setTitle(mDrawerTitle);
+				// calling onPrepareOptionsMenu() to hide action bar icons
+				invalidateOptionsMenu();
 			}
+		};
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+		if (savedInstanceState == null) {
+			// on first time display view for first nav item
+			displayView(0);
 		}
 	}
 
@@ -219,10 +216,14 @@ public class MainActivity extends Activity {
 		Intent msgIntent = new Intent(this, GcmIntentService.class);
 		msgIntent.setAction(Constants.ACTION_ECHO);
 		String msg = null;
-		if(status){msg="_MobileAppOn";}else{msg="_MobileAppOff";};
+		if(status){
+			msg="_MobileAppOn";
+			Crouton.showText(this, getString(R.string.not_by_app), Style.INFO);
+		}else{
+			msg="_MobileAppOff";
+			Crouton.showText(this, getString(R.string.not_by_sms), Style.INFO);
+		}
 
-		String msgTxt = getString(R.string.phone_number_sent, msg);
-		Crouton.showText(this, msgTxt, Style.INFO);
 		msgIntent.putExtra(Constants.KEY_MESSAGE_TXT, msg);
 		this.startService(msgIntent);
 	}

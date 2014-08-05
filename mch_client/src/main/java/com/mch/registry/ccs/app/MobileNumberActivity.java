@@ -103,7 +103,7 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 		String mobileNumber = pregnancy.get_mobileNumber();
 
 		if (pregnancy.get_isVerified()==1){
-			actionBar.show();
+			//actionBar.show();
 			pdh.setLoadingProgress(6);
 		}else{
 			actionBar.hide();
@@ -167,10 +167,10 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 		new Thread(new Runnable() {
 			public void run() {
 				PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(), "progressing...", null, 1);
-				while (mProgressStatus < 6) {
+				while (mProgressStatus < 6 && pdh.getPregnancy().get_isVerified()==0) {
 					mProgressStatus = pdh.getPregnancy().get_loadingProgress();
 					try {
-						Thread.sleep(500);
+						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -182,9 +182,15 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 					});
 				}
 
-				if (mProgressStatus >= 6 || pdh.getPregnancy().get_isVerified()==1) {
-					actionBar.show();
-					Toast.makeText(getApplicationContext(), getString(R.string.application_ready), Toast.LENGTH_LONG).show();
+				if (pdh.getPregnancy().get_isVerified()==1) {
+					Handler mHandler = new Handler(getMainLooper());
+					mHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							Toast.makeText(getApplicationContext(), getString(R.string.application_ready), Toast.LENGTH_LONG).show();
+						}
+					});
+
 					// sleep 2 seconds, so you can see the 100%
 					try {
 						Thread.sleep(2000);
@@ -214,6 +220,7 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 
 		if (pregnancy.get_mobileNumber().compareTo(mobileNumber)==0 && pregnancy.get_isVerified()==1){
 			Crouton.showText(this, getString(R.string.number_same), Style.INFO);
+			actionBar.show();
 		}else{
 			if(validatePhoneNumber(mobileNumber)){
 			pdh.updateMobilePhoneNumber(mobileNumber);

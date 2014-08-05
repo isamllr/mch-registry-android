@@ -49,7 +49,7 @@ public class RecommendationsFragment extends Fragment {
 
 		Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
 		sharingIntent.setType("text/plain");
-		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Hospital Visit: ");
+		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.pregnancy_recommendation_share_title));
 		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, recommendationText);
 		startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.abc_shareactionprovider_share_with_application)));
 	}

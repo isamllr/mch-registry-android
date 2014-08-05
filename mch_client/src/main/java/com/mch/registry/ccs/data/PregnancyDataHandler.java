@@ -63,7 +63,7 @@ public class PregnancyDataHandler extends SQLiteOpenHelper {
 					    + COLUMN_REGID + ", "
 					    + COLUMN_VERIFIED + ", "
 					    + COLUMN_PROGRESS
-						+ ")VALUES(null, 1, 1, '', '', '2000-01-01', '', '', '', 0, 0);";
+						+ ")VALUES(null, 1, 1, 'unknown', '', '2000-01-01', '', '', '', 0, 0);";
 	    db.execSQL(INSERT_PATIENT_TABLE);
 
 	    Log.i("Pregnancy Guide", "PregnancyDB created & patient inserted");

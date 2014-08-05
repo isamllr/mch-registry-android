@@ -98,8 +98,11 @@
 	<string name="calendar_visit_text">Hospital Visit</string>
 	<string name="pick_action">Choose action</string>
 	<string name="hospital_visit">Hospital Visit </string>
-	<string name="pick_preference_app_sms">I\'d like to receive notifications by ...</string>
+	<string name="pick_preference_app_sms">I\'d like to receive notifications by</string>
 	<string name="action_app_on">App On/Off</string>
+	<string name="pregnancy_recommendation_share_title">Pregnancy Recommendation</string>
+	<string name="not_by_app">You will receive future notifications by this app.</string>
+	<string name="not_by_sms">You will receive future notifications by SMS.</string>
 
 	<string-array name="action_array">
 		<item>Share text</item>
@@ -107,8 +110,8 @@
 	</string-array>
 
 	<string-array name="action_array_preference_app_sms">
-		<item>this app</item>
-		<item>SMS (turn this app off)</item>
+		<item>... this app</item>
+		<item>... SMS (turn app off)</item>
 	</string-array>
 
 </resources>
