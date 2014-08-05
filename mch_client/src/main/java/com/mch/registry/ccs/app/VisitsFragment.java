@@ -56,13 +56,14 @@ public class VisitsFragment extends Fragment{
 				.setItems(R.array.action_array, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 
-						switch(which){
+						switch (which) {
 							case 0:
 								shareVisitText(visitText);
 								break;
 							case 1:
 								saveToCalendar(visitDate, visitText);
-								break;}
+								break;
+						}
 					}
 				});
 		AlertDialog dialog = builder.create();
@@ -81,7 +82,7 @@ public class VisitsFragment extends Fragment{
 		Date end = null;
 		try {
 			start = dateFormat.parse(visitDate + " 08:00");
-			end = dateFormat.parse(visitDate + " 18:00");
+			end = dateFormat.parse(visitDate + " 19:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -101,7 +102,7 @@ public class VisitsFragment extends Fragment{
 
 		Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
 		sharingIntent.setType("text/plain");
-		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Hospital Visit: ");
+		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.hospital_visit));
 		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, visitText);
 		startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.abc_shareactionprovider_share_with_application)));
 	}

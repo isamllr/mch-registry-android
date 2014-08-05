@@ -97,10 +97,18 @@
 	<string name="hospital_visit_reminder">Hospital Visit Reminder</string>
 	<string name="calendar_visit_text">Hospital Visit</string>
 	<string name="pick_action">Choose action</string>
+	<string name="hospital_visit">Hospital Visit </string>
+	<string name="pick_preference_app_sms">I\'d like to receive notifications by ...</string>
+	<string name="action_app_on">App On/Off</string>
 
 	<string-array name="action_array">
 		<item>Share text</item>
 		<item>Save event to calendar</item>
+	</string-array>
+
+	<string-array name="action_array_preference_app_sms">
+		<item>this app</item>
+		<item>SMS (turn this app off)</item>
 	</string-array>
 
 </resources>

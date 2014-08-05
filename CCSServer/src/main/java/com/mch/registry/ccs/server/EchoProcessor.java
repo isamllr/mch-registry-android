@@ -67,7 +67,17 @@ public class EchoProcessor implements PayloadProcessor{
 				sendVerificationMessage(msg.getFrom(), true);
 				logger.log(Level.INFO, "Verification failed");
 			}
+		}else if(txtMsg.contains("_MobileAppOn")){
+			MySqlHandler mysql = new MySqlHandler();
+			mysql.setVerified(msg.getFrom(), false);
+			logger.log(Level.INFO, "App turned on for user");
+			}
+		else if(txtMsg.contains("_MobileAppOff")){
+			MySqlHandler mysql = new MySqlHandler();
+			mysql.setVerified(msg.getFrom(), false);
+			logger.log(Level.INFO, "App turned off for user");
 		}
+
 	}
 
 	private void sendPregnancyForMobileNumberNotFound(String gcmRegId) {

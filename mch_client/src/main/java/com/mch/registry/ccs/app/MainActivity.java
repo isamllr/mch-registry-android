@@ -1,14 +1,17 @@
 package com.mch.registry.ccs.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -18,8 +21,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.mch.registry.ccs.app.navigation.NavDrawerListAdapter;
 import com.mch.registry.ccs.app.navigation.NavDrawerItem;
+import com.mch.registry.ccs.app.navigation.NavDrawerListAdapter;
 import com.mch.registry.ccs.data.PregnancyDataHandler;
 import com.mch.registry.ccs.data.RecommendationDataHandler;
 import com.mch.registry.ccs.data.VisitDataHandler;
@@ -46,6 +49,8 @@ public class MainActivity extends Activity {
 
 	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerListAdapter adapter;
+	private String visitSize = "";
+	private String recommendationSize = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,18 +86,23 @@ public class MainActivity extends Activity {
 			mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
 
 
-
 			navDrawerItems = new ArrayList<NavDrawerItem>();
 
-			VisitDataHandler vdh = new VisitDataHandler(getApplication(), null, null, 1);
-			RecommendationDataHandler rdh = new RecommendationDataHandler(getApplication(), null, null, 1);
+			Handler hand = new Handler();
+			hand.post(new Runnable() {
+				public void run() {
+					getVisitSize();
+					getRecommendationSize();
+				}
+			});
+
 			// adding nav drawer items to array
 			// Home
 			navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
 			// Visits
-			navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1), true, Integer.toString(vdh.getAllVisits().size())));
+			navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1), true, visitSize));
 			// Recommendations
-			navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1), true, Integer.toString(rdh.getAllRecommendations().size())));
+			navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1), true, recommendationSize));
 			// Notes
 			navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
 			// About
@@ -104,8 +114,7 @@ public class MainActivity extends Activity {
 			mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 
 			// setting the nav drawer list adapter
-			adapter = new NavDrawerListAdapter(getApplicationContext(),
-					navDrawerItems);
+			adapter = new NavDrawerListAdapter(getApplicationContext(), navDrawerItems);
 			mDrawerList.setAdapter(adapter);
 
 			// enabling action bar app icon and behaving it as toggle button
@@ -136,6 +145,16 @@ public class MainActivity extends Activity {
 				displayView(0);
 			}
 		}
+	}
+
+	private void getRecommendationSize() {
+		RecommendationDataHandler rdh = new RecommendationDataHandler(getApplication(), null, null, 1);
+		recommendationSize = Integer.toString(rdh.getAllRecommendations().size());
+	}
+
+	public void getVisitSize() {
+		VisitDataHandler vdh = new VisitDataHandler(getApplication(), null, null, 1);
+		visitSize = Integer.toString(vdh.getAllVisits().size());
 	}
 
 	/**
@@ -169,7 +188,43 @@ public class MainActivity extends Activity {
 			startActivity(intent);
 			return true;
 		}
+		if (id == R.id.action_app_on) {
+			showAppOnOffDialog();
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void showAppOnOffDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.pick_preference_app_sms)
+				.setItems(R.array.action_array_preference_app_sms, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+
+						switch (which) {
+							case 0:
+								mobileAppOn(true);
+								break;
+							case 1:
+								mobileAppOn(false);
+								break;
+						}
+					}
+				});
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+
+	private void mobileAppOn(boolean status) {
+		Intent msgIntent = new Intent(this, GcmIntentService.class);
+		msgIntent.setAction(Constants.ACTION_ECHO);
+		String msg = null;
+		if(status){msg="_MobileAppOn";}else{msg="_MobileAppOff";};
+
+		String msgTxt = getString(R.string.phone_number_sent, msg);
+		Crouton.showText(this, msgTxt, Style.INFO);
+		msgIntent.putExtra(Constants.KEY_MESSAGE_TXT, msg);
+		this.startService(msgIntent);
 	}
 
 	/* *
