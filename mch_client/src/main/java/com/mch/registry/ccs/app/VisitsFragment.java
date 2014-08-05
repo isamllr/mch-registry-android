@@ -25,8 +25,10 @@ public class VisitsFragment extends Fragment {
 			VisitDataHandler rdh = new VisitDataHandler(getActivity(),"fn received", null, 1);
 			ArrayList<Visit> visits = rdh.getAllVisits();
 
-			ListView visitsLV = (ListView)rootView.findViewById(R.id.listView);
-			visitsLV.setAdapter(new VisitArrayAdapter(getActivity(), visits));
+			if(visits.size()>0){
+				ListView visitsLV = (ListView)rootView.findViewById(R.id.listView);
+				visitsLV.setAdapter(new VisitArrayAdapter(getActivity(), visits));
+			}
 
         return rootView;
     }

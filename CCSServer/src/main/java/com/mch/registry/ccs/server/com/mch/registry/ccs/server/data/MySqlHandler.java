@@ -6,6 +6,8 @@ package com.mch.registry.ccs.server.com.mch.registry.ccs.server.data;
 
 // Do not import com.mysql.jdbc.*!
 
+import com.mch.registry.ccs.server.Config;
+
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.sql.Connection;
@@ -37,8 +39,9 @@ public class MySqlHandler{
 
 	private static void connect(){
 		try {
-			//conn =	DriverManager.getConnection("jdbc:mysql://localhost?" + "user=root&password=");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/registry", "root", "");
+			//conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/registry", "root", "");
+			Config config = new Config();
+			conn = DriverManager.getConnection("jdbc:mysql://" + config.getDatabaseurl() + ":" + config.getDbport() + "/" + config.getDbname(), config.getDbuser(), config.getDbpassword());
 
 		} catch (SQLException ex) {
 			// handle any errors

@@ -4,6 +4,7 @@ package com.mch.registry.ccs.server.sms;
  * Created by Isa on 29.07.2014.
  */
 
+import com.mch.registry.ccs.server.Config;
 import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.MySqlHandler;
 import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.Pregnancy;
 
@@ -31,10 +32,18 @@ public class SendSMS {
 		// in a Properties
 		Properties props = new Properties();
 
-		props.setProperty("smsj.clickatell.username", "swisstph");
+		/*props.setProperty("smsj.clickatell.username", "swisstph");
 		props.setProperty("smsj.clickatell.password", "eBFSBRKUaKgXaP");
 		props.setProperty("smsj.clickatell.apiid", "3475961"); //testing HTTP
-		String sender = "41767658011";
+		String sender = "41767658011";*/
+
+		Config config = new Config();
+
+		props.setProperty("smsj.clickatell.username", config.getClickatellUsername());
+		props.setProperty("smsj.clickatell.password", config.getClickatellPassword());
+		props.setProperty("smsj.clickatell.apiid", config.getClickatellAPIID()); //testing HTTP
+		String sender = config.getSenderphone();
+
 
 		// Load the clickatell transport
 		SmsTransport transport = null;

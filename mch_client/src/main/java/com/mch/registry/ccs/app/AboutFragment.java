@@ -15,14 +15,7 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-		/*
-		* R.string.common_about_text,
-				R.string.app_name,
-				R.string.gcm_demo_copyright,
-				R.string.repo_link
-		*/
- 
-        View rootView = inflater.inflate(R.layout.fragment_visits, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_about, container, false);
 		TextView textAbout = (TextView)rootView.findViewById(R.id.about_text);
 		textAbout.setText(getString(R.string.common_about_text));
          

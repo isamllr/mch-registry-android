@@ -42,6 +42,15 @@ public class VisitDataHandler extends SQLiteOpenHelper {
                         + COLUMN_VISITDATE + " DATETIME"
                         + ")";
         db.execSQL(CREATE_VISITS_TABLE);
+
+	    String INSERT_VISITS_TABLE =
+			    "INSERT INTO " + TABLE_VISITS + "("
+					    + COLUMN_ID + ", "
+					    + COLUMN_VISITTEXT + ","
+					    + COLUMN_RECEIVEDDATE+ ","
+					    + COLUMN_VISITDATE
+					    + ")VALUES(null, 'Future visit reminders will be shown here.', date('now'), date('now'));";
+	    db.execSQL(INSERT_VISITS_TABLE);
     }
 
     @Override

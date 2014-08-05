@@ -25,10 +25,21 @@ public interface Constants {
     String KEY_ACCOUNT = "keyAccount";
     String KEY_MESSAGE_TXT = "keyMessageTxt";
     String KEY_EVENT_TYPE = "keyEventbusType";
+
+	/*
+	String KEY_LINK_TARGETS_ID = "key_linkTargetsId";
+	String KEY_LINK_TEXTS_ID = "key_linkTextsId";
+	String KEY_DESCRIPTION_ID = "key_descriptionId";
+	String KEY_HOME_CLASS = "keyHomeClass";
+	String KEY_LIB_TITLES_ID = "keyLibTitlesId";
+	String KEY_LIB_DESCRIPTIONS_ID = "keyLibDescriptionsId";
+	String KEY_APP_TITLE_ID = "keyAppTitleId";
+	String KEY_COPYRIGHT_YEAR_ID = "keyCopyrightYearId";
+	String KEY_REPOSITORY_LINK_ID = "keyRepositoryLinkId";
+	*/
     
     String ACTION = "action";
 
-    // TODO: very simply notification handling
     int NOTIFICATION_NR = 10;
 
     long GCM_DEFAULT_TTL = 30 * 24 * 60 * 60 * 1000; // 30 days
