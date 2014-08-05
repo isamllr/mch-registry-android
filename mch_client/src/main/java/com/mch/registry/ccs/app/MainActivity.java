@@ -21,6 +21,8 @@ import android.widget.ListView;
 import com.mch.registry.ccs.app.navigation.NavDrawerListAdapter;
 import com.mch.registry.ccs.app.navigation.NavDrawerItem;
 import com.mch.registry.ccs.data.PregnancyDataHandler;
+import com.mch.registry.ccs.data.RecommendationDataHandler;
+import com.mch.registry.ccs.data.VisitDataHandler;
 
 import java.util.ArrayList;
 
@@ -52,7 +54,6 @@ public class MainActivity extends Activity {
 
 		PregnancyDataHandler pdh = new PregnancyDataHandler(this, null, null, 1);
 		if (pdh.getPregnancy().get_isVerified() == 0) {
-			//actionBar.hide();
 			Intent intent = new Intent(getApplicationContext(), MobileNumberActivity.class);
 			startActivity(intent);
 		} else {
@@ -79,15 +80,19 @@ public class MainActivity extends Activity {
 			mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 			mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
 
+
+
 			navDrawerItems = new ArrayList<NavDrawerItem>();
 
+			VisitDataHandler vdh = new VisitDataHandler(getApplication(), null, null, 1);
+			RecommendationDataHandler rdh = new RecommendationDataHandler(getApplication(), null, null, 1);
 			// adding nav drawer items to array
 			// Home
 			navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
 			// Visits
-			navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1), true, "50+"));
+			navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1), true, Integer.toString(vdh.getAllVisits().size())));
 			// Recommendations
-			navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1), true, "22"));
+			navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1), true, Integer.toString(rdh.getAllRecommendations().size())));
 			// Notes
 			navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
 			// About

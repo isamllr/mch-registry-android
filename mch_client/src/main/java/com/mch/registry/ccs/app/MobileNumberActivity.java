@@ -2,6 +2,7 @@ package com.mch.registry.ccs.app;
 
 import android.accounts.AccountManager;
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -46,12 +48,16 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 	private ProgressBar mProgress;
 	private int mProgressStatus = 0;
 
+	ActionBar actionBar = null;
+
 	private Handler mHandler = new Handler();
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_number);
+
+		actionBar = getActionBar();
 
 		if(!checkPlayServices()){
 			Intent intent = new Intent(getApplicationContext(), NoGooglePlayServicesActivity.class);
@@ -64,7 +70,6 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 
 	    smsReceiver = new SMSReceiver();
 	    getApplicationContext().registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
-
 
 	    mState = getCurrState();
 
@@ -97,6 +102,13 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 		Pregnancy pregnancy = pdh.getPregnancy();
 		String mobileNumber = pregnancy.get_mobileNumber();
 
+		if (pregnancy.get_isVerified()==1){
+			actionBar.show();
+			pdh.setLoadingProgress(6);
+		}else{
+			actionBar.hide();
+		}
+
 		if(!(mobileNumber.compareTo("")==0)){
 			mobilePhoneNumber.setText(mobileNumber);
 		}else{
@@ -107,34 +119,11 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-	    /*PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(), null, null, 1);
-	    Pregnancy pregnancy = pdh.getPregnancy();
-	    if (pregnancy.get_isVerified()==1){
-            getMenuInflater().inflate(R.menu.main, menu);
-	    }*/
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-	    /*int id = item.getItemId();
-	    if (id == R.id.action_settings) {
-		    Intent intent = tent(getApplicationContext(), SettingsActivity.class);
-		    startActivity(intent);
-		    return true;
-	    }
-	    if (id == R.id.action_mobilephonenumber) {
-		    Intent intent = new Intent(getApplicationContext(), MobileNumberActivity.class);
-		    startActivity(intent);
-		    return true;
-	    }
-	    if (id == R.id.about) {
-		    showAboutDialog();
-		    return true;
-	    }*/
 	    return super.onOptionsItemSelected(item);
     }
 
@@ -172,26 +161,19 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 
 	@Override
 	public void onClick(View view) {
+		PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(), "progressing...", null, 1);
+		pdh.setLoadingProgress(1);
 
 		new Thread(new Runnable() {
 			public void run() {
 				PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(), "progressing...", null, 1);
-				Pregnancy preg = pdh.getPregnancy();
-
-				pdh.setLoadingProgress(1);
-
 				while (mProgressStatus < 6) {
-
-					// process some tasks
-					mProgressStatus = preg.get_loadingProgress();
-
-					// your computer is too fast, sleep 1 second
+					mProgressStatus = pdh.getPregnancy().get_loadingProgress();
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-
 					// Update the progress bar
 					mHandler.post(new Runnable() {
 						public void run() {
@@ -200,16 +182,18 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 					});
 				}
 
-				if (mProgressStatus >= 6) {
-
-					// sleep 2 seconds, so that you can see the 100%
+				if (mProgressStatus >= 6 || pdh.getPregnancy().get_isVerified()==1) {
+					actionBar.show();
+					Toast.makeText(getApplicationContext(), getString(R.string.application_ready), Toast.LENGTH_LONG).show();
+					// sleep 2 seconds, so you can see the 100%
 					try {
 						Thread.sleep(2000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 
-					// close the progress bar dialog
+					Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+					startActivity(intent);
 				}
 			}
 		}).start();
@@ -223,8 +207,6 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 			default:
 				break;
 		}
-
-		PregnancyDataHandler pdh = new PregnancyDataHandler(this, null, null, 1);
 
 		Pregnancy pregnancy = pdh.getPregnancy();
 		String mobileNumber = mobilePhoneNumber.getText().toString().replaceAll("\\s","");

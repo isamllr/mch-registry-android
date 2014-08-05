@@ -84,27 +84,49 @@ public class VisitDataHandler extends SQLiteOpenHelper {
 		return match;
 	}
 
-    public Visit findVisit(int visitDate) {
-        String query = "Select * FROM " + TABLE_VISITS + " WHERE " + COLUMN_VISITDATE + " =  \"" + Integer.toString(visitDate) + "\"";
+    public String findVisitText(String visitDate) {
+		String query = "Select * FROM " + TABLE_VISITS + " WHERE " + COLUMN_VISITDATE + " =  \"" + visitDate + "\"";
 
-        SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery(query, null);
+		Cursor cursor = db.rawQuery(query, null);
 
-        Visit visitRecord = new Visit();
+		Visit visitRecord = new Visit();
 
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            visitRecord.setID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
-            visitRecord.set_visitText(cursor.getString(cursor.getColumnIndex(COLUMN_VISITTEXT)));
-            visitRecord.set_receivedDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECEIVEDDATE)));
-            visitRecord.set_visitDate(cursor.getString(cursor.getColumnIndex(COLUMN_VISITDATE)));
-            cursor.close();
-        }
+		if (cursor.moveToFirst()) {
+			cursor.moveToFirst();
+			visitRecord.setID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+			visitRecord.set_visitText(cursor.getString(cursor.getColumnIndex(COLUMN_VISITTEXT)));
+			visitRecord.set_receivedDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECEIVEDDATE)));
+			visitRecord.set_visitDate(cursor.getString(cursor.getColumnIndex(COLUMN_VISITDATE)));
+			cursor.close();
+		}
 
-        db.close();
-        return visitRecord;
-    }
+		db.close();
+		return visitRecord.get_visitText();
+	}
+
+	public Visit findVisitById(int id) {
+		String query = "Select * FROM " + TABLE_VISITS + " WHERE " + COLUMN_ID + " =  \"" + Integer.toString(id) + "\"";
+
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		Cursor cursor = db.rawQuery(query, null);
+
+		Visit visitRecord = new Visit();
+
+		if (cursor.moveToFirst()) {
+			cursor.moveToFirst();
+			visitRecord.setID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+			visitRecord.set_visitText(cursor.getString(cursor.getColumnIndex(COLUMN_VISITTEXT)));
+			visitRecord.set_receivedDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECEIVEDDATE)));
+			visitRecord.set_visitDate(cursor.getString(cursor.getColumnIndex(COLUMN_VISITDATE)));
+			cursor.close();
+		}
+
+		db.close();
+		return visitRecord;
+	}
 
     public boolean deleteVisit(int visitID) {
 

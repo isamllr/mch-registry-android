@@ -167,9 +167,6 @@ public class GcmIntentService extends IntentService {
 	                }
 
                Log.i("PregnancyGuide", "Received: " + extras.toString());
-	            if(preg.get_loadingProgress()>=6 && preg.get_isVerified()==1){
-		            Toast.makeText(getApplicationContext(),getString(R.string.application_ready), Toast.LENGTH_LONG).show();
-	            }
             }
          }
       } finally {

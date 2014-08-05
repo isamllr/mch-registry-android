@@ -5,19 +5,13 @@
 
 	<ImageView
 		android:id="@+id/imageView1"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:layout_alignParentLeft="true"
-		android:layout_alignParentTop="true"
+		android:layout_width="200dip"
+		android:layout_height="200dip"
 		android:src="@drawable/mch"
-		android:scaleType="centerCrop"/>
-
-	<ImageView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_home"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:id="@+id/imageView"/>
+		android:layout_alignParentTop="true"
+		android:layout_centerHorizontal="true"
+		android:layout_marginTop="20dp"
+		android:layout_marginBottom="20dp"/>
 
 	<TableLayout
 		android:layout_width="wrap_content"
@@ -25,15 +19,21 @@
 		android:shrinkColumns="*"
 		android:stretchColumns="*"
 		android:gravity="center|center_vertical|center_horizontal"
-		android:layout_centerInParent="true"
 		android:showDividers="beginning|end"
-		android:textAlignment="center">
+		android:textAlignment="center"
+		android:id="@+id/tableLayout"
+		android:layout_below="@+id/imageView1"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentStart="true"
+		>
 
 		<TableRow
-			android:layout_height="wrap_content"
 			android:layout_width="match_parent"
 			android:gravity="center"
-			android:layout_marginTop="20dip">
+			android:layout_marginTop="10dip"
+			android:layout_height="1px"
+			android:background="@color/counter_text_color"
+			>
 
 			<TextView
 				android:layout_width="wrap_content"
@@ -58,7 +58,8 @@
 			android:layout_height="wrap_content"
 			android:layout_width="match_parent"
 			android:gravity="center"
-			android:layout_marginTop="20dip">
+			android:layout_marginTop="10dip"
+			>
 
 			<TextView
 				android:layout_width="wrap_content"
@@ -80,10 +81,11 @@
 		</TableRow>
 
 		<TableRow
-			android:layout_height="wrap_content"
 			android:layout_width="match_parent"
 			android:gravity="center"
-			android:layout_marginTop="20dip"
+			android:layout_marginTop="10dip"
+			android:layout_height="1px"
+			android:background="@color/counter_text_color"
 			>
 
 			<TextView
@@ -109,7 +111,7 @@
 			android:layout_height="wrap_content"
 			android:layout_width="match_parent"
 			android:gravity="center"
-			android:layout_marginTop="20dip">
+			android:layout_marginTop="10dip">
 
 			<TextView
 				android:layout_width="wrap_content"
@@ -131,10 +133,11 @@
 		</TableRow>
 
 		<TableRow
-			android:layout_height="wrap_content"
 			android:layout_width="match_parent"
 			android:gravity="center"
-			android:layout_marginTop="20dip"
+			android:layout_marginTop="10dip"
+			android:layout_height="1px"
+			android:background="@color/counter_text_color"
 			>
 
 			<TextView

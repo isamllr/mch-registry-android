@@ -96,11 +96,5 @@
 	<string name="visit_date">Visit date</string>
 	<string name="hospital_visit_reminder">Hospital Visit Reminder</string>
 	<string name="calendar_visit_text">Hospital Visit</string>
-	<string name="pick_action">Choose action</string>
-
-	<string-array name="action_array">
-		<item>Share text</item>
-		<item>Save event to calendar</item>
-	</string-array>
 
 </resources>
