@@ -128,29 +128,6 @@ public class VisitDataHandler extends SQLiteOpenHelper {
 		return visitRecord;
 	}
 
-    public boolean deleteVisit(int visitID) {
-
-        boolean result = false;
-
-        String query = "Select * FROM " + TABLE_VISITS + " WHERE " + COLUMN_ID + " =  \"" + Integer.toString(visitID) + "\"";
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery(query, null);
-
-        Visit visit = new Visit();
-
-        if (cursor.moveToFirst()) {
-            visit.setID(Integer.parseInt(cursor.getString(0)));
-            db.delete(TABLE_VISITS, COLUMN_ID + " = ?",
-                    new String[] { String.valueOf(visit.getID()) });
-            cursor.close();
-            result = true;
-        }
-        db.close();
-        return result;
-    }
-
     public ArrayList<Visit> getAllVisits(){
 
         String query = "Select * FROM " + TABLE_VISITS;

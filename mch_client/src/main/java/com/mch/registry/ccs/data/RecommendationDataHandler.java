@@ -49,7 +49,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 					    + COLUMN_RECOMMENDATIONTEXT + ","
 					    + COLUMN_RECOMMENDATIONDAY + ","
 					    + COLUMN_RECEIVEDDATE
-					    + " )VALUES(null, 'This is the very first recommendation. During your pregnancy, more will follow.', 1, '2000-01-01 10:00');";
+					    + " )VALUES(null, 'This is the very first recommendation. During your pregnancy, more will follow.', 1, date('now'));";
 	    //TODO: replace by /@string
 	    db.execSQL(INSERT_RECOMMENDATION_TABLE);
 
@@ -130,26 +130,6 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
         db.close();
 
         return resultList;
-    }
-
-    public boolean deleteRecommendation(int recommendationID) {
-
-        boolean result = false;
-
-        String query = "Select * FROM " + TABLE_RECOMMENDATIONS + " WHERE " + COLUMN_ID + " =  \"" + Integer.toString(recommendationID) + "\"";
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        Recommendation recommendation = new Recommendation();
-
-        if (cursor.moveToFirst()) {
-            recommendation.setID(Integer.parseInt(cursor.getString(0)));
-            db.delete(TABLE_RECOMMENDATIONS, COLUMN_ID + " = ?",
-                    new String[] { String.valueOf(recommendation.getID()) });
-            cursor.close();
-            result = true;
-        }
-        db.close();
-        return result;
     }
 
     public Recommendation findRecommendation(int recommendationID) {

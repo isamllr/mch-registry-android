@@ -1,46 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
 
-	<string name="app_name">Pregnancy Guide</string>
-	<!-- Nav Drawer Menu Items -->
-	<string-array name="nav_drawer_items">
-		<item >Home</item>
-		<item >Visits</item>
-		<item >Hints</item>
-		<item >Notes</item>
-		<item >About</item>
-	</string-array>
+    <string name="app_name">Pregnancy Guide</string>
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item>Home</item>
+        <item>Visits</item>
+        <item>Hints</item>
+        <item>Notes</item>
+        <item>About</item>
+    </string-array>
 
-	<!-- Nav Drawer List Item Icons -->
-	<!-- Keep them in order as the titles are in -->
-	<array name="nav_drawer_icons">
-		<item>@drawable/ic_home</item>
-		<item>@drawable/ic_visits</item>
-		<item>@drawable/ic_recommendations</item>
-		<item>@drawable/ic_notes</item>
-		<item>@drawable/ic_about</item>
-	</array>
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_visits</item>
+        <item>@drawable/ic_recommendations</item>
+        <item>@drawable/ic_notes</item>
+        <item>@drawable/ic_about</item>
+    </array>
 
-	<!-- Content Description -->
-	<string name="desc_list_item_icon">Item Icon</string>
-
-	<string name="drawer_open">Open navigation drawer</string>
-	<string name="drawer_close">Close navigation drawer</string>
-
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
     <string name="msg_received">Message received: %1$s</string>
     <string name="msg_sent">Message sent: %1$s</string>
     <string name="txt_no_play_services">
-	<![CDATA[
+<![CDATA[
         Either you do not have Google Play Services or your 
         Google Play Services package is not up to date. 
         Please download the app from Google Play or update 
         your existing app.
         ]]>
-
     </string>
     <string name="about">About</string>
-
     <string name="common_about_text">
 <![CDATA[
         <strong>Pregnancy Guide</strong>
@@ -57,8 +52,7 @@
             licensed under the <a href="http://source.android.com/source/licenses.html">Apache License 2.0</a></small>.
         ]]>
     </string>
-
-     <string name="visit_notification_title_template">Visit: %1$s</string>
+    <string name="visit_notification_title_template">Visit: %1$s</string>
     <string name="visit_notification_placeholder_text_template">You said %1$s and lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis. Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec tortor.</string>
     <string name="action_visits">Visits</string>
     <string name="action_share">Share</string>
@@ -86,33 +80,45 @@
     <string name="timeout">Sorry, the verification timed out. Please try again.</string>
     <string name="title_activity_no_google_play_services">NoGooglePlayServices</string>
     <string name="action_settings">Settings</string>
-	<string name="application_ready">You can now start to use the app by pressing the back button in the upper left corner.</string>
-	<string name="textExpectedDelivery">Expected delivery</string>
-	<string name="textPatientName">Name</string>
-	<string name="textPhone">Phone</string>
-	<string name="textFacility">Registration Facility</string>
-	<string name="textFacilityPhone">Facility Phone</string>
-	<string name="pregnancy_week">Week</string>
-	<string name="visit_date">Visit date</string>
-	<string name="hospital_visit_reminder">Hospital Visit Reminder</string>
-	<string name="calendar_visit_text">Hospital Visit</string>
-	<string name="pick_action">Choose action</string>
-	<string name="hospital_visit">Hospital Visit </string>
-	<string name="pick_preference_app_sms">I\'d like to receive notifications by</string>
-	<string name="action_app_on">App On/Off</string>
-	<string name="pregnancy_recommendation_share_title">Pregnancy Recommendation</string>
-	<string name="not_by_app">You will receive future notifications by this app.</string>
-	<string name="not_by_sms">You will receive future notifications by SMS.</string>
-	<string name="search_recommendation_hint">Search recommendation text...</string>
+    <string name="application_ready">You can now start to use the app by pressing the back button in the upper left corner.</string>
+    <string name="textExpectedDelivery">Expected delivery</string>
+    <string name="textPatientName">Name</string>
+    <string name="textPhone">Phone</string>
+    <string name="textFacility">Registration Facility</string>
+    <string name="textFacilityPhone">Facility Phone</string>
+    <string name="pregnancy_week">Week</string>
+    <string name="visit_date">Visit date</string>
+    <string name="hospital_visit_reminder">Hospital Visit Reminder</string>
+    <string name="calendar_visit_text">Hospital Visit</string>
+    <string name="pick_action">Choose action</string>
+    <string name="hospital_visit">Hospital Visit </string>
+    <string name="pick_preference_app_sms">I\'d like to receive notifications by</string>
+    <string name="action_app_on">App On/Off</string>
+    <string name="pregnancy_recommendation_share_title">Pregnancy Recommendation</string>
+    <string name="not_by_app">You will receive future notifications by this app.</string>
+    <string name="not_by_sms">You will receive future notifications by SMS.</string>
+    <string name="search_recommendation_hint">Search recommendation text...</string>
+	<string name="search_note_hint">Search diary note text...</string>
+	<item name="searchNote" type="id">Search diary note...</item>
 
-	<string-array name="action_array">
-		<item>Share text</item>
-		<item>Save event to calendar</item>
+    <string-array name="action_array">
+        <item>Share text</item>
+        <item>Save event to calendar</item>
+    </string-array>
+    <string-array name="action_array_preference_app_sms">
+        <item>... this app</item>
+        <item>... SMS (turn app off)</item>
+    </string-array>
+
+	<string-array name="note_action_array">
+		<item>Edit note</item>
+		<item>Delete note</item>
+		<item>Share note</item>
 	</string-array>
 
-	<string-array name="action_array_preference_app_sms">
-		<item>... this app</item>
-		<item>... SMS (turn app off)</item>
-	</string-array>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="diary_confirm">Save note</string>
+	<string name="first_note">This is the very first diary note. This diary is personal, but you can let your doctor know about it when visiting.\'</string>
+	<string name="note_share_title">Pregnancy Diary</string>
 
 </resources>
