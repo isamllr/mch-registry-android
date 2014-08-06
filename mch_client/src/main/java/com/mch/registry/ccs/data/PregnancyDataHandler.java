@@ -119,7 +119,7 @@ public class PregnancyDataHandler extends SQLiteOpenHelper {
 
 	        db.close();
     }catch(Exception e){
-			Log.e("DB Error", e.getMessage());
+			Log.e("dberror", " " + e.getMessage());
 	}
 	    Log.i("Pregnancy Guide", "get Patient. Mobile number: " + pregnancy.get_mobileNumber() );
         return pregnancy;

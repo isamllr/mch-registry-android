@@ -12,10 +12,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -30,7 +28,7 @@ public class NoteDataHandler extends SQLiteOpenHelper {
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_NOTETEXT = "_noteText";
 	public static final String COLUMN_NOTEDAY = "_noteDay";
-	public static final String COLUMN_RECEIVEDDATE = "_createdDate";
+	public static final String COLUMN_CREATEDDATE = "_createdDate";
 
 	public NoteDataHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
 		super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -43,7 +41,7 @@ public class NoteDataHandler extends SQLiteOpenHelper {
 						+ COLUMN_ID + " INTEGER PRIMARY KEY,"
 						+ COLUMN_NOTETEXT + " TEXT,"
 						+ COLUMN_NOTEDAY + " INTEGER,"
-						+ COLUMN_RECEIVEDDATE + " DATETIME"
+						+ COLUMN_CREATEDDATE + " DATETIME"
 						+ ")";
 		db.execSQL(CREATE_NOTES_TABLE);
 
@@ -52,8 +50,8 @@ public class NoteDataHandler extends SQLiteOpenHelper {
 						+ COLUMN_ID + ", "
 						+ COLUMN_NOTETEXT + ","
 						+ COLUMN_NOTEDAY + ","
-						+ COLUMN_RECEIVEDDATE
-						+ " )VALUES(null, '" + "This is the first diary note. These notes are personal, but you can let your doctor know about them, if any." + ", 1, date('now'));";
+						+ COLUMN_CREATEDDATE
+						+ " )VALUES(null, '" + "This is the first diary note. These notes are personal, but the diary will help you to remember when talking to your doctor.'" + ", 1, date('now'));";
 		db.execSQL(INSERT_NOTE_TABLE);
 
 		Log.i("Pregnancy Guide", "NoteDB created & 1 note inserted");
@@ -65,44 +63,19 @@ public class NoteDataHandler extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 
-	public void addNote(String noteText) {
+	public void addNote(String noteText, int noteDay, Date today) {
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss");
-		Calendar cal = Calendar.getInstance();
 
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_NOTETEXT,noteText);
-		values.put(COLUMN_NOTEDAY, calculateNoteDay(cal.getTime()));
-		values.put(COLUMN_RECEIVEDDATE, dateFormat.format(cal.getTime()).toString());
+		values.put(COLUMN_NOTEDAY, noteDay);
+		values.put(COLUMN_CREATEDDATE, dateFormat.format(today));
 
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		db.insert(TABLE_NOTES, null, values);
 		db.close();
-	}
-
-	private int calculateNoteDay(Date today) {
-		PregnancyDataHandler pdh = new PregnancyDataHandler(null, "Note", null, 1);
-		pdh.getPregnancy();
-		Pregnancy pregnancy = new Pregnancy();
-
-		DateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
-
-		String truncatedDateString1 = formatter.format(today);
-		Date truncatedDate1 = null;
-		String truncatedDateString2 = formatter.format(pregnancy.get_expectedDelivery());
-		Date truncatedDate2 = null;
-		try {
-			truncatedDate1 = formatter.parse(truncatedDateString1);
-			truncatedDate2 = formatter.parse(truncatedDateString2);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		long timeDifference = truncatedDate2.getTime()- truncatedDate1.getTime();
-		long daysInBetween = timeDifference / (24*60*60*1000);
-
-		return ((int) daysInBetween);
 	}
 
 	public ArrayList<Note> getAllNotes(){
@@ -121,7 +94,7 @@ public class NoteDataHandler extends SQLiteOpenHelper {
 					noteRecord.setID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
 					noteRecord.set_noteText(cursor.getString(cursor.getColumnIndex(COLUMN_NOTETEXT)));
 					noteRecord.set_noteDay(cursor.getInt(cursor.getColumnIndex(COLUMN_NOTEDAY)));
-					noteRecord.set_createdDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECEIVEDDATE)));
+					noteRecord.set_createdDate(cursor.getString(cursor.getColumnIndex(COLUMN_CREATEDDATE)));
 					resultList.add(noteRecord);
 				} catch (Exception e) {
 					Log.e("SQLLite getNote Error", "Error " + e.toString());

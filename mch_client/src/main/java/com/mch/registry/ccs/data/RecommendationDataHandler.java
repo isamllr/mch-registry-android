@@ -8,10 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -62,45 +60,20 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public void addRecommendation(String recommendationText) {
+    public void addRecommendation(String recommendationText, int noteDay, Date today) {
 
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss");
-	    Calendar cal = Calendar.getInstance();
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_RECOMMENDATIONTEXT,recommendationText);
-        values.put(COLUMN_RECOMMENDATIONDAY, calculateRecommendationDay(cal.getTime()));
-        values.put(COLUMN_RECEIVEDDATE, dateFormat.format(cal.getTime()).toString());
+        values.put(COLUMN_RECOMMENDATIONDAY, noteDay);
+        values.put(COLUMN_RECEIVEDDATE, dateFormat.format(today));
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.insert(TABLE_RECOMMENDATIONS, null, values);
         db.close();
     }
-
-	private int calculateRecommendationDay(Date today) {
-		PregnancyDataHandler pdh = new PregnancyDataHandler(null, "Recommendation", null, 1);
-		pdh.getPregnancy();
-		Pregnancy pregnancy = new Pregnancy();
-
-		DateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
-
-		String truncatedDateString1 = formatter.format(today);
-		Date truncatedDate1 = null;
-		String truncatedDateString2 = formatter.format(pregnancy.get_expectedDelivery());
-		Date truncatedDate2 = null;
-		try {
-			truncatedDate1 = formatter.parse(truncatedDateString1);
-			truncatedDate2 = formatter.parse(truncatedDateString2);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		long timeDifference = truncatedDate2.getTime()- truncatedDate1.getTime();
-		long daysInBetween = timeDifference / (24*60*60*1000);
-		
-		return ((int) daysInBetween);
-	}
 
 	public ArrayList<Recommendation> getAllRecommendations(){
 

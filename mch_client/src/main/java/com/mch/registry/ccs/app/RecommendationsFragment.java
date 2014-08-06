@@ -14,7 +14,6 @@ import android.widget.ListView;
 
 import com.mch.registry.ccs.data.Recommendation;
 import com.mch.registry.ccs.data.RecommendationDataHandler;
-import com.mch.registry.ccs.data.VisitDataHandler;
 import com.mch.registry.ccs.data.adapter.RecommendationArrayAdapter;
 
 import java.util.ArrayList;
@@ -71,8 +70,6 @@ public class RecommendationsFragment extends Fragment {
     }
 
 	public void shareRecommendationText(String recommendationText){
-		VisitDataHandler vdh = new VisitDataHandler(getActivity(),"fn received", null, 1);
-
 		Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
 		sharingIntent.setType("text/plain");
 		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.pregnancy_recommendation_share_title));

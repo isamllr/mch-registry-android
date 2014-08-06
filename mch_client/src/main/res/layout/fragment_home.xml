@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
 	<ImageView
 		android:id="@+id/imageView1"
-		android:layout_width="200dip"
-		android:layout_height="200dip"
+		android:layout_width="150dip"
+		android:layout_height="150dip"
 		android:src="@drawable/mch"
 		android:layout_alignParentTop="true"
 		android:layout_centerHorizontal="true"
@@ -25,6 +26,8 @@
 		android:layout_below="@+id/imageView1"
 		android:layout_alignParentLeft="true"
 		android:layout_alignParentStart="true"
+	    android:layout_marginLeft="20dip"
+	    android:layout_marginRight="20dip"
 		>
 
 		<TableRow
@@ -38,7 +41,7 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:text="@string/textExpectedDelivery"
 				android:textStyle="bold"
 				android:id="@+id/textExpectedDelivery"
@@ -47,7 +50,7 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:text="Medium Text"
 				android:id="@+id/textExpectedDeliveryValue"
 				android:layout_marginLeft="20dip"
@@ -64,7 +67,7 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:text="@string/textPatientName"
 				android:textStyle="bold"
 				android:id="@+id/textPatientName"
@@ -73,7 +76,7 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:text="Medium Text"
 				android:id="@+id/textPatientNameValue"
 				android:layout_marginLeft="20dip"
@@ -91,7 +94,7 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:text="@string/textPhone"
 				android:textStyle="bold"
 				android:id="@+id/textPatientPhone"
@@ -100,7 +103,7 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:text="Medium Text"
 				android:id="@+id/textPatientPhoneValue"
 				android:layout_marginLeft="20dip"
@@ -116,7 +119,7 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:text="@string/textFacility"
 				android:textStyle="bold"
 				android:id="@+id/textFacilityName"
@@ -125,7 +128,7 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:text="Medium Text"
 				android:id="@+id/textFacilityNameValue"
 				android:layout_marginLeft="20dip"
@@ -143,7 +146,7 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:text="@string/textFacilityPhone"
 				android:textStyle="bold"
 				android:id="@+id/textFacilityPhone"
@@ -152,15 +155,13 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:text="Medium Text"
 				android:id="@+id/textFacilityPhoneValue"
 				android:layout_marginLeft="20dip"
 				android:layout_marginRight="20dip"
 				android:textColor="@color/list_background_pressed"/>
 		</TableRow>
-
-
 
 	</TableLayout>
 
@@ -169,11 +170,11 @@
 		android:layout_height="wrap_content"
 		android:text="Call Facility"
 		android:id="@+id/button"
-		android:layout_alignParentBottom="true"
-		android:layout_centerHorizontal="true"
-		android:layout_margin="40dip"
 		android:clickable="true"
-		android:onClick="onClick"/>
-
+		android:onClick="onClick"
+		android:layout_below="@id/tableLayout"
+		android:layout_centerHorizontal="true"
+		android:layout_margin="20dip"/>
 
 </RelativeLayout>
+

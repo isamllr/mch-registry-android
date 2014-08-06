@@ -170,7 +170,7 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 				while (mProgressStatus < 6 && pdh.getPregnancy().get_isVerified()==0) {
 					mProgressStatus = pdh.getPregnancy().get_loadingProgress();
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(1500);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

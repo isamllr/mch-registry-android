@@ -98,8 +98,6 @@ public class VisitsFragment extends Fragment{
 	}
 
 	public void shareVisitText(String visitText){
-		VisitDataHandler vdh = new VisitDataHandler(getActivity(),"fn received", null, 1);
-
 		Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
 		sharingIntent.setType("text/plain");
 		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.hospital_visit));

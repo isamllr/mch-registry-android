@@ -39,6 +39,11 @@ import com.mch.registry.ccs.data.RecommendationDataHandler;
 import com.mch.registry.ccs.data.VisitDataHandler;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import de.greenrobot.event.EventBus;
 
@@ -102,7 +107,9 @@ public class GcmIntentService extends IntentService {
 			                @Override
 			                public void run() {
 				                RecommendationDataHandler rdh = new RecommendationDataHandler(getApplicationContext(),"Msg received",null, 1);
-				                rdh.addRecommendation(recommendationMessage);
+				                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss");
+				                Calendar cal = Calendar.getInstance();
+				                rdh.addRecommendation(recommendationMessage, calculateNoteDay(cal.getTime()), cal.getTime());
 				                sendNotification("Pregnancy Guide: Recommendation received!", "New recommendation");
 			                }
 		                });
@@ -334,4 +341,34 @@ public class GcmIntentService extends IntentService {
    private SharedPreferences getPrefs() {
       return PreferenceManager.getDefaultSharedPreferences(this);
    }
+
+	private int calculateNoteDay(Date today) {
+
+		Date truncatedDate1 = null;
+		Date truncatedDate2 = null;
+
+		long timeDifference = 0;
+		long daysInBetween = 0;
+
+		try {
+			PregnancyDataHandler pdh = new PregnancyDataHandler(this, "Rec", null, 1);
+			Pregnancy pregnancy = pdh.getPregnancy();
+
+			DateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+
+			String truncatedDateString1 = formatter.format(today);
+			String truncatedDateString2 = pregnancy.get_expectedDelivery().toString();
+			truncatedDate1 = formatter.parse(truncatedDateString1);
+			truncatedDate2 = formatter.parse(truncatedDateString2);
+
+			timeDifference = truncatedDate2.getTime()- truncatedDate1.getTime();
+			daysInBetween = timeDifference / (24*60*60*1000);
+
+		} catch (ParseException e) {
+			Log.i("Pregnancy Guide", "error parsing dates" + e.getMessage());
+		}
+
+
+		return ((int) daysInBetween);
+	}
 }
