@@ -35,7 +35,32 @@
 			android:gravity="center"
 			android:layout_marginTop="10dip"
 			android:layout_height="1px"
-			android:background="@color/counter_text_color"
+			>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:text="@string/pregnancy_week"
+				android:textStyle="bold"
+				android:id="@+id/textWeek"
+				android:layout_marginLeft="20dip"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:text="Medium Text"
+				android:id="@+id/textWeekValue"
+				android:layout_marginLeft="20dip"
+				android:layout_marginRight="20dip"/>
+		</TableRow>
+
+		<TableRow
+			android:layout_width="match_parent"
+			android:gravity="center"
+			android:layout_marginTop="10dip"
+			android:layout_height="1px"
 			>
 
 			<TextView
@@ -88,7 +113,6 @@
 			android:gravity="center"
 			android:layout_marginTop="10dip"
 			android:layout_height="1px"
-			android:background="@color/counter_text_color"
 			>
 
 			<TextView
@@ -140,7 +164,6 @@
 			android:gravity="center"
 			android:layout_marginTop="10dip"
 			android:layout_height="1px"
-			android:background="@color/counter_text_color"
 			>
 
 			<TextView
