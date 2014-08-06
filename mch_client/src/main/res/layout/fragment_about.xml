@@ -15,7 +15,6 @@
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:id="@+id/about_text"
 		android:layout_margin="20dip"
-		android:autoLink="all"
 		android:linksClickable="true"/>
 	</ScrollView>
 

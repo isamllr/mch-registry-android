@@ -16,7 +16,10 @@
 		android:smoothScrollbar="true"
 		android:scrollingCache="true"
 		android:choiceMode="singleChoice"
-		android:clickable="true"/>
+		android:clickable="true"
+		android:padding="10dip"
+		android:textSize="16dip"
+		android:textStyle="bold"/>
     
 
 </RelativeLayout>

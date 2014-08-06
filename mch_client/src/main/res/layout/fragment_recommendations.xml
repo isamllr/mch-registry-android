@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:windowSoftInputMode="stateHidden">
 
 	<ListView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:id="@+id/listView"
-		android:layout_alignParentTop="true"
-		android:layout_alignParentLeft="true"
-		android:layout_alignParentStart="true"
 		android:headerDividersEnabled="true"
 		android:footerDividersEnabled="true"
 		android:layoutMode="opticalBounds"
@@ -17,7 +15,24 @@
 		android:scrollingCache="true"
 		android:choiceMode="singleChoice"
 		android:clickable="true"
+		android:layout_below="@+id/searchRecommendation"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentStart="true"
+		android:padding="10dip"
+		android:textSize="16dip"
+		android:textStyle="bold"/>
+
+	<EditText
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/searchRecommendation"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentStart="true"
+		android:layout_alignParentRight="true"
 		android:layout_alignParentEnd="true"
-		/>
+		android:hint="@string/search_recommendation_hint"
+		android:inputType="textVisiblePassword"
+		android:windowSoftInputMode="stateHidden"/>
 
 </RelativeLayout>

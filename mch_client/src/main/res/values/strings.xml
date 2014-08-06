@@ -103,6 +103,7 @@
 	<string name="pregnancy_recommendation_share_title">Pregnancy Recommendation</string>
 	<string name="not_by_app">You will receive future notifications by this app.</string>
 	<string name="not_by_sms">You will receive future notifications by SMS.</string>
+	<string name="search_recommendation_hint">Search recommendation...</string>
 
 	<string-array name="action_array">
 		<item>Share text</item>

@@ -3,10 +3,13 @@ package com.mch.registry.ccs.app;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.mch.registry.ccs.data.Recommendation;
@@ -17,20 +20,26 @@ import com.mch.registry.ccs.data.adapter.RecommendationArrayAdapter;
 import java.util.ArrayList;
 
 public class RecommendationsFragment extends Fragment {
-	
+
+	EditText inputSearch;
+	RecommendationArrayAdapter recAdapter;
+
 	public RecommendationsFragment(){}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_recommendations, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_recommendations, container, false);
 
 		final RecommendationDataHandler rdh = new RecommendationDataHandler(getActivity(),"fn received", null, 1);
 		ArrayList<Recommendation> recommendations = rdh.getAllRecommendations();
 
 		final ListView recommendationLV = (ListView)rootView.findViewById(R.id.listView);
-		recommendationLV.setAdapter(new RecommendationArrayAdapter(getActivity(), recommendations));
+		recAdapter = new RecommendationArrayAdapter(getActivity(), recommendations);
+		recommendationLV.setAdapter(recAdapter);
+
+		inputSearch = (EditText)rootView.findViewById(R.id.searchRecommendation);
 
 		recommendationLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -38,6 +47,23 @@ public class RecommendationsFragment extends Fragment {
 				shareRecommendationText(getString(R.string.pregnancy_week) +  " "
 						+ Integer.toString(((int) Math.floor(rdh.findRecommendation(position+1).get_recommendationDay() / 7)))
 						+ ": " + rdh.findRecommendation(position+1).get_recommendationText());
+			}
+		});
+
+		inputSearch.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+				// When user changed the Text
+				recAdapter.getFilter().filter(cs);
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable arg0) {
 			}
 		});
 
