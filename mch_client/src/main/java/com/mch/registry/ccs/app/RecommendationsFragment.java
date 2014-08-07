@@ -44,7 +44,7 @@ public class RecommendationsFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				shareRecommendationText(getString(R.string.pregnancy_week) +  " "
-						+ Integer.toString(((int) Math.floor(rdh.findRecommendation(position+1).get_recommendationDay() / 7)))
+						+ Integer.toString(rdh.findRecommendation(position+1).get_pregnancyWeek())
 						+ ": " + rdh.findRecommendation(position+1).get_recommendationText());
 			}
 		});

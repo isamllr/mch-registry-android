@@ -9,6 +9,7 @@ public class Recommendation {
     private String _recommendationText;
     private int _recommendationDay;
     private String _receivedDate;
+	private int _pregnancyWeek;
 
     public Recommendation() {
 	}
@@ -21,19 +22,6 @@ public class Recommendation {
 	public String toString(){
 		return this._recommendationText;
 	}
-
-    public Recommendation(int _id, String _recommendationText, String _receivedDate, int _recommendationDay) {
-        this._id = _id;
-        this._recommendationText = _recommendationText;
-        this._receivedDate = _receivedDate;
-        this._recommendationDay = _recommendationDay;
-    }
-
-    public Recommendation(String _recommendationText, String _receivedDate, int _recommendationDay) {
-        this._recommendationText = _recommendationText;
-        this._receivedDate = _receivedDate;
-        this._recommendationDay = _recommendationDay;
-    }
 
     public void setID(int id) {
         this._id = id;
@@ -66,4 +54,27 @@ public class Recommendation {
     public void set_receivedDate(String _receivedDate) {
         this._receivedDate = _receivedDate;
     }
+
+	public Recommendation(String _recommendationText, int _recommendationDay, String _receivedDate, int _pregnancyWeek) {
+		this._recommendationText = _recommendationText;
+		this._recommendationDay = _recommendationDay;
+		this._receivedDate = _receivedDate;
+		this._pregnancyWeek = _pregnancyWeek;
+	}
+
+	public Recommendation(int _id, String _recommendationText, String _receivedDate, int _recommendationDay, int _pregnancyWeek) {
+		this._id = _id;
+		this._recommendationText = _recommendationText;
+		this._receivedDate = _receivedDate;
+		this._recommendationDay = _recommendationDay;
+		this._pregnancyWeek = _pregnancyWeek;
+	}
+
+	public int get_pregnancyWeek() {
+		return _pregnancyWeek;
+	}
+
+	public void set_pregnancyWeek(int _pregnancyWeek) {
+		this._pregnancyWeek = _pregnancyWeek;
+	}
 }

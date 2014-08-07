@@ -109,7 +109,8 @@ public class GcmIntentService extends IntentService {
 				                RecommendationDataHandler rdh = new RecommendationDataHandler(getApplicationContext(),"Msg received",null, 1);
 				                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss");
 				                Calendar cal = Calendar.getInstance();
-				                rdh.addRecommendation(recommendationMessage, calculateRecommendationDay(cal.getTime()), cal.getTime());
+				                int pregnancyDay = calculateRecommendationDay(cal.getTime());
+				                rdh.addRecommendation(recommendationMessage, pregnancyDay , cal.getTime(), (int)Math.floor(pregnancyDay / 7));
 				                sendNotification("Pregnancy Guide: Recommendation received!", "New recommendation");
 			                }
 		                });

@@ -105,6 +105,28 @@ limitations under the License.
 		    </intent-filter>
 	    </activity>
 
+	    <receiver android:name="com.mch.registry.ccs.widget.WidgetProvider" >
+		    <intent-filter>
+			    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		    </intent-filter>
+
+		    <meta-data
+			    android:name="android.appwidget.provider"
+			    android:resource="@xml/demo_widget_provider" />
+	    </receiver>
+
+	    <receiver
+		    android:name="com.mch.registry.ccs.widget.WidgetIntentReceiver"
+		    android:label="@string/app_name" >
+		    <intent-filter>
+			    <action android:name="com.mch.intent.action.UPDATE_WIDGET" />
+		    </intent-filter>
+
+		    <meta-data
+			    android:name="android.appwidget.provider"
+			    android:resource="@xml/demo_widget_provider" />
+	    </receiver>
+
     </application>
 
 </manifest>

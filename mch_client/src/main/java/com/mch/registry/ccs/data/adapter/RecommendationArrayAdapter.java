@@ -20,7 +20,7 @@ public class RecommendationArrayAdapter extends TwoLineArrayAdapter<Recommendati
 
 	@Override
 	public String lineOneText(Recommendation r) {
-		return _context.getString(R.string.pregnancy_week) +  ": " + Integer.toString(((int) Math.floor(r.get_recommendationDay() / 7)));
+		return _context.getString(R.string.pregnancy_week) +  ": " + Integer.toString(r.get_pregnancyWeek());
 	}
 
 	@Override

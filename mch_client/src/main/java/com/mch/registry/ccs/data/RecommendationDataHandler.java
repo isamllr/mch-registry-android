@@ -25,6 +25,8 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
     public static final String COLUMN_RECOMMENDATIONTEXT = "_recomendationText";
     public static final String COLUMN_RECOMMENDATIONDAY = "_recommendationDay";
     public static final String COLUMN_RECEIVEDDATE = "_receivedDate";
+	public static final String COLUMN_PREGNANCYWEEK = "_pregnancyWeek";
+
 
     public RecommendationDataHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -37,7 +39,8 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
                 + COLUMN_ID + " INTEGER PRIMARY KEY,"
                 + COLUMN_RECOMMENDATIONTEXT + " TEXT,"
                 + COLUMN_RECOMMENDATIONDAY + " INTEGER,"
-                + COLUMN_RECEIVEDDATE + " DATETIME"
+                + COLUMN_RECEIVEDDATE + " DATETIME,"
+		         + COLUMN_PREGNANCYWEEK + " INTEGER"
                 + ")";
         db.execSQL(CREATE_RECOMMENDATIONS_TABLE);
 
@@ -46,8 +49,9 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 					    + COLUMN_ID + ", "
 					    + COLUMN_RECOMMENDATIONTEXT + ","
 					    + COLUMN_RECOMMENDATIONDAY + ","
-					    + COLUMN_RECEIVEDDATE
-					    + " )VALUES(null, 'This is the very first recommendation. During your pregnancy, more will follow.', 1, date('now'));";
+					    + COLUMN_RECEIVEDDATE + ","
+					    + COLUMN_PREGNANCYWEEK + ","
+					    + " )VALUES(null, 'This is the very first recommendation. During your pregnancy, more will follow.', 1, date('now'), 0);";
 	    //TODO: replace by /@string
 	    db.execSQL(INSERT_RECOMMENDATION_TABLE);
 
@@ -60,7 +64,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public void addRecommendation(String recommendationText, int noteDay, Date today) {
+    public void addRecommendation(String recommendationText, int noteDay, Date today, int pregnancyWeek) {
 
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss");
 
@@ -68,6 +72,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
         values.put(COLUMN_RECOMMENDATIONTEXT,recommendationText);
         values.put(COLUMN_RECOMMENDATIONDAY, noteDay);
         values.put(COLUMN_RECEIVEDDATE, dateFormat.format(today));
+	    values.put(COLUMN_PREGNANCYWEEK, pregnancyWeek);
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -92,6 +97,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
                     recommendationRecord.set_recommendationText(cursor.getString(cursor.getColumnIndex(COLUMN_RECOMMENDATIONTEXT)));
                     recommendationRecord.set_recommendationDay(cursor.getInt(cursor.getColumnIndex(COLUMN_RECOMMENDATIONDAY)));
                     recommendationRecord.set_receivedDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECEIVEDDATE)));
+	                recommendationRecord.set_recommendationDay(cursor.getInt(cursor.getColumnIndex(COLUMN_PREGNANCYWEEK)));
                     resultList.add(recommendationRecord);
                 } catch (Exception e) {
                     Log.e("SQLLite getRecommendation Error", "Error " + e.toString());
@@ -117,6 +123,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
             recommendation.set_recommendationText(cursor.getString(1));
             recommendation.set_recommendationDay(Integer.parseInt(cursor.getString(2)));
             recommendation.set_receivedDate(cursor.getString(3));
+	        recommendation.set_pregnancyWeek(Integer.parseInt(cursor.getString(4)));
             cursor.close();
         } else {
             recommendation = null;
@@ -125,5 +132,34 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 
         return recommendation;
     }
+
+	public ArrayList<Recommendation> findRecommendationByPregnancyWeek(int pregnancyWeek) {
+
+		ArrayList<Recommendation> recommendations = new ArrayList<Recommendation>();
+		Recommendation recommendation = new Recommendation();
+
+		try {
+			String query = "Select * FROM " + TABLE_RECOMMENDATIONS + " WHERE " + COLUMN_PREGNANCYWEEK + " =  \"" + Integer.toString(pregnancyWeek) + "\" LIMIT 3";
+			SQLiteDatabase db = this.getWritableDatabase();
+			Cursor cursor = db.rawQuery(query, null);
+
+			if (cursor.moveToFirst()) {
+				cursor.moveToFirst();
+				recommendation.setID(Integer.parseInt(cursor.getString(0)));
+				recommendation.set_recommendationText(cursor.getString(1));
+				recommendation.set_recommendationDay(Integer.parseInt(cursor.getString(2)));
+				recommendation.set_receivedDate(cursor.getString(3));
+				recommendation.set_pregnancyWeek(Integer.parseInt(cursor.getString(4)));
+				recommendations.add(recommendation);
+			}
+
+			cursor.close();
+			db.close();
+		}catch(Exception e){
+			Log.e("Rec widget data erro", e.getMessage());
+		}
+
+		return recommendations;
+	}
 
 }
