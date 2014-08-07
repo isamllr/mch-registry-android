@@ -112,7 +112,7 @@ limitations under the License.
 
 		    <meta-data
 			    android:name="android.appwidget.provider"
-			    android:resource="@xml/demo_widget_provider" />
+			    android:resource="@xml/widget_provider" />
 	    </receiver>
 
 	    <receiver
@@ -124,7 +124,7 @@ limitations under the License.
 
 		    <meta-data
 			    android:name="android.appwidget.provider"
-			    android:resource="@xml/demo_widget_provider" />
+			    android:resource="@xml/widget_provider" />
 	    </receiver>
 
     </application>

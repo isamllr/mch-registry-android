@@ -4,28 +4,14 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5sp"
                 android:orientation="vertical"
-	style="@style/Theme.AppCompat.Light">
+                android:alpha="0.75"
+                android:background="@drawable/abc_cab_background_bottom_holo_dark" >
 
-	<RelativeLayout
-		android:id="@+id/buttonContainer"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true" >
-
-		<Button
-			android:id="@+id/sync_button"
-			android:layout_width="48dp"
-			android:layout_height="48dp"
-			android:layout_centerInParent="true"
-			android:background="@drawable/ic_action_refresh"
-			android:text="" />
-	</RelativeLayout>
 
 	<LinearLayout
 		android:id="@+id/contentContainer"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:layout_above="@id/buttonContainer"
 		android:layout_alignParentTop="true"
 		android:orientation="vertical"
 		android:padding="8dp" >
@@ -52,15 +38,23 @@
 			android:textStyle="normal" />
 
 
-	</LinearLayout>
+		<RelativeLayout
+			android:id="@+id/buttonContainer"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			>
 
-	<ImageView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:id="@+id/imageView"
-		android:layout_gravity="right"
-		android:layout_alignParentTop="true"
-	    android:layout_alignParentRight="true"
-	    android:src="@android:drawable/star_off"/>
+			<Button
+				android:id="@+id/sync_button"
+				android:layout_width="30dp"
+				android:layout_height="30dp"
+				android:layout_centerInParent="true"
+				android:background="@drawable/ic_action_refresh"
+				android:text="" />
+
+		</RelativeLayout>
+
+
+	</LinearLayout>
 
 </RelativeLayout>
