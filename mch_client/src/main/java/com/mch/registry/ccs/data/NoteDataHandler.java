@@ -87,23 +87,24 @@ public class NoteDataHandler extends SQLiteOpenHelper {
 
 		ArrayList<Note> resultList = new ArrayList<Note>();
 		Note noteRecord = new Note();
+		try {
+			if (cursor.moveToFirst()) {
+				do {
+						noteRecord = new Note();
+						noteRecord.set_id(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+						noteRecord.set_noteText(cursor.getString(cursor.getColumnIndex(COLUMN_NOTETEXT)));
+						noteRecord.set_noteDay(cursor.getInt(cursor.getColumnIndex(COLUMN_NOTEDAY)));
+						noteRecord.set_createdDate(cursor.getString(cursor.getColumnIndex(COLUMN_CREATEDDATE)));
+						resultList.add(noteRecord);
 
-		if (cursor.moveToFirst()) {
-			do {
-				try {
-					noteRecord.setID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
-					noteRecord.set_noteText(cursor.getString(cursor.getColumnIndex(COLUMN_NOTETEXT)));
-					noteRecord.set_noteDay(cursor.getInt(cursor.getColumnIndex(COLUMN_NOTEDAY)));
-					noteRecord.set_createdDate(cursor.getString(cursor.getColumnIndex(COLUMN_CREATEDDATE)));
-					resultList.add(noteRecord);
-				} catch (Exception e) {
-					Log.e("SQLLite getNote Error", "Error " + e.toString());
-				}
-			}while (cursor.moveToNext());
+				}while (cursor.moveToNext());
+			}
+
+			cursor.close();
+			db.close();
+		} catch (Exception e) {
+			Log.e("SQLLite getNote Error", "Error " + e.toString());
 		}
-
-		cursor.close();
-		db.close();
 
 		return resultList;
 	}
@@ -129,7 +130,7 @@ public class NoteDataHandler extends SQLiteOpenHelper {
 
 		if (cursor.moveToFirst()) {
 			cursor.moveToFirst();
-			note.setID(Integer.parseInt(cursor.getString(0)));
+			note.set_id(Integer.parseInt(cursor.getString(0)));
 			note.set_noteText(cursor.getString(1));
 			note.set_noteDay(Integer.parseInt(cursor.getString(2)));
 			note.set_createdDate(cursor.getString(3));

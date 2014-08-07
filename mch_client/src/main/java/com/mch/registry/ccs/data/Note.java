@@ -13,34 +13,29 @@ public class Note {
 	public Note() {
 	}
 
-	public Note(int _noteDay, String _noteTex) {
-		this._noteText = _noteText;
-		this._noteDay = _noteDay;
-	}
-
 	public String toString(){
 		return this._noteText;
 	}
 
-	public Note(int _id, String _noteText, String _createdDate, int _noteDay) {
+	public Note(String _noteText, int _noteDay, String _createdDate) {
+		this._noteText = _noteText;
+		this._noteDay = _noteDay;
+		this._createdDate = _createdDate;
+	}
+
+	public Note(int _id, String _noteText, int _noteDay, String _createdDate) {
 		this._id = _id;
 		this._noteText = _noteText;
-		this._createdDate = _createdDate;
 		this._noteDay = _noteDay;
-	}
-
-	public Note(String _noteText, String _createdDate, int _noteDay) {
-		this._noteText = _noteText;
 		this._createdDate = _createdDate;
-		this._noteDay = _noteDay;
 	}
 
-	public void setID(int id) {
-		this._id = id;
+	public int get_id() {
+		return _id;
 	}
 
-	public int getID() {
-		return this._id;
+	public void set_id(int _id) {
+		this._id = _id;
 	}
 
 	public String get_noteText() {
@@ -51,20 +46,20 @@ public class Note {
 		this._noteText = _noteText;
 	}
 
-	public int get_noteDay() {
-		return _noteDay;
-	}
-
-	public void set_noteDay(int _noteDay) {
-		this._noteDay = _noteDay;
-	}
-
 	public String get_createdDate() {
 		return _createdDate;
 	}
 
 	public void set_createdDate(String _createdDate) {
 		this._createdDate = _createdDate;
+	}
+
+	public int get_noteDay() {
+		return _noteDay;
+	}
+
+	public void set_noteDay(int _noteDay) {
+		this._noteDay = _noteDay;
 	}
 }
 

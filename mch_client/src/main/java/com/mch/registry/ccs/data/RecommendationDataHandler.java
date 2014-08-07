@@ -93,7 +93,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
         if (cursor.moveToFirst()) {
             do {
                 try {
-                    recommendationRecord.setID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+                    recommendationRecord.set_id(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                     recommendationRecord.set_recommendationText(cursor.getString(cursor.getColumnIndex(COLUMN_RECOMMENDATIONTEXT)));
                     recommendationRecord.set_recommendationDay(cursor.getInt(cursor.getColumnIndex(COLUMN_RECOMMENDATIONDAY)));
                     recommendationRecord.set_receivedDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECEIVEDDATE)));
@@ -119,7 +119,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 
         if (cursor.moveToFirst()) {
             cursor.moveToFirst();
-            recommendation.setID(Integer.parseInt(cursor.getString(0)));
+            recommendation.set_id(Integer.parseInt(cursor.getString(0)));
             recommendation.set_recommendationText(cursor.getString(1));
             recommendation.set_recommendationDay(Integer.parseInt(cursor.getString(2)));
             recommendation.set_receivedDate(cursor.getString(3));
@@ -145,7 +145,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 
 			if (cursor.moveToFirst()) {
 				cursor.moveToFirst();
-				recommendation.setID(Integer.parseInt(cursor.getString(0)));
+				recommendation.set_id(Integer.parseInt(cursor.getString(0)));
 				recommendation.set_recommendationText(cursor.getString(1));
 				recommendation.set_recommendationDay(Integer.parseInt(cursor.getString(2)));
 				recommendation.set_receivedDate(cursor.getString(3));

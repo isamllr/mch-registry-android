@@ -34,8 +34,7 @@ public abstract class TwoLineArrayAdapter<T> extends ArrayAdapter<T> {
 			ViewGroup parent) {
 
 
-		LayoutInflater inflater = (LayoutInflater)getContext()
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		View listItemView = convertView;
 		if (null == convertView) {
@@ -46,10 +45,8 @@ public abstract class TwoLineArrayAdapter<T> extends ArrayAdapter<T> {
 		}
 
 		// The ListItemLayout must use the standard text item IDs.
-		TextView lineOneView = (TextView)listItemView.findViewById(
-				android.R.id.text1);
-		TextView lineTwoView = (TextView)listItemView.findViewById(
-				android.R.id.text2);
+		TextView lineOneView = (TextView)listItemView.findViewById(android.R.id.text1);
+		TextView lineTwoView = (TextView)listItemView.findViewById(android.R.id.text2);
 
 		T t = (T)getItem(position);
 		lineOneView.setText(lineOneText(t));

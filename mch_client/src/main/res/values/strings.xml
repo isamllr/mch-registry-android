@@ -123,5 +123,6 @@
 	<string name="hint_add_note">Add a note</string>
 	<string name="widget_title_pregnancy_week">Pregnancy Week: </string>
 	<string name="no_recommendations">There are currently no recommendations for your pregnancy week.</string>
+	<string name="edit_note">Edit Note</string>
 
 </resources>
