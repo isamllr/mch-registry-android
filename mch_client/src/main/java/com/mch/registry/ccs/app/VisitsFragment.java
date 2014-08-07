@@ -45,7 +45,8 @@ public class VisitsFragment extends Fragment{
 			visitsLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					showDialog(vdh.findVisitById(visitAdapter.getItem(position).getID()).get_visitDate(), vdh.findVisitById(visitAdapter.getItem(position).getID()).get_visitText());
+					Visit vis = visitAdapter.getItem(position);
+					showDialog(vdh.findVisitById(vis.getID()).get_visitDate(), vdh.findVisitById(vis.getID()).get_visitText());
 			}
 		});
 

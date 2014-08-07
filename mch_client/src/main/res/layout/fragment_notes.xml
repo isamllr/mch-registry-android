@@ -60,6 +60,8 @@
 		android:layout_toLeftOf="@+id/button"
 		android:layout_toStartOf="@+id/button"
 		android:layout_alignTop="@+id/button"
-		android:hint="@string/hint_add_note"/>
+		android:hint="@string/hint_add_note"
+		android:background="@drawable/abc_cab_background_bottom_holo_light"
+		android:textStyle="bold"/>
 
 </RelativeLayout>

@@ -43,8 +43,9 @@ public class RecommendationsFragment extends Fragment {
 		recommendationLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				shareRecommendationText(getString(R.string.pregnancy_week) +  " " + Integer.toString(rdh.findRecommendation(recAdapter.getItem(position).get_id()).get_pregnancyWeek())
-						+ ": " + rdh.findRecommendation(recAdapter.getItem(position).get_id()).get_recommendationText());
+				Recommendation rec = recAdapter.getItem(position);
+				shareRecommendationText(getString(R.string.pregnancy_week) +  " " + Integer.toString(rdh.findRecommendation(rec.get_id()).get_pregnancyWeek())
+						+ ": " + rdh.findRecommendation(rec.get_id()).get_recommendationText());
 			}
 		});
 
