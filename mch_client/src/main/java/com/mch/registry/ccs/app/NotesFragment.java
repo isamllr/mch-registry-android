@@ -34,6 +34,8 @@ public class NotesFragment extends Fragment{
 
 	EditText inputSearch;
 	NoteArrayAdapter noteAdapter;
+	ListView noteLV;
+	ArrayList<Note> notes;
 
 	public NotesFragment(){
 	}
@@ -45,9 +47,9 @@ public class NotesFragment extends Fragment{
         final View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
 
 		NoteDataHandler ndh = new NoteDataHandler(getActivity(),"loading notes list", null, 1);
-		ArrayList<Note> notes = ndh.getAllNotes();
+		notes = ndh.getAllNotes();
 
-		final ListView noteLV = (ListView)rootView.findViewById(R.id.listView);
+		noteLV = (ListView)rootView.findViewById(R.id.listView);
 		noteAdapter = new NoteArrayAdapter(getActivity(), notes);
 		noteLV.setAdapter(noteAdapter);
 
@@ -61,6 +63,7 @@ public class NotesFragment extends Fragment{
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss");
 				Calendar cal = Calendar.getInstance();
 				ndh.addNote(tv.getText().toString(), calculateNoteDay(cal.getTime()), cal.getTime());
+				noteAdapter.notifyDataSetChanged();
 			}
 		});
 
@@ -74,17 +77,22 @@ public class NotesFragment extends Fragment{
 							public void onClick(DialogInterface dialog, int which) {
 								NoteDataHandler ndh = new NoteDataHandler(getActivity(),"edit, delete or share note", null, 1);
 								switch (which) {
-									//TODO: real id of note
 									case 0:
-										getEditedText(position+1,ndh.findNote(position+1).get_noteText());
+										getEditedText(noteAdapter.getItem(position).getID(),ndh.findNote(noteAdapter.getItem(position).getID()).get_noteText());
+										noteLV = (ListView)rootView.findViewById(R.id.listView);
+										noteAdapter = new NoteArrayAdapter(getActivity(), notes);
+										noteLV.setAdapter(noteAdapter);
 										noteAdapter.notifyDataSetChanged();
 										break;
 									case 1:
-										ndh.deleteNote(position+1);
+										ndh.deleteNote(noteAdapter.getItem(position).getID());
+										noteLV = (ListView)rootView.findViewById(R.id.listView);
+										noteAdapter = new NoteArrayAdapter(getActivity(), notes);
+										noteLV.setAdapter(noteAdapter);
 										noteAdapter.notifyDataSetChanged();
 										break;
 									case 2:
-										shareNoteText(ndh.findNote(position+1).get_noteText());
+										shareNoteText(ndh.findNote(noteAdapter.getItem(position).getID()).get_noteText());
 										break;
 								}
 							}

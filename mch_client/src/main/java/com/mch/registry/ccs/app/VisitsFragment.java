@@ -26,7 +26,8 @@ import java.util.Date;
 public class VisitsFragment extends Fragment{
 
 	View rootView;
-	
+	VisitArrayAdapter visitAdapter;
+
 	public VisitsFragment(){}
 	
 	@Override
@@ -38,12 +39,13 @@ public class VisitsFragment extends Fragment{
 			ArrayList<Visit> visits = vdh.getAllVisits();
 
 			final ListView visitsLV = (ListView)rootView.findViewById(R.id.listView);
-			visitsLV.setAdapter(new VisitArrayAdapter(getActivity(), visits));
+			visitAdapter = new VisitArrayAdapter(getActivity(), visits);
+			visitsLV.setAdapter(visitAdapter);
 
 			visitsLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					showDialog(vdh.findVisitById(position+1).get_visitDate(), vdh.findVisitById(position+1).get_visitText());
+					showDialog(vdh.findVisitById(visitAdapter.getItem(position).getID()).get_visitDate(), vdh.findVisitById(visitAdapter.getItem(position).getID()).get_visitText());
 			}
 		});
 
