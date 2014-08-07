@@ -14,9 +14,13 @@ import com.mch.registry.ccs.app.R;
  * Created by Isa on 07.08.2014.
  */
 public class WidgetProvider extends AppWidgetProvider {
-	public static PendingIntent buildButtonPendingIntent(Context context) {
+
+	static Context context = null;
+
+	public static PendingIntent buildButtonPendingIntent(Context _context) {
 		++WidgetIntentReceiver.clickCount;
 
+		context = _context;
 		// initiate widget update request
 		Intent intent = new Intent();
 		intent.setAction(WidgetUtils.WIDGET_UPDATE_ACTION);
@@ -24,11 +28,15 @@ public class WidgetProvider extends AppWidgetProvider {
 	}
 
 	private static CharSequence getDesc() {
-		return "Sync to see some of our funniest joke collections";
+		if (WidgetTools.getRecommendationsOfCurrentWeek(context).size()>0){
+			return WidgetTools.getRecommendationsOfCurrentWeek(context).get(1).get_recommendationText();}
+		else{
+			return context.getString(R.string.no_recommendations);
+		}
 	}
 
 	private static CharSequence getTitle() {
-		return "Funny Jokes";
+		return context.getString(R.string.widget_title_pregnancy_week) + " " + Integer.toString(WidgetTools.getPregnancyWeek(context));
 	}
 
 	public static void pushWidgetUpdate(Context context, RemoteViews remoteViews) {

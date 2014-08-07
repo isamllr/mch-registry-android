@@ -121,7 +121,6 @@ public class PregnancyDataHandler extends SQLiteOpenHelper {
     }catch(Exception e){
 			Log.e("dberror", " " + e.getMessage());
 	}
-	    Log.i("Pregnancy Guide", "get Patient. Mobile number: " + pregnancy.get_mobileNumber() );
         return pregnancy;
     }
 

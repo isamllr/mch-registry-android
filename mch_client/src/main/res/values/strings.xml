@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string-array name="news_headlines">
-        <item>Two brooms are getting married. Before the ceremony, the bride broom says to the groom broom, "I think I'm going to have a whisk."
-The groom broom says, How can that be possible? We havent even swept together!"</item>
-        <item>A man cheats on his girlfriend named Lorraine with a girl named Clearly.
-
-Suddenly, Lorraine died.
-
-At the funeral, the man stands up and sings, I can see Clearly now, Lorraine is gone.</item>
-        <item>Q: What is the difference between a girlfriend and a wife?
-
-A: 45 lbs.
-
-Q: What is the difference between a boyfriend and a husband?
-
-A: 45 minutes.</item>
-        <item> Q: What is the difference between a divorce and a circumcision?
-
-A: In a divorce, you get rid of the whole schmuck.
-</item>
-	</string-array>
-
     <string name="app_name">Pregnancy Guide</string>
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
@@ -37,7 +16,7 @@ A: In a divorce, you get rid of the whole schmuck.
     <array name="nav_drawer_icons">
         <item>@drawable/ic_home</item>
         <item>@drawable/ic_action_star</item>
-        <item>@drawable/ic_action_attach</item>
+        <item>@drawable/ic_action_copy</item>
         <item>@drawable/ic_action_edit</item>
         <item>@drawable/ic_about</item>
     </array>
@@ -142,5 +121,7 @@ A: In a divorce, you get rid of the whole schmuck.
 	<string name="first_note">This is the very first diary note. This diary is personal, but you can let your doctor know about it when visiting.\'</string>
 	<string name="note_share_title">Pregnancy Diary</string>
 	<string name="hint_add_note">Add a note</string>
+	<string name="widget_title_pregnancy_week">Pregnancy Week: </string>
+	<string name="no_recommendations">There are currently no recommendations for your pregnancy week.</string>
 
 </resources>

@@ -50,7 +50,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 					    + COLUMN_RECOMMENDATIONTEXT + ","
 					    + COLUMN_RECOMMENDATIONDAY + ","
 					    + COLUMN_RECEIVEDDATE + ","
-					    + COLUMN_PREGNANCYWEEK + ","
+					    + COLUMN_PREGNANCYWEEK
 					    + " )VALUES(null, 'This is the very first recommendation. During your pregnancy, more will follow.', 1, date('now'), 0);";
 	    //TODO: replace by /@string
 	    db.execSQL(INSERT_RECOMMENDATION_TABLE);
@@ -139,7 +139,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 		Recommendation recommendation = new Recommendation();
 
 		try {
-			String query = "Select * FROM " + TABLE_RECOMMENDATIONS + " WHERE " + COLUMN_PREGNANCYWEEK + " =  \"" + Integer.toString(pregnancyWeek) + "\" LIMIT 3";
+			String query = "Select * FROM " + TABLE_RECOMMENDATIONS + " WHERE " + COLUMN_PREGNANCYWEEK + " =  \"" + Integer.toString(pregnancyWeek) + "\"";
 			SQLiteDatabase db = this.getWritableDatabase();
 			Cursor cursor = db.rawQuery(query, null);
 
