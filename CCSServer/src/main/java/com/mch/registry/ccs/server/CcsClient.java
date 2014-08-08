@@ -63,7 +63,7 @@ import javax.net.ssl.SSLSocketFactory;
  * documentation: http://developer.android.com/google/gcm/ccs.html
  * But some additions have been made by Wolfram Rittmeyer. Bigger changes are annotated like that:
  * "/// new Rittmeyer".
- * "/// new Mueller".
+ * "/// new Mueller" or /*created by Isa
  */
 public class CcsClient {
 
@@ -498,7 +498,7 @@ public class CcsClient {
 							messagePrefix = "_V: ";
 							break;
 						default:
-							messagePrefix = "";
+							messagePrefix = "Unknown message type";
 					}
 
 					Iterator<Notification> iterator = queue.iterator();
@@ -539,7 +539,7 @@ public class CcsClient {
 
 		final Runnable sendNotifications = new Runnable() {
 			public void run() {
-				try{
+		/*		try{
 				logger.log(Level.INFO, "Working queue!");
 				if (!isOffHours()) {
 
@@ -565,10 +565,10 @@ public class CcsClient {
 
 						switch (i) {
 							case 1:
-								messagePrefix = "R: ";
+								messagePrefix = "_R: ";
 								break;
 							case 2:
-								messagePrefix = "V: ";
+								messagePrefix = "_V: ";
 								break;
 							default:
 								messagePrefix = "";
@@ -605,7 +605,7 @@ public class CcsClient {
 				}
 			} catch (Exception e) {
 				logger.log(Level.WARNING, "Exception ", e);
-			}
+			}*/
 			}
 		};
 

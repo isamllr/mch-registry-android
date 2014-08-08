@@ -111,7 +111,7 @@ public class GcmIntentService extends IntentService {
 				                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss");
 				                Calendar cal = Calendar.getInstance();
 				                rdh.addRecommendation(recommendationMessage, Utils.getPregnancyDay(getApplicationContext()) , cal.getTime(), Utils.getPregnancyWeek(getApplicationContext()));
-				                sendNotification("Pregnancy Guide: Recommendation received!", "New recommendation");
+				                sendNotification("Pregnancy Guide", "New recommendation");
 			                }
 		                });
 		            }else if(msg.contains("_V: ")){

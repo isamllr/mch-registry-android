@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,15 +87,17 @@ public class VisitsFragment extends Fragment{
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss");
 		Date start = null;
 		Date end = null;
+		Calendar startTime = Calendar.getInstance();
+		Calendar endTime = Calendar.getInstance();
 		try {
 			start = dateFormat.parse(visitDate + " 08:00");
 			end = dateFormat.parse(visitDate + " 19:00");
 		} catch (ParseException e) {
-			e.printStackTrace();
+			Log.e("No date to parse available in received message", e.getMessage());
+			start = startTime.getTime();
+			end = endTime.getTime();
 		}
-		Calendar startTime = Calendar.getInstance();
 		startTime.setTime(start);
-		Calendar endTime = Calendar.getInstance();
 		endTime.setTime(end);
 
 		calIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,startTime.getTimeInMillis());

@@ -80,9 +80,14 @@ public class VisitDataHandler extends SQLiteOpenHelper {
 	private static String extractDate(String visitText) {
 		int count = 0;
 		String match = "";
-		Matcher m = Pattern.compile("(0[1-9]|1[012])[- ..](0[1-9]|[12][0-9]|3[01])[- ..](19|20)\\d\\d").matcher(visitText);
-		m.find();
-		match = m.group();
+		try{
+			Matcher m = Pattern.compile("(0[1-9]|1[012])[- ..](0[1-9]|[12][0-9]|3[01])[- ..](19|20)\\d\\d").matcher(visitText);
+			m.find();
+			match = m.group();}
+		catch (Exception e){
+			Log.e("Matcher", "Error " + e.toString());
+			match = "date not found";
+		}
 		return match;
 	}
 
@@ -143,6 +148,7 @@ public class VisitDataHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 try {
+	                visitRecord = new Visit();
                     visitRecord.setID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                     visitRecord.set_visitText(cursor.getString(cursor.getColumnIndex(COLUMN_VISITTEXT)));
                     visitRecord.set_receivedDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECEIVEDDATE)));

@@ -54,7 +54,6 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 					    + COLUMN_RECEIVEDDATE + ","
 					    + COLUMN_PREGNANCYWEEK
 					    + " )VALUES(null, 'This is the very first recommendation. During your pregnancy, more will follow.', 1, date('now'), 0);";
-	    //TODO: replace by /@string
 	    db.execSQL(INSERT_RECOMMENDATION_TABLE);
 
 	    Log.i("Pregnancy Guide", "RecommendationDB created & 1 recommendation inserted");
@@ -95,6 +94,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
         if (cursor.moveToFirst()) {
             do {
                 try {
+	                recommendationRecord = new Recommendation();
                     recommendationRecord.set_id(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                     recommendationRecord.set_recommendationText(cursor.getString(cursor.getColumnIndex(COLUMN_RECOMMENDATIONTEXT)));
                     recommendationRecord.set_recommendationDay(cursor.getInt(cursor.getColumnIndex(COLUMN_RECOMMENDATIONDAY)));

@@ -19,7 +19,7 @@ public class VisitArrayAdapter extends TwoLineArrayAdapter<Visit> {
 
 	@Override
 	public String lineOneText(Visit v) {
-		return _context.getString(R.string.visit_date) +  ": " + v.get_visitDate();
+		return _context.getString(R.string.visit_date) +  ": " + v.get_visitDate() + ", #" + v.getID();
 	}
 
 	@Override

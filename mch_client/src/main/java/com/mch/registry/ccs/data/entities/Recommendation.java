@@ -14,19 +14,19 @@ public class Recommendation {
 	public Recommendation() {
 	}
 
-	public Recommendation(String _recommendationText, int _recommendationDay, String _receivedDate, int _pregnancyWeek) {
+	public Recommendation(int _id, String _recommendationText, int _recommendationDay, String _receivedDate, int _pregnancyWeek) {
+		this._id = _id;
 		this._recommendationText = _recommendationText;
 		this._recommendationDay = _recommendationDay;
 		this._receivedDate = _receivedDate;
 		this._pregnancyWeek = _pregnancyWeek;
 	}
 
-	public Recommendation(int _id, int _pregnancyWeek, String _receivedDate, int _recommendationDay, String _recommendationText) {
-		this._id = _id;
-		this._pregnancyWeek = _pregnancyWeek;
-		this._receivedDate = _receivedDate;
-		this._recommendationDay = _recommendationDay;
+	public Recommendation(String _recommendationText, int _recommendationDay, String _receivedDate, int _pregnancyWeek) {
 		this._recommendationText = _recommendationText;
+		this._recommendationDay = _recommendationDay;
+		this._receivedDate = _receivedDate;
+		this._pregnancyWeek = _pregnancyWeek;
 	}
 
 	public int get_id() {
@@ -53,19 +53,19 @@ public class Recommendation {
 		this._recommendationDay = _recommendationDay;
 	}
 
-	public int get_pregnancyWeek() {
-		return _pregnancyWeek;
-	}
-
-	public void set_pregnancyWeek(int _pregnancyWeek) {
-		this._pregnancyWeek = _pregnancyWeek;
-	}
-
 	public String get_receivedDate() {
 		return _receivedDate;
 	}
 
 	public void set_receivedDate(String _receivedDate) {
 		this._receivedDate = _receivedDate;
+	}
+
+	public int get_pregnancyWeek() {
+		return _pregnancyWeek;
+	}
+
+	public void set_pregnancyWeek(int _pregnancyWeek) {
+		this._pregnancyWeek = _pregnancyWeek;
 	}
 }

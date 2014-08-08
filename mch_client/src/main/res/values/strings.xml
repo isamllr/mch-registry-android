@@ -124,5 +124,6 @@
 	<string name="widget_title_pregnancy_week">Pregnancy Week: </string>
 	<string name="no_recommendations">There are currently no recommendations for your pregnancy week.</string>
 	<string name="edit_note">Edit Note</string>
+	<string name="date_unknown">Date unknown</string>
 
 </resources>

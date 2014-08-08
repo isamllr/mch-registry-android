@@ -28,8 +28,8 @@ public class RegisterProcessor implements PayloadProcessor{
 	//TODO
     @Override
     public void handleMessage(CcsMessage msg) {
-        String accountName = msg.getPayload().get("account");
-        Dao.getInstance().addRegistration(msg.getFrom(), accountName);
+        //String accountName = msg.getPayload().get("account");
+        Dao.getInstance().addRegistration(msg.getFrom());
 	    logger.log(Level.INFO, "registerprocessor is registering");
     }
 

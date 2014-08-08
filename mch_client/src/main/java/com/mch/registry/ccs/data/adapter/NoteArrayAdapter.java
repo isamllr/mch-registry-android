@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 		@Override
 		public String lineOneText(Note n) {
-			return _context.getString(R.string.pregnancy_week) +  ": " + Integer.toString(((int) Math.floor(n.get_noteDay() / 7))) + ", Note #" + n.get_id();
+			return _context.getString(R.string.pregnancy_week) +  ": " + Integer.toString(((int) Math.floor(n.get_noteDay() / 7))) + ", #" + n.get_id();
 		}
 
 		@Override

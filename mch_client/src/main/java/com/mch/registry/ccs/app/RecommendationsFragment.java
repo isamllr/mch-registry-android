@@ -12,9 +12,9 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.mch.registry.ccs.data.adapter.RecommendationArrayAdapter;
 import com.mch.registry.ccs.data.entities.Recommendation;
 import com.mch.registry.ccs.data.handler.RecommendationDataHandler;
-import com.mch.registry.ccs.data.adapter.RecommendationArrayAdapter;
 
 import java.util.ArrayList;
 
@@ -29,26 +29,34 @@ public class RecommendationsFragment extends Fragment {
 	public RecommendationsFragment(){}
 	
 	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
         final View rootView = inflater.inflate(R.layout.fragment_recommendations, container, false);
 
-		final RecommendationDataHandler rdh = new RecommendationDataHandler(getActivity(),"fn received", null, 1);
+		RecommendationDataHandler rdh = new RecommendationDataHandler(getActivity(),"loading recommendations list", null, 1);
 		ArrayList<Recommendation> recommendations = rdh.getAllRecommendations();
 
-		final ListView recommendationLV = (ListView)rootView.findViewById(R.id.listView);
-		recAdapter = new RecommendationArrayAdapter(getActivity(), recommendations);
-		recommendationLV.setAdapter(recAdapter);
+		ListView recommendationLV = (ListView)rootView.findViewById(R.id.listView);
+		RecommendationArrayAdapter recommendationAdapter = new RecommendationArrayAdapter(getActivity(), recommendations);
+		recommendationLV.setAdapter(recommendationAdapter);
 
 		inputSearch = (EditText)rootView.findViewById(R.id.searchRecommendation);
 
 		recommendationLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Recommendation rec = recAdapter.getItem(position);
-				shareRecommendationText(getString(R.string.pregnancy_week) +  " " + Integer.toString(rdh.findRecommendation(rec.get_id()).get_pregnancyWeek())
-						+ ": " + rdh.findRecommendation(rec.get_id()).get_recommendationText());
+
+				RecommendationDataHandler rdh = new RecommendationDataHandler(getActivity(),"edit, delete or share note", null, 1);
+
+				ArrayList<Recommendation> recommendations = rdh.getAllRecommendations();
+				RecommendationArrayAdapter noteAdapter = new RecommendationArrayAdapter(getActivity(), recommendations);
+				Recommendation recommendation = noteAdapter.getItem(position);
+
+				int recId = recommendation.get_id();
+
+				shareRecommendationText(getString(R.string.pregnancy_week)
+						+  " " + Integer.toString(rdh.findRecommendation(recId).get_pregnancyWeek())
+						+ ": " + rdh.findRecommendation(recId).get_recommendationText());
 			}
 		});
 
