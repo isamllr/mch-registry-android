@@ -26,13 +26,17 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.mch.registry.ccs.data.Pregnancy;
-import com.mch.registry.ccs.data.PregnancyDataHandler;
+import com.mch.registry.ccs.data.entities.Pregnancy;
+import com.mch.registry.ccs.data.handler.PregnancyDataHandler;
+import com.mch.registry.ccs.phone.SMSReceiver;
 
 import de.greenrobot.event.EventBus;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
+/**
+ * Created by Isa
+ */
 public class MobileNumberActivity extends Activity implements View.OnClickListener {
 
 	private Button btnOK;

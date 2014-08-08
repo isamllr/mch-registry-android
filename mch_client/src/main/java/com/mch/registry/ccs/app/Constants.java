@@ -19,6 +19,9 @@ public interface Constants {
 
     String PROJECT_ID = "210193935586";
 
+	//Part of the sender number of clickatell SMS (without int. code)
+	String SMS_SENDER_PART ="767658011";
+
     String KEY_STATE = "keyState";
     String KEY_REG_ID = "keyRegId";
     String KEY_MSG_ID = "keyMsgId";
@@ -26,18 +29,6 @@ public interface Constants {
     String KEY_MESSAGE_TXT = "keyMessageTxt";
     String KEY_EVENT_TYPE = "keyEventbusType";
 
-	/*
-	String KEY_LINK_TARGETS_ID = "key_linkTargetsId";
-	String KEY_LINK_TEXTS_ID = "key_linkTextsId";
-	String KEY_DESCRIPTION_ID = "key_descriptionId";
-	String KEY_HOME_CLASS = "keyHomeClass";
-	String KEY_LIB_TITLES_ID = "keyLibTitlesId";
-	String KEY_LIB_DESCRIPTIONS_ID = "keyLibDescriptionsId";
-	String KEY_APP_TITLE_ID = "keyAppTitleId";
-	String KEY_COPYRIGHT_YEAR_ID = "keyCopyrightYearId";
-	String KEY_REPOSITORY_LINK_ID = "keyRepositoryLinkId";
-	*/
-    
     String ACTION = "action";
 
     int NOTIFICATION_NR = 10;
@@ -53,7 +44,7 @@ public interface Constants {
     // action for notification intent
     String NOTIFICATION_ACTION = PACKAGE + ".NOTIFICATION";
     
-    String DEFAULT_USER = ""; //should be phonenumber
+    String DEFAULT_USER = "";
 
     enum EventbusMessageType {
        REGISTRATION_FAILED, REGISTRATION_SUCCEEDED, UNREGISTRATION_SUCCEEDED, UNREGISTRATION_FAILED;

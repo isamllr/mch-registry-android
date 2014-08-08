@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.mch.registry.ccs.app.R;
+import com.mch.registry.ccs.app.Utils;
 
 /**
  * Created by Isa on 07.08.2014.
@@ -28,15 +29,15 @@ public class WidgetProvider extends AppWidgetProvider {
 	}
 
 	private static CharSequence getDesc() {
-		if (WidgetTools.getRecommendationsOfCurrentWeek(context).size()>0){
-			return WidgetTools.getRecommendationsOfCurrentWeek(context).get(1).get_recommendationText();}
+		if (WidgetUtils.getRecommendationsOfCurrentWeek(context).size()>0){
+			return WidgetUtils.getRecommendationsOfCurrentWeek(context).get(1).get_recommendationText();}
 		else{
 			return context.getString(R.string.no_recommendations);
 		}
 	}
 
 	private static CharSequence getTitle() {
-		return context.getString(R.string.widget_title_pregnancy_week) + " " + Integer.toString(WidgetTools.getPregnancyWeek(context));
+		return context.getString(R.string.widget_title_pregnancy_week) + " " + Integer.toString(Utils.getPregnancyWeek(context));
 	}
 
 	public static void pushWidgetUpdate(Context context, RemoteViews remoteViews) {

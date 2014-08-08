@@ -1,4 +1,4 @@
-package com.mch.registry.ccs.app.navigation;
+package com.mch.registry.ccs.navigation;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +13,10 @@ import com.mch.registry.ccs.app.R;
 
 import java.util.ArrayList;
 
+/**
+ * Navigation Drawer Template by Androidhive
+ * http://www.androidhive.info/2013/11/android-sliding-menu-using-navigation-drawer/
+ */
 public class NavDrawerListAdapter extends BaseAdapter {
 	
 	private Context context;

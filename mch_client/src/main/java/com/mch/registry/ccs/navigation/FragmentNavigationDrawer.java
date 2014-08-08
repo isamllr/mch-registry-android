@@ -1,4 +1,4 @@
-package com.mch.registry.ccs.app.navigation;
+package com.mch.registry.ccs.navigation;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -20,6 +20,10 @@ import com.mch.registry.ccs.app.R;
 
 import java.util.ArrayList;
 
+/**
+ * Navigation Drawer Template by Androidhive
+ * http://www.androidhive.info/2013/11/android-sliding-menu-using-navigation-drawer/
+ */
 public class FragmentNavigationDrawer extends DrawerLayout {
 	private ActionBarDrawerToggle drawerToggle;
 	private ListView lvDrawer;

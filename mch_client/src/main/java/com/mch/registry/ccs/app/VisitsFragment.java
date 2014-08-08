@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.mch.registry.ccs.data.Visit;
-import com.mch.registry.ccs.data.VisitDataHandler;
+import com.mch.registry.ccs.data.entities.Visit;
+import com.mch.registry.ccs.data.handler.VisitDataHandler;
 import com.mch.registry.ccs.data.adapter.VisitArrayAdapter;
 
 import java.text.DateFormat;
@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Created by Isa
+ */
 public class VisitsFragment extends Fragment{
 
 	View rootView;

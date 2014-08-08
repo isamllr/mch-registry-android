@@ -28,8 +28,6 @@ public class Dao {
     private final static Dao instance = new Dao();
     private final static Random sRandom = new Random();
     private final Set<Integer> mMessageIds = new HashSet<Integer>();
-    //private final Map<String, List<String>> mUserMap = new HashMap<String, List<String>>();
-    //private final List<String> mRegisteredUsers = new ArrayList<String>();
     private final Map<String, String> mNotificationKeyMap = new HashMap<String, String>();
     
     private Dao() {
@@ -38,8 +36,9 @@ public class Dao {
     public static Dao getInstance() {
         return instance;
     }
-    
-    public void addRegistration(String regId, String mobilePhoneNumber) {
+
+	///Mueller: Edited, unneeded functions removed
+    public void addRegistration(String regId) {
 	    MySqlHandler mysql = new MySqlHandler();
 
 	    if (!mysql.findRegID(regId)) {
@@ -47,30 +46,6 @@ public class Dao {
         }
     }
 
-    /*public List<String> getAllRegistrationIds() {
-        return Collections.unmodifiableList(mRegisteredUsers);
-    }*/
-
-    /*public List<String> getAllRegistrationIdsForAccount(String account) {
-        List<String> regIds = mUserMap.get(account);
-        if (regIds != null) {
-           return Collections.unmodifiableList(regIds);
-        }
-        return null;
-    }*/
-    
-    public String getNotificationKeyName(String accountName) {
-        return mNotificationKeyMap.get(accountName);
-    }
-    
-    public void storeNotificationKeyName(String accountName, String notificationKeyName) {
-        mNotificationKeyMap.put(accountName, notificationKeyName);
-    }
-    
-    /*public Set<String> getAccounts() {
-        return Collections.unmodifiableSet(mUserMap.keySet());
-    }*/
-    
     public String getUniqueMessageId() {
         int nextRandom = sRandom.nextInt();
         while (mMessageIds.contains(nextRandom)) {

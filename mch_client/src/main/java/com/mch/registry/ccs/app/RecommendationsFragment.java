@@ -12,12 +12,15 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.mch.registry.ccs.data.Recommendation;
-import com.mch.registry.ccs.data.RecommendationDataHandler;
+import com.mch.registry.ccs.data.entities.Recommendation;
+import com.mch.registry.ccs.data.handler.RecommendationDataHandler;
 import com.mch.registry.ccs.data.adapter.RecommendationArrayAdapter;
 
 import java.util.ArrayList;
 
+/**
+ * Created by Isa
+ */
 public class RecommendationsFragment extends Fragment {
 
 	EditText inputSearch;

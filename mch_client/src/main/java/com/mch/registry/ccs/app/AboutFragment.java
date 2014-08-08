@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+/**
+ * Created by Isa
+ */
 public class AboutFragment extends Fragment {
 
 	public AboutFragment(){}

@@ -1,4 +1,4 @@
-package com.mch.registry.ccs.data;
+package com.mch.registry.ccs.data.entities;
 
 /**
  * Created by Isa on 18.07.2014.

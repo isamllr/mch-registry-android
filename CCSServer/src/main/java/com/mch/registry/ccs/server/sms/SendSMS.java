@@ -1,9 +1,5 @@
 package com.mch.registry.ccs.server.sms;
 
-/**
- * Created by Isa on 29.07.2014.
- */
-
 import com.mch.registry.ccs.server.Config;
 import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.MySqlHandler;
 import com.mch.registry.ccs.server.com.mch.registry.ccs.server.data.Pregnancy;
@@ -19,6 +15,9 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Created by Isa on 29.07.2014.
+ */
 public class SendSMS {
 
 	public static final Logger logger = Logger.getLogger(SendSMS.class.getName());
@@ -29,7 +28,6 @@ public class SendSMS {
 	public void sendActivationCode(String phoneNumber) {
 
 		// The username, password and apiid is sent to the clickatell transport
-		// in a Properties
 		Properties props = new Properties();
 
 		Config config = new Config();

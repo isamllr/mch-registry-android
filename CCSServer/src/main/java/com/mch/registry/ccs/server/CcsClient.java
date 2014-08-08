@@ -492,10 +492,10 @@ public class CcsClient {
 
 					switch (i) {
 						case 1:
-							messagePrefix = "R: ";
+							messagePrefix = "_R: ";
 							break;
 						case 2:
-							messagePrefix = "V: ";
+							messagePrefix = "_V: ";
 							break;
 						default:
 							messagePrefix = "";
@@ -521,7 +521,7 @@ public class CcsClient {
 						} catch (Exception e) {
 							mysql.prepareNotificationForTheNextDay(notificationQueueID);
 							sucessfullySent = false;
-							logger.log(Level.WARNING, "Message coudl not be sent! ID: " + notificationQueueID + ", RegID: " + toRegId + ", Text: " + message);
+							logger.log(Level.WARNING, "Message could not be sent! ID: " + notificationQueueID + ", RegID: " + toRegId + ", Text: " + message);
 						}
 						sucessfullySent = true;
 						if (sucessfullySent) {

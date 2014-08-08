@@ -57,8 +57,9 @@ public class MySqlHandler{
 		}
 	}
 
-	public ArrayList<Notification> getNotificationQueue(int notificationTypeID){
+
 	// notificationTypeID 1: Visit Reminder,  notificationTypeID 2: Recommendations
+	public ArrayList<Notification> getNotificationQueue(int notificationTypeID){
 
 		Notification notification = new Notification();
 		ArrayList<Notification> notificationQueue = new ArrayList<Notification>();

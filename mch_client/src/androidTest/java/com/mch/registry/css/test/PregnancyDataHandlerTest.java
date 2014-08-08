@@ -2,7 +2,7 @@ package com.mch.registry.css.test;
 
 import android.test.AndroidTestCase;
 
-import com.mch.registry.ccs.data.PregnancyDataHandler;
+import com.mch.registry.ccs.data.handler.PregnancyDataHandler;
 
 /**
  * Created by Isa on 31.07.2014.

@@ -33,20 +33,21 @@ import android.widget.Toast;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.mch.registry.ccs.app.Constants.EventbusMessageType;
 import com.mch.registry.ccs.app.Constants.State;
-import com.mch.registry.ccs.data.Pregnancy;
-import com.mch.registry.ccs.data.PregnancyDataHandler;
-import com.mch.registry.ccs.data.RecommendationDataHandler;
-import com.mch.registry.ccs.data.VisitDataHandler;
+import com.mch.registry.ccs.data.entities.Pregnancy;
+import com.mch.registry.ccs.data.handler.PregnancyDataHandler;
+import com.mch.registry.ccs.data.handler.RecommendationDataHandler;
+import com.mch.registry.ccs.data.handler.VisitDataHandler;
 
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import de.greenrobot.event.EventBus;
 
+/**
+ * Extended by Isa
+ */
 public class GcmIntentService extends IntentService {
 
    private NotificationManager mNotificationManager;
@@ -109,8 +110,7 @@ public class GcmIntentService extends IntentService {
 				                RecommendationDataHandler rdh = new RecommendationDataHandler(getApplicationContext(),"Msg received",null, 1);
 				                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss");
 				                Calendar cal = Calendar.getInstance();
-				                int pregnancyDay = calculateRecommendationDay(cal.getTime());
-				                rdh.addRecommendation(recommendationMessage, pregnancyDay , cal.getTime(), (int)Math.floor(pregnancyDay / 7));
+				                rdh.addRecommendation(recommendationMessage, Utils.getPregnancyDay(getApplicationContext()) , cal.getTime(), Utils.getPregnancyWeek(getApplicationContext()));
 				                sendNotification("Pregnancy Guide: Recommendation received!", "New recommendation");
 			                }
 		                });
@@ -122,7 +122,7 @@ public class GcmIntentService extends IntentService {
 			                public void run() {
 				                VisitDataHandler vdh = new VisitDataHandler(getApplicationContext(),"Msg received",null, 1);
 				                vdh.addVisit(visitMessage);
-				                sendNotification("Pregnancy Guide: Reminder received!", "New visit reminder");
+				                sendNotification("Pregnancy Guide: Visit Reminder received!", "New visit reminder");
 			                }
 		                });
 		            }else if(msg.contains("_Verified")){
@@ -342,34 +342,4 @@ public class GcmIntentService extends IntentService {
    private SharedPreferences getPrefs() {
       return PreferenceManager.getDefaultSharedPreferences(this);
    }
-
-	private int calculateRecommendationDay(Date today) {
-
-		Date truncatedDate1 = null;
-		Date truncatedDate2 = null;
-
-		long timeDifference = 0;
-		long daysInBetween = 0;
-
-		try {
-			PregnancyDataHandler pdh = new PregnancyDataHandler(this, "Rec", null, 1);
-			Pregnancy pregnancy = pdh.getPregnancy();
-
-			DateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
-
-			String truncatedDateString1 = formatter.format(today);
-			String truncatedDateString2 = pregnancy.get_expectedDelivery().toString();
-			truncatedDate1 = formatter.parse(truncatedDateString1);
-			truncatedDate2 = formatter.parse(truncatedDateString2);
-
-			timeDifference = truncatedDate2.getTime()- truncatedDate1.getTime();
-			daysInBetween = timeDifference / (24*60*60*1000);
-
-		} catch (ParseException e) {
-			Log.i("Pregnancy Guide", "error parsing dates" + e.getMessage());
-		}
-
-
-		return ((int) daysInBetween);
-	}
 }

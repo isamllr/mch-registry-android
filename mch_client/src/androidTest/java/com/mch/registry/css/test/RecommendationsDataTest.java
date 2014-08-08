@@ -2,7 +2,7 @@ package com.mch.registry.css.test;
 
 import android.test.AndroidTestCase;
 
-import com.mch.registry.ccs.data.RecommendationDataHandler;
+import com.mch.registry.ccs.data.handler.RecommendationDataHandler;
 
 /**
  * Created by Isa on 23.07.2014.

@@ -20,17 +20,22 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.mch.registry.ccs.app.navigation.NavDrawerItem;
-import com.mch.registry.ccs.app.navigation.NavDrawerListAdapter;
-import com.mch.registry.ccs.data.PregnancyDataHandler;
-import com.mch.registry.ccs.data.RecommendationDataHandler;
-import com.mch.registry.ccs.data.VisitDataHandler;
+import com.mch.registry.ccs.navigation.NavDrawerItem;
+import com.mch.registry.ccs.navigation.NavDrawerListAdapter;
+import com.mch.registry.ccs.data.handler.PregnancyDataHandler;
+import com.mch.registry.ccs.data.handler.RecommendationDataHandler;
+import com.mch.registry.ccs.data.handler.VisitDataHandler;
 
 import java.util.ArrayList;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
+/**
+ * Created by Isa
+ * Navigation Drawer Template by Androidhive
+ * http://www.androidhive.info/2013/11/android-sliding-menu-using-navigation-drawer/
+ */
 public class MainActivity extends Activity {
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -272,7 +277,7 @@ public class MainActivity extends Activity {
 			mDrawerLayout.closeDrawer(mDrawerList);
 		} else {
 			// error in creating fragment
-			Log.e("MainActivity", "Error in creating fragment");
+			Log.e("MainActivity", "Error creating fragment");
 		}
 	}
 
@@ -292,7 +297,7 @@ public class MainActivity extends Activity {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		// Pass any configuration change to the drawer toggls
+		// Pass any configuration change to the drawer toggles
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 

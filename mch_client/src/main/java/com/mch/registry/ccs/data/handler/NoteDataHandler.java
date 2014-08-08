@@ -1,4 +1,4 @@
-package com.mch.registry.ccs.data;
+package com.mch.registry.ccs.data.handler;
 
 /**
  * Created by Isa on 06.08.2014.
@@ -11,10 +11,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.mch.registry.ccs.data.entities.Note;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  * Created by Isa on 18.07.2014.
@@ -63,14 +65,14 @@ public class NoteDataHandler extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 
-	public void addNote(String noteText, int noteDay, Date today) {
+	public void addNote(String noteText, int noteDay) {
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss");
 
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_NOTETEXT,noteText);
 		values.put(COLUMN_NOTEDAY, noteDay);
-		values.put(COLUMN_CREATEDDATE, dateFormat.format(today));
+		values.put(COLUMN_CREATEDDATE, dateFormat.format(Calendar.getInstance().getTime()));
 
 		SQLiteDatabase db = this.getWritableDatabase();
 

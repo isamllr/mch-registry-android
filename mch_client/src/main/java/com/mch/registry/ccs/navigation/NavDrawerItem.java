@@ -1,5 +1,9 @@
-package com.mch.registry.ccs.app.navigation;
+package com.mch.registry.ccs.navigation;
 
+/**
+ * Navigation Drawer Template by Androidhive
+ * http://www.androidhive.info/2013/11/android-sliding-menu-using-navigation-drawer/
+ */
 public class NavDrawerItem {
 	
 	private String title;

@@ -3,7 +3,7 @@ package com.mch.registry.ccs.data.adapter;
 import android.content.Context;
 
 import com.mch.registry.ccs.app.R;
-import com.mch.registry.ccs.data.Visit;
+import com.mch.registry.ccs.data.entities.Visit;
 
 import java.util.ArrayList;
 

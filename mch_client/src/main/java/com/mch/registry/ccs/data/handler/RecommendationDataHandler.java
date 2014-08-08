@@ -1,4 +1,4 @@
-package com.mch.registry.ccs.data;
+package com.mch.registry.ccs.data.handler;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.mch.registry.ccs.data.entities.Recommendation;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -156,7 +158,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 			cursor.close();
 			db.close();
 		}catch(Exception e){
-			Log.e("Rec widget data erro", e.getMessage());
+			Log.e("Rec widget data error", e.getMessage());
 		}
 
 		return recommendations;

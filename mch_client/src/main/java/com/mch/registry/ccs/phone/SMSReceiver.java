@@ -1,4 +1,4 @@
-package com.mch.registry.ccs.app;
+package com.mch.registry.ccs.phone;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,6 +7,13 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
 
+import com.mch.registry.ccs.app.Constants;
+import com.mch.registry.ccs.app.GcmIntentService;
+import com.mch.registry.ccs.app.R;
+
+/**
+ * Created by Isa
+ */
 public class SMSReceiver extends BroadcastReceiver{
 
     public SMSReceiver() {
@@ -24,8 +31,8 @@ public class SMSReceiver extends BroadcastReceiver{
 		SmsMessage msg = SmsMessage.createFromPdu((byte[]) pdus[0]);
 		String origNumber = msg.getOriginatingAddress();
 		String msgBody = msg.getMessageBody();
-		//TODO
-		if (origNumber.contains("767658011")){
+
+		if (origNumber.contains(Constants.SMS_SENDER_PART)){
 			sendVerificationCodeBackToServer(msgBody, context, intent);
 		}
 	}
