@@ -67,13 +67,14 @@ public class MainActivity extends Activity {
 			startActivity(intent);
 		}
 
+		//Prepare for incoming notifications
 		final Intent intent = getIntent();
 		String msg = intent.getStringExtra(Constants.KEY_MESSAGE_TXT);
 		if (msg != null) {
 			final NotificationManager manager =
 					(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 			manager.cancel(Constants.NOTIFICATION_NR);
-			String msgTxt = getString(R.string.msg_received, msg);
+			String msgTxt = msg;
 			Crouton.showText(this, msgTxt, Style.INFO);
 		}
 

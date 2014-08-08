@@ -48,6 +48,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -463,7 +464,7 @@ public class CcsClient {
 		try {
 			ccsClient.connect();
 		} catch (XMPPException e) {
-			e.printStackTrace();
+			logger.log(Level.WARNING, "XMPP Exception ", e);
 		}
 
 		final Runnable sendNotifications = new Runnable() {
@@ -471,7 +472,6 @@ public class CcsClient {
 				try{
 					logger.log(Level.INFO, "Working Q!");
 					if (!isOffHours()) {
-
 						//Prepare downstream message
 						String toRegId = "";
 						String message = "";
@@ -491,64 +491,73 @@ public class CcsClient {
 
 						for (int i = 1; i < 3; i++) {
 							queue = mysql.getNotificationQueue(i);
+							if (queue.size()>0) {
 
-							switch (i) {
-								case 1:
-									messagePrefix = "_V: ";
-									break;
-								case 2:
-									messagePrefix = "_R: ";
-									break;
-								default:
-									messagePrefix = "";
-									logger.log(Level.WARNING, "Unknown message type!");
-							}
-
-							Notification notification = new Notification();
-							Iterator<Notification> iterator = queue.iterator();
-
-							while (iterator.hasNext()) {
-								notification = iterator.next();
-
-								toRegId = notification.getGcmRegID();
-								message = notification.getNotificationText();
-								notificationQueueID = notification.getNotificationQueueID();
-								messageId = "m-" + Long.toString(random.nextLong());
-
-								payload = new HashMap<String, String>();
-								payload.put("message", messagePrefix + message);
-
-								try {
-									// Send the downstream message to a device.
-									ccsClient.send(createJsonMessage(toRegId, messageId, payload, collapseKey, timeToLive, delayWhileIdle));
-									sucessfullySent = true;
-									logger.log(Level.INFO, "Message sent. ID: " + notificationQueueID + ", RegID: " + toRegId + ", Text: " + message);
-								} catch (Exception e) {
-									mysql.prepareNotificationForTheNextDay(notificationQueueID);
-									sucessfullySent = false;
-									logger.log(Level.WARNING, "Message could not be sent! ID: " + notificationQueueID + ", RegID: " + toRegId + ", Text: " + message);
+								switch (i) {
+									case 1:
+										messagePrefix = "_V: ";
+										break;
+									case 2:
+										messagePrefix = "_R: ";
+										break;
+									default:
+										messagePrefix = "";
+										logger.log(Level.WARNING, "Unknown message type!");
 								}
 
-								if (sucessfullySent) {
-									mysql.moveNotificationToHistory(notificationQueueID);
+								Notification notification = new Notification();
+								Iterator<Notification> iterator = queue.iterator();
+
+								while (iterator.hasNext()) {
+									notification = iterator.next();
+
+									toRegId = notification.getGcmRegID();
+									message = notification.getNotificationText();
+									notificationQueueID = notification.getNotificationQueueID();
+									messageId = "m-" + Long.toString(random.nextLong());
+
+									payload = new HashMap<String, String>();
+									payload.put("message", messagePrefix + message);
+
+									try {
+										// Send the downstream message to a device.
+										ccsClient.send(createJsonMessage(toRegId, messageId, payload, collapseKey, timeToLive, delayWhileIdle));
+										sucessfullySent = true;
+										logger.log(Level.INFO, "Message sent. ID: " + notificationQueueID + ", RegID: " + toRegId + ", Text: " + message);
+									} catch (Exception e) {
+										mysql.prepareNotificationForTheNextDay(notificationQueueID);
+										sucessfullySent = false;
+										logger.log(Level.WARNING, "Message could not be sent! ID: " + notificationQueueID + ", RegID: " + toRegId + ", Text: " + message);
+									}
+
+									if (sucessfullySent) {mysql.moveNotificationToHistory(notificationQueueID);}
 								}
-							}
+							}else{logger.log(Level.INFO, "No notifications to send. Type: " + Integer.toString(i));}
 						}
 					}
-				} catch (Exception e) {
-					logger.log(Level.WARNING, "Exception ", e);
-				}
+				} catch (Exception e) {logger.log(Level.WARNING, "Exception ", e);}
 			}
 		};
 
 		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 		//Start when server starts and every 30 minutes after
 		ScheduledFuture task = executor.scheduleAtFixedRate(sendNotifications, 0, 30, TimeUnit.MINUTES);
-
+		try {
+			task.get();
+		} catch (ExecutionException e) {
+			logger.log(Level.SEVERE, "Exception ", e);
+		} catch (InterruptedException e) {
+			logger.log(Level.SEVERE, "Exception ", e);
+		}
 		task.cancel(false);
-		executor.shutdown();
 
-		//TODO: STOP correctly (take arg)
+		try {
+			executor.shutdown();
+			executor.awaitTermination(30, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			logger.log(Level.SEVERE, "Exception ", e);
+		}
+
 	}
 
 }
