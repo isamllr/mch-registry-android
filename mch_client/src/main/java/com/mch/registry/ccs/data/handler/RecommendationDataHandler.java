@@ -120,15 +120,15 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
         Recommendation recommendation = new Recommendation();
 
         if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
+	        do {
+            cursor.moveToNext();
             recommendation.set_id(Integer.parseInt(cursor.getString(0)));
             recommendation.set_recommendationText(cursor.getString(1));
             recommendation.set_recommendationDay(Integer.parseInt(cursor.getString(2)));
             recommendation.set_receivedDate(cursor.getString(3));
 	        recommendation.set_pregnancyWeek(Integer.parseInt(cursor.getString(4)));
             cursor.close();
-        } else {
-            recommendation = null;
+	        }while (cursor.moveToNext());
         }
         db.close();
 
@@ -140,13 +140,15 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 		ArrayList<Recommendation> recommendations = new ArrayList<Recommendation>();
 		Recommendation recommendation = new Recommendation();
 
+		String query = "";
+
 		try {
-			String query = "Select * FROM " + TABLE_RECOMMENDATIONS + " WHERE " + COLUMN_PREGNANCYWEEK + " = " + Integer.toString(pregnancyWeek) + ";";
+			query = "Select * FROM " + TABLE_RECOMMENDATIONS + " WHERE " + COLUMN_PREGNANCYWEEK + " = " + Integer.toString(pregnancyWeek) + ";";
 			SQLiteDatabase db = this.getWritableDatabase();
 			Cursor cursor = db.rawQuery(query, null);
 
 			if (cursor.moveToFirst()) {
-				cursor.moveToNext();
+				do {
 				recommendation = new Recommendation();
 				recommendation.set_id(Integer.parseInt(cursor.getString(0)));
 				recommendation.set_recommendationText(cursor.getString(1));
@@ -154,6 +156,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 				recommendation.set_receivedDate(cursor.getString(3));
 				recommendation.set_pregnancyWeek(Integer.parseInt(cursor.getString(4)));
 				recommendations.add(recommendation);
+				}while (cursor.moveToNext());
 			}
 
 			cursor.close();
@@ -162,7 +165,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 			Log.e("Rec widget data error", e.getMessage());
 		}
 
-		Log.i("PregRecByWeek. Records:", Integer.toString(recommendations.size()));
+		Log.i("PregRecByWeek. Records:", Integer.toString(recommendations.size()) + "query: " + query);
 		return recommendations;
 	}
 
