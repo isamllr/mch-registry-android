@@ -39,8 +39,8 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
 		ArrayList<Recommendation> recommendations = WidgetUtils.getRecommendationsOfCurrentWeek(context);
 
 		if (recommendations.size() > 0){
-			if (clickCount > recommendations.size()) {
-				clickCount = 1;
+			if (clickCount >= recommendations.size()) {
+				clickCount = 0;
 			}
 			return recommendations.get(clickCount).get_recommendationText();
 		}else{

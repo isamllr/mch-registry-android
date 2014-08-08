@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:windowSoftInputMode="stateHidden">
-
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:windowSoftInputMode="stateHidden"
+                android:background="@drawable/abc_cab_background_bottom_holo_light">
 	<ListView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -15,13 +15,13 @@
 		android:scrollingCache="true"
 		android:choiceMode="singleChoice"
 		android:clickable="true"
-		android:layout_below="@+id/searchRecommendation"
-		android:layout_alignParentLeft="true"
-		android:layout_alignParentStart="true"
 		android:padding="10dip"
 		android:textSize="16dip"
-		android:textStyle="bold"/>
-
+		android:textStyle="bold"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentStart="true"
+		android:layout_below="@+id/searchRecommendation"
+		/>
 	<EditText
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -33,6 +33,6 @@
 		android:layout_alignParentEnd="true"
 		android:hint="@string/search_recommendation_hint"
 		android:inputType="textVisiblePassword"
-		android:windowSoftInputMode="stateHidden"/>
-
+		android:windowSoftInputMode="stateHidden"
+		/>
 </RelativeLayout>

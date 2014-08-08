@@ -432,7 +432,7 @@ public class CcsClient {
 
 	/// new: Mueller
 	/**
-	 * Checks if time lies between 22:29 and 06:00
+	 * Checks if time lies off-hours (not between 6:00 and 22:29)
 	 */
 	private static boolean isOffHours() {
 
@@ -441,14 +441,14 @@ public class CcsClient {
 		Integer hour = cal.get(Calendar.HOUR_OF_DAY);
 		Integer minute = cal.get(Calendar.MINUTE);
 
-		if ((hour > 22 && minute < 30) && hour < 6) {
+		if ((hour > 22 && minute > 29) && hour < 6) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	/// new Mueller: Adjusted functionality to send messages from queue
+	/// new Mueller: Send messages from queue
 	/**
 	 * Sends messages to registered devices
 	 */
@@ -465,151 +465,84 @@ public class CcsClient {
 		} catch (XMPPException e) {
 			e.printStackTrace();
 		}
-		/*#-----*/
-		try{
-			logger.log(Level.INFO, "Working queue!");
-			if (true) {//!isOffHours()
-
-				//Prepare downstream message
-				String toRegId = "";
-				String message = "";
-				String messageId = "";
-				Map<String, String> payload = new HashMap<String, String>();
-				String collapseKey = null;
-				Long timeToLive = 10000L;
-				Boolean delayWhileIdle = true;
-				String messagePrefix = "";
-				int notificationQueueID = 0;
-				boolean sucessfullySent = false;
-
-				//Read from mysql database
-				MySqlHandler mysql = new MySqlHandler();
-				ArrayList<Notification> queue = new ArrayList<Notification>();
-				Notification notification = new Notification();
-
-				for (int i = 1; i < 3; i++) {
-					queue = mysql.getNotificationQueue(i);
-
-					switch (i) {
-						case 1:
-							messagePrefix = "_R: ";
-							break;
-						case 2:
-							messagePrefix = "_V: ";
-							break;
-						default:
-							messagePrefix = "Unknown message type";
-					}
-
-					Iterator<Notification> iterator = queue.iterator();
-					while (iterator.hasNext()) {
-						notification = iterator.next();
-
-						toRegId = notification.getGcmRegID();
-						message = notification.getNotificationText();
-						notificationQueueID = notification.getNotificationQueueID();
-						messageId = "m-" + Long.toString(random.nextLong());
-
-						payload = new HashMap<String, String>();
-						payload.put("message", messagePrefix + message);
-
-						try {
-							// Send the downstream message to a device.
-							ccsClient.send(createJsonMessage(toRegId, messageId, payload, collapseKey, timeToLive, delayWhileIdle));
-							sucessfullySent = true;
-							logger.log(Level.INFO, "Message sent. ID: " + notificationQueueID + ", RegID: " + toRegId + ", Text: " + message);
-						} catch (Exception e) {
-							mysql.prepareNotificationForTheNextDay(notificationQueueID);
-							sucessfullySent = false;
-							logger.log(Level.WARNING, "Message could not be sent! ID: " + notificationQueueID + ", RegID: " + toRegId + ", Text: " + message);
-						}
-						sucessfullySent = true;
-						if (sucessfullySent) {
-							mysql.moveNotificationToHistory(notificationQueueID);
-						}
-					}
-				}
-			}
-		} catch (Exception e) {
-			logger.log(Level.WARNING, "Exception ", e);
-		}
-
-		 /*------------*/
-
 
 		final Runnable sendNotifications = new Runnable() {
 			public void run() {
-		/*		try{
-				logger.log(Level.INFO, "Working queue!");
-				if (!isOffHours()) {
+				try{
+					logger.log(Level.INFO, "Working Q!");
+					if (!isOffHours()) {
 
-					//Prepare downstream message
-					String toRegId = "";
-					String message = "";
-					String messageId = "";
-					Map<String, String> payload = new HashMap<String, String>();
-					String collapseKey = null;
-					Long timeToLive = 10000L;
-					Boolean delayWhileIdle = true;
-					String messagePrefix = "";
-					int notificationQueueID = 0;
-					boolean sucessfullySent = false;
+						//Prepare downstream message
+						String toRegId = "";
+						String message = "";
+						String messageId = "";
+						Map<String, String> payload = new HashMap<String, String>();
+						String collapseKey = null;
+						Long timeToLive = 10000L;
+						Boolean delayWhileIdle = true;
+						String messagePrefix = "";
+						int notificationQueueID = 0;
+						boolean sucessfullySent = false;
 
-					//Read from mysql database
-					MySqlHandler mysql = new MySqlHandler();
-					ArrayList<Notification> queue = new ArrayList<Notification>();
-					Notification notification = new Notification();
+						//Read from mysql database
+						MySqlHandler mysql = new MySqlHandler();
+						ArrayList<Notification> queue = new ArrayList<Notification>();
 
-					for (int i = 1; i < 3; i++) {
-						queue = mysql.getNotificationQueue(i);
 
-						switch (i) {
-							case 1:
-								messagePrefix = "_R: ";
-								break;
-							case 2:
-								messagePrefix = "_V: ";
-								break;
-							default:
-								messagePrefix = "";
-						}
+						for (int i = 1; i < 3; i++) {
+							queue = mysql.getNotificationQueue(i);
 
-						Iterator<Notification> iterator = queue.iterator();
-						while (iterator.hasNext()) {
-							notification = iterator.next();
-
-							toRegId = notification.getGcmRegID();
-							message = notification.getNotificationText();
-							notificationQueueID = notification.getNotificationQueueID();
-							messageId = CcsClient.getRandomMessageId();
-
-							payload = new HashMap<String, String>();
-							payload.put("message", messagePrefix + message);
-
-							try {
-								// Send the downstream message to a device.
-								ccsClient.send(createJsonMessage(toRegId, messageId, payload, collapseKey, timeToLive, delayWhileIdle));
-								sucessfullySent = true;
-								logger.log(Level.INFO, "Message sent. ID: " + notificationQueueID + ", RegID: " + toRegId + ", Text: " + message);
-							} catch (Exception e) {
-								mysql.prepareNotificationForTheNextDay(notificationQueueID);
-								sucessfullySent = false;
-								logger.log(Level.WARNING, "Message coudl not be sent! ID: " + notificationQueueID + ", RegID: " + toRegId + ", Text: " + message);
+							switch (i) {
+								case 1:
+									messagePrefix = "_V: ";
+									break;
+								case 2:
+									messagePrefix = "_R: ";
+									break;
+								default:
+									messagePrefix = "";
+									logger.log(Level.WARNING, "Unknown message type!");
 							}
-							sucessfullySent = true;
-							if (sucessfullySent) {
-								mysql.moveNotificationToHistory(notificationQueueID);
+
+							Notification notification = new Notification();
+							Iterator<Notification> iterator = queue.iterator();
+
+							while (iterator.hasNext()) {
+								notification = iterator.next();
+
+								toRegId = notification.getGcmRegID();
+								message = notification.getNotificationText();
+								notificationQueueID = notification.getNotificationQueueID();
+								messageId = "m-" + Long.toString(random.nextLong());
+
+								payload = new HashMap<String, String>();
+								payload.put("message", messagePrefix + message);
+
+								try {
+									// Send the downstream message to a device.
+									ccsClient.send(createJsonMessage(toRegId, messageId, payload, collapseKey, timeToLive, delayWhileIdle));
+									sucessfullySent = true;
+									logger.log(Level.INFO, "Message sent. ID: " + notificationQueueID + ", RegID: " + toRegId + ", Text: " + message);
+								} catch (Exception e) {
+									mysql.prepareNotificationForTheNextDay(notificationQueueID);
+									sucessfullySent = false;
+									logger.log(Level.WARNING, "Message could not be sent! ID: " + notificationQueueID + ", RegID: " + toRegId + ", Text: " + message);
+								}
+
+								if (sucessfullySent) {
+									mysql.moveNotificationToHistory(notificationQueueID);
+								}
 							}
 						}
 					}
+				} catch (Exception e) {
+					logger.log(Level.WARNING, "Exception ", e);
 				}
-			} catch (Exception e) {
-				logger.log(Level.WARNING, "Exception ", e);
-			}*/
 			}
 		};
 
 		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+		//Start when server starts and every 30 minutes after
 		ScheduledFuture task = executor.scheduleAtFixedRate(sendNotifications, 0, 30, TimeUnit.MINUTES);
 
 		task.cancel(false);

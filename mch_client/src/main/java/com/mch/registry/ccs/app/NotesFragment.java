@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,24 +18,23 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.mch.registry.ccs.data.adapter.NoteArrayAdapter;
 import com.mch.registry.ccs.data.entities.Note;
 import com.mch.registry.ccs.data.handler.NoteDataHandler;
-import com.mch.registry.ccs.data.entities.Pregnancy;
-import com.mch.registry.ccs.data.handler.PregnancyDataHandler;
-import com.mch.registry.ccs.data.adapter.NoteArrayAdapter;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Created by Isa
  */
 public class NotesFragment extends Fragment{
+
+	NoteArrayAdapter noteAdapter;
+	ListView noteLV;
+	ArrayList<Note> notes;
+	Note note;
+	EditText inputSearch;
 
 	public NotesFragment(){
 	}
@@ -45,18 +43,14 @@ public class NotesFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-		EditText inputSearch;
-
         final View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
 
 		NoteDataHandler ndh = new NoteDataHandler(getActivity(),"loading notes list", null, 1);
-		ArrayList<Note> notes = ndh.getAllNotes();
+		notes = ndh.getAllNotes();
 
 		ListView noteLV = (ListView)rootView.findViewById(R.id.listView);
-		NoteArrayAdapter noteAdapter = new NoteArrayAdapter(getActivity(), notes);
+		noteAdapter = new NoteArrayAdapter(getActivity(), notes);
 		noteLV.setAdapter(noteAdapter);
-
-		inputSearch = (EditText)rootView.findViewById(R.id.searchNote);
 
 		final Button button = (Button) rootView.findViewById(R.id.button);
 		button.setOnClickListener(new View.OnClickListener() {
@@ -75,8 +69,8 @@ public class NotesFragment extends Fragment{
 
 				//Reload list view
 				ListView noteLV = (ListView)rootView.findViewById(R.id.listView);
-				ArrayList<Note> notes = ndh.getAllNotes();
-				NoteArrayAdapter noteAdapter = new NoteArrayAdapter(getActivity(), notes);
+				notes = ndh.getAllNotes();
+				noteAdapter = new NoteArrayAdapter(getActivity(), notes);
 				noteLV.setAdapter(noteAdapter);
 				noteAdapter.notifyDataSetChanged();
 			}
@@ -93,8 +87,8 @@ public class NotesFragment extends Fragment{
 								NoteDataHandler ndh = new NoteDataHandler(getActivity(),"edit, delete or share note", null, 1);
 
 								ArrayList<Note> notes = ndh.getAllNotes();
-								NoteArrayAdapter noteAdapter = new NoteArrayAdapter(getActivity(), notes);
-								Note note = noteAdapter.getItem(position);
+								noteAdapter = new NoteArrayAdapter(getActivity(), notes);
+								note = noteAdapter.getItem(position);
 								ListView noteLV = (ListView)rootView.findViewById(R.id.listView);
 
 								int id = note.get_id();
@@ -122,17 +116,11 @@ public class NotesFragment extends Fragment{
 			}
 		});
 
+		inputSearch = (EditText)rootView.findViewById(R.id.searchNote);
 		inputSearch.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-
-				NoteDataHandler ndh = new NoteDataHandler(getActivity(),"loading notes list", null, 1);
-				ArrayList<Note> notes = ndh.getAllNotes();
-
-				ListView noteLV = (ListView)rootView.findViewById(R.id.listView);
-				NoteArrayAdapter noteAdapter = new NoteArrayAdapter(getActivity(), notes);
-				noteLV.setAdapter(noteAdapter);
 
 				// When user changed the Text
 				noteAdapter.getFilter().filter(cs);
@@ -171,7 +159,7 @@ public class NotesFragment extends Fragment{
 
 				//update list
 				ArrayList<Note> notes = ndh.getAllNotes();
-				NoteArrayAdapter noteAdapter = new NoteArrayAdapter(getActivity(), notes);
+				noteAdapter = new NoteArrayAdapter(getActivity(), notes);
 				ListView noteLV = (ListView)rootView.findViewById(R.id.listView);
 				noteLV.setAdapter(noteAdapter);
 				noteAdapter.notifyDataSetChanged();

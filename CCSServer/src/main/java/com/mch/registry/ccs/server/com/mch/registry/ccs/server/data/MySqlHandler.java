@@ -98,12 +98,13 @@ public class MySqlHandler{
 
 			while(rs.next()){
 				//Retrieve by column name
+				notification = new Notification();
 				notification.setGcmRegID(rs.getString("GCMRegistrationID"));
 				notification.setNotificationQueueID(rs.getInt("NotificationQueueID"));
 				notification.setNotificationText(rs.getString("NotificationText"));
 				notificationQueue.add(notification);
-
 			}
+			logger.log(Level.INFO, "get notificationQ");
 		}
 		catch (SQLException ex){
 			System.out.println("SQLException: " + ex.getMessage());
@@ -116,7 +117,7 @@ public class MySqlHandler{
 				try {
 					rs.close();
 				} catch (SQLException sqlEx) {
-					logger.log(Level.SEVERE, "getq" + sqlEx.getMessage());
+					logger.log(Level.SEVERE, "get Q" + sqlEx.getMessage());
 				}
 				rs = null;
 			}
@@ -125,7 +126,7 @@ public class MySqlHandler{
 				try {
 					stmt.close();
 				} catch (SQLException sqlEx) {
-					logger.log(Level.SEVERE, "getq" + sqlEx.getMessage());
+					logger.log(Level.SEVERE, "get Q" + sqlEx.getMessage());
 				}
 				stmt = null;
 			}

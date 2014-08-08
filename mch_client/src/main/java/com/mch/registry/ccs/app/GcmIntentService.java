@@ -39,8 +39,6 @@ import com.mch.registry.ccs.data.handler.RecommendationDataHandler;
 import com.mch.registry.ccs.data.handler.VisitDataHandler;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import de.greenrobot.event.EventBus;
@@ -108,10 +106,9 @@ public class GcmIntentService extends IntentService {
 			                @Override
 			                public void run() {
 				                RecommendationDataHandler rdh = new RecommendationDataHandler(getApplicationContext(),"Msg received",null, 1);
-				                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss");
 				                Calendar cal = Calendar.getInstance();
 				                rdh.addRecommendation(recommendationMessage, Utils.getPregnancyDay(getApplicationContext()) , cal.getTime(), Utils.getPregnancyWeek(getApplicationContext()));
-				                sendNotification("Pregnancy Guide", "New recommendation");
+				                sendNotification(getString(R.string.notification_text_new_recommendation), getString(R.string.app_name));
 			                }
 		                });
 		            }else if(msg.contains("_V: ")){
@@ -122,7 +119,7 @@ public class GcmIntentService extends IntentService {
 			                public void run() {
 				                VisitDataHandler vdh = new VisitDataHandler(getApplicationContext(),"Msg received",null, 1);
 				                vdh.addVisit(visitMessage);
-				                sendNotification("Pregnancy Guide: Visit Reminder received!", "New visit reminder");
+				                sendNotification(getString(R.string.notification_text_new_visit), getString(R.string.app_name));
 			                }
 		                });
 		            }else if(msg.contains("_Verified")){
@@ -218,14 +215,8 @@ public class GcmIntentService extends IntentService {
 
          EventBus.getDefault().post(bundle);
       } catch (IOException e) {
-         // If there is an error, don't just keep trying to register.
-         // Require the user to click a button again, or perform
-         // exponential back-off.
-
-         // Simply notify the user:
          Bundle bundle = new Bundle();
-         bundle.putInt(Constants.KEY_EVENT_TYPE,
-               EventbusMessageType.REGISTRATION_FAILED.ordinal());
+         bundle.putInt(Constants.KEY_EVENT_TYPE, EventbusMessageType.REGISTRATION_FAILED.ordinal());
          EventBus.getDefault().post(bundle);
          Log.e("PregnancyGuide", "Registration failed.", e);
       }
@@ -243,7 +234,6 @@ public class GcmIntentService extends IntentService {
    }
 
    private void removeRegistrationId() {
-	   //TODO account
 	  PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(), null, null, 1);
 	  pdh.updateRegId("null");
       final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -283,10 +273,6 @@ public class GcmIntentService extends IntentService {
          Log.e("PregnancyGuide", "Error while sending a message", e);
       }
    }
-
-   // Put the message into a notification and post it.
-   // This is just one simple example of what you might choose to do with
-   // a GCM message.
 
 	///New: Mueller
 	private void sendPhoneActivityNotification(String msg, String title) {

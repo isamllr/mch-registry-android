@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.mch.registry.ccs.data.adapter.VisitArrayAdapter;
 import com.mch.registry.ccs.data.entities.Visit;
 import com.mch.registry.ccs.data.handler.VisitDataHandler;
-import com.mch.registry.ccs.data.adapter.VisitArrayAdapter;
 
 import java.text.DateFormat;
 import java.text.ParseException;

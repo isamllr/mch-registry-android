@@ -125,5 +125,8 @@
 	<string name="no_recommendations">There are currently no recommendations for your pregnancy week.</string>
 	<string name="edit_note">Edit Note</string>
 	<string name="date_unknown">Date unknown</string>
+	<string name="notification_text_new_recommendation">New Recommendation!</string>
+	<string name="notification_text_new_visit">New Visit Reminder!</string>
+	<string name="search_visit_hint">Search visit text...</string>
 
 </resources>

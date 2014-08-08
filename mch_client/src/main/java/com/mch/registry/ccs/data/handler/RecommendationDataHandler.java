@@ -99,7 +99,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
                     recommendationRecord.set_recommendationText(cursor.getString(cursor.getColumnIndex(COLUMN_RECOMMENDATIONTEXT)));
                     recommendationRecord.set_recommendationDay(cursor.getInt(cursor.getColumnIndex(COLUMN_RECOMMENDATIONDAY)));
                     recommendationRecord.set_receivedDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECEIVEDDATE)));
-	                recommendationRecord.set_recommendationDay(cursor.getInt(cursor.getColumnIndex(COLUMN_PREGNANCYWEEK)));
+	                recommendationRecord.set_pregnancyWeek(cursor.getInt(cursor.getColumnIndex(COLUMN_PREGNANCYWEEK)));
                     resultList.add(recommendationRecord);
                 } catch (Exception e) {
                     Log.e("SQLLite getRecommendation Error", "Error " + e.toString());
@@ -147,6 +147,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 
 			if (cursor.moveToFirst()) {
 				cursor.moveToFirst();
+				recommendation = new Recommendation();
 				recommendation.set_id(Integer.parseInt(cursor.getString(0)));
 				recommendation.set_recommendationText(cursor.getString(1));
 				recommendation.set_recommendationDay(Integer.parseInt(cursor.getString(2)));

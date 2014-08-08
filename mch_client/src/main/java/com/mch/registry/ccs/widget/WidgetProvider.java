@@ -30,7 +30,8 @@ public class WidgetProvider extends AppWidgetProvider {
 
 	private static CharSequence getDesc() {
 		if (WidgetUtils.getRecommendationsOfCurrentWeek(context).size()>0){
-			return WidgetUtils.getRecommendationsOfCurrentWeek(context).get(1).get_recommendationText();}
+			return WidgetUtils.getRecommendationsOfCurrentWeek(context).get(0).get_recommendationText();
+		}
 		else{
 			return context.getString(R.string.no_recommendations);
 		}
