@@ -35,4 +35,5 @@
 		android:inputType="textVisiblePassword"
 		android:windowSoftInputMode="stateHidden"
 		/>
+
 </RelativeLayout>

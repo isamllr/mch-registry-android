@@ -13,7 +13,7 @@ import com.mch.registry.ccs.data.handler.RecommendationDataHandler;
 import java.util.ArrayList;
 
 public class WidgetIntentReceiver extends BroadcastReceiver {
-	public static int clickCount = 1;
+	public static int clickCount = 0;
 	private String msg[] = null;
 
 	@Override

@@ -58,7 +58,7 @@ public class VisitsFragment extends Fragment{
 			}
 		});
 
-		inputSearch = (EditText)rootView.findViewById(R.id.searchVisit);
+		EditText inputSearch = (EditText)rootView.findViewById(R.id.searchVisit);
 		inputSearch.addTextChangedListener(new TextWatcher() {
 
 			@Override

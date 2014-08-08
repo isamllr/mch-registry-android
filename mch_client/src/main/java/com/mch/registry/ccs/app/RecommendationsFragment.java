@@ -44,7 +44,6 @@ public class RecommendationsFragment extends Fragment {
 		recommendationLV.setAdapter(recAdapter);
 
 		EditText inputSearch = (EditText)rootView.findViewById(R.id.searchRecommendation);
-
 		inputSearch.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {

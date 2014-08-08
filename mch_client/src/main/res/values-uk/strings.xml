@@ -82,10 +82,10 @@
 	<string name="action_settings">Налаштування</string>
 	<string name="application_ready">Ви скоро отримаєте ваші перші рекомендації та відвідати нагадування.</string>
 	<string name="textExpectedDelivery">Очікувана доставка</string>
-	<string name="textPatientName">Ім'я</string>
+	<string name="textPatientName">Ім\'я</string>
 	<string name="textPhone">Телефон</string>
 	<string name="textFacility">Реєстрація фонд</string>
-	<string name="textFacilityPhone">Об'єкт Телефон</string>
+	<string name="textFacilityPhone">Об\'єкт Телефон</string>
 	<string name="pregnancy_week">Тиждень</string>
 	<string name="visit_date">Дата відвідування</string>
 	<string name="hospital_visit_reminder">Лікарня Візит Нагадування</string>
@@ -93,7 +93,7 @@
 	<string name="pick_action">Виберіть дію</string>
 	<string name="hospital_visit">Лікарня Візит</string>
 	<string name="pick_preference_app_sms">Я хотів би отримувати повідомлення по</string>
-	<string name="action_app_on">App On / Off</string>
+	<string name="action_app_on">App On/Off</string>
 	<string name="pregnancy_recommendation_share_title">Вагітність Рекомендація</string>
 	<string name="not_by_app">Ви отримаєте майбутніх повідомлень по цим додатком.</string>
 	<string name="not_by_sms">Ви отримаєте майбутніх повідомлень по SMS.</string>

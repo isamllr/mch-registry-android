@@ -141,12 +141,12 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 		Recommendation recommendation = new Recommendation();
 
 		try {
-			String query = "Select * FROM " + TABLE_RECOMMENDATIONS + " WHERE " + COLUMN_PREGNANCYWEEK + " =  \"" + Integer.toString(pregnancyWeek) + "\"";
+			String query = "Select * FROM " + TABLE_RECOMMENDATIONS + " WHERE " + COLUMN_PREGNANCYWEEK + " = " + Integer.toString(pregnancyWeek) + ";";
 			SQLiteDatabase db = this.getWritableDatabase();
 			Cursor cursor = db.rawQuery(query, null);
 
 			if (cursor.moveToFirst()) {
-				cursor.moveToFirst();
+				cursor.moveToNext();
 				recommendation = new Recommendation();
 				recommendation.set_id(Integer.parseInt(cursor.getString(0)));
 				recommendation.set_recommendationText(cursor.getString(1));
@@ -162,6 +162,7 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
 			Log.e("Rec widget data error", e.getMessage());
 		}
 
+		Log.i("PregRecByWeek. Records:", Integer.toString(recommendations.size()));
 		return recommendations;
 	}
 
