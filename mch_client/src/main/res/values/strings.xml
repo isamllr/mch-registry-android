@@ -116,7 +116,6 @@
 		<item>Share note</item>
 	</string-array>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 	<string name="diary_confirm">Save note</string>
 	<string name="first_note">This is the very first diary note. This diary is personal, but you can let your doctor know about it when visiting.\'</string>
 	<string name="note_share_title">Pregnancy Diary</string>

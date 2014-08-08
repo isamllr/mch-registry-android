@@ -28,11 +28,7 @@ public abstract class TwoLineArrayAdapter<T> extends ArrayAdapter<T> {
 	}
 
 	@Override
-	public android.view.View getView(
-			int position,
-			View convertView,
-			ViewGroup parent) {
-
+	public android.view.View getView(int position, View convertView, ViewGroup parent) {
 
 		LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -58,4 +54,5 @@ public abstract class TwoLineArrayAdapter<T> extends ArrayAdapter<T> {
 	public abstract String lineOneText(T t);
 
 	public abstract String lineTwoText(T t);
+
 }

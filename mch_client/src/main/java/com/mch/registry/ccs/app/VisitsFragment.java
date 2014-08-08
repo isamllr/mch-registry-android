@@ -6,11 +6,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.mch.registry.ccs.data.adapter.VisitArrayAdapter;
@@ -31,6 +34,7 @@ public class VisitsFragment extends Fragment{
 
 	View rootView;
 	VisitArrayAdapter visitAdapter;
+	EditText inputSearch;
 
 	public VisitsFragment(){}
 	
@@ -51,6 +55,25 @@ public class VisitsFragment extends Fragment{
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					Visit vis = visitAdapter.getItem(position);
 					showDialog(vdh.findVisitById(vis.getID()).get_visitDate(), vdh.findVisitById(vis.getID()).get_visitText());
+			}
+		});
+
+		inputSearch = (EditText)rootView.findViewById(R.id.searchVisit);
+		inputSearch.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+
+				// When user changed the Text
+				visitAdapter.getFilter().filter(cs);
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable arg0) {
 			}
 		});
 

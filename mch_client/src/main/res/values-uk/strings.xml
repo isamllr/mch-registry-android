@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="app_name">Pregnancy Guide</string>
+	<string name="app_name">Керівництво Вагітність</string>
 	<!-- Nav Drawer Menu Items -->
 	<string-array name="nav_drawer_items">
-		<item>Home</item>
-		<item>Visits</item>
-		<item>Hints</item>
-		<item>Notes</item>
-		<item>About</item>
+		<item>Головна</item>
+		<item>переглядів</item>
+		<item>Поради</item>
+		<item>Примітки</item>
+		<item>Про</item>
 	</string-array>
 
 	<!-- Nav Drawer List Item Icons -->
@@ -22,106 +22,110 @@
 	</array>
 
 	<!-- Content Description -->
-	<string name="desc_list_item_icon">Item Icon</string>
-	<string name="drawer_open">Open navigation drawer</string>
-	<string name="drawer_close">Close navigation drawer</string>
-	<string name="msg_received">Message received: %1$s</string>
-	<string name="msg_sent">Message sent: %1$s</string>
+	<string name="desc_list_item_icon">Товар Іконка</string>
+	<string name="drawer_open">Відкрити навігації ящик</string>
+	<string name="drawer_close">Закрити навігації ящик</string>
+	<string name="msg_received">Повідомлення отримано: %1$s</string>
+	<string name="msg_sent">Повідомлення надіслано: %1$s</string>
     <string name="txt_no_play_services">
 <![CDATA[
-        Either you do not have Google Play Services or your 
-        Google Play Services package is not up to date. 
-        Please download the app from Google Play or update 
-        your existing app.
+        Або у вас немає Google Play Services або ваш
+         Google Play Послуги пакет не в курсі.
+         Будь ласка, завантажте додаток з Play або поновлення Google
+         існуючий додаток.
         ]]>
     </string>
-	<string name="about">About</string>
+	<string name="about">Про</string>
     <string name="common_about_text">
 <![CDATA[
-        <strong>Pregnancy Guide</strong>
+        <strong>Вагітність Керівництво</strong>
         <br>
         \u00a9 2014 by Swiss TPH
         <br>
         <a href="http://www.swisstph.ch/>http://www.swisstph.ch/</a>
         <br><br>
-        This app is part of the MCH-Registry by the Swiss TPH. If you would like to know more about the project, please visit
-        <a href="http://www.swisstph.ch/?id=1448">MCH-Registry</a>.
-        <br><br><em>The code is licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache License Version 2.0</a>.</em>
+        математичні інструменти
+         Ця програма є частиною MCH-реєстрі швейцарського TPH. Якщо ви хотіли б знати більше про проект, будь ласка, відвідайте <a href="http://www.swisstph.ch/?id=1448">MCH-реєстру</a>.
+        <br><br><em>Математичні інструменти Код поширюється під <a href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache License Version 2.0</a>.</em>
         <br><br><br>
-        <small>This software is based on Wolfram Rittmeyers <a href="https://github.com/writtmeyer/gcm_sample">GCM Sample</a> and <a href="https://github.com/writtmeyer/gcm_server">GCM Server</a>, both
-            licensed under the <a href="http://source.android.com/source/licenses.html">Apache License 2.0</a></small>.
+        <small>Це програмне забезпечення базується на Wolfram Rittmeyer <a href="https://github.com/writtmeyer/gcm_sample">GCM Sample</a> and <a href="https://github.com/writtmeyer/gcm_server">GCM Server</a>,
+         сервера, як під ліцензією<a href="http://source.android.com/source/licenses.html">Apache License 2.0</a></small>.
         ]]>
     </string>
-	<string name="visit_notification_title_template">Visit: %1$s</string>
-	<string name="visit_notification_placeholder_text_template">You said %1$s and lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis. Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec tortor.</string>
-	<string name="action_visits">Visits</string>
-	<string name="action_share">Share</string>
-	<string name="action_reply">Reply</string>
-	<string name="configure">Configure</string>
-	<string name="add_widget">Add widget</string>
-	<string name="title_activity_phone_number">Mobile Phone Number</string>
-	<string name="enter_phone_number">Your mobile phone number:</string>
-	<string name="phone_format">Format: +380xxxxxxxxx for a Ukrainian number</string>
-	<string name="action_phonenumber">Mobile Number</string>
-	<string name="number_invalid">The phone number format is invalid, please try again.</string>
-	<string name="action_recommendations">Recommendations</string>
-	<string name="title_section_visits">Visits</string>
-	<string name="title_section_recommendations">Tips</string>
-	<string name="title_section_diary">Diary</string>
-	<string name="title_section_phone">Mobile Phone</string>
+	<string name="visit_notification_title_template">Візит: %1$s</string>
+	<string name="visit_notification_placeholder_text_template">Ви сказали %1$s</string>
+	<string name="action_visits">переглядів</string>
+	<string name="action_share">Поділитися</string>
+	<string name="action_reply">Відповідь</string>
+	<string name="configure">Налаштувати</string>
+	<string name="add_widget">Додати віджет</string>
+	<string name="title_activity_phone_number">Номер мобільного телефону</string>
+	<string name="enter_phone_number">Ваш номер мобільного телефону:</string>
+	<string name="phone_format">Формат: +380xxxxxxxxx для українського числа</string>
+	<string name="action_phonenumber">Номер мобільного</string>
+	<string name="number_invalid">Формат номер телефону недійсний, спробуйте ще раз.</string>
+	<string name="action_recommendations">Рекомендації</string>
+	<string name="title_section_visits">переглядів</string>
+	<string name="title_section_recommendations">Поради</string>
+	<string name="title_section_diary">Щоденник</string>
+	<string name="title_section_phone">Мобільний телефон</string>
 	<string name="title_section_home">Home</string>
-	<string name="title_activity_main">Pregnancy Guide</string>
-	<string name="number_same">This number is already verified.</string>
-	<string name="phone_number_sent">Thank you. We will try to verify your phone number by SMS.</string>
-	<string name="number_not_found">The phone number you have entered was not registered with us, sorry. Did you hand out another number to the staff at the hospital?</string>
-	<string name="number_verified">Your number is now verified.</string>
-	<string name="number_not_verified">Your number could not be verified. Please try again or use another number. You should receive a SMS containing a code.</string>
-	<string name="activation_code_received">Activation code received. Checking...</string>
-	<string name="timeout">Sorry, the verification timed out. Please try again.</string>
+	<string name="title_activity_main">Керівництво Вагітність</string>
+	<string name="number_same">Це число вже пройшла перевірку.</string>
+	<string name="phone_number_sent">Спасибо. Ми постараємося, щоб підтвердити свій номер телефону по SMS.</string>
+	<string name="number_not_found">номер телефону ви введете був не зареєстровані у нас, вибачте. Ви роздають другий номер персоналу в лікарні?</string>
+	<string name="number_verified">Ваш номер тепер перевіряється.</string>
+	<string name="number_not_verified">Ваш номер не може бути перевірений. Будь ласка, спробуйте ще раз або використовувати інший номер. Ви повинні отримати SMS, що містить код.</string>
+	<string name="activation_code_received">код активації, отриманий. Перевірка ...</string>
+	<string name="timeout">На жаль, перевірка минув. Будь ласка, спробуйте ще раз.</string>
 	<string name="title_activity_no_google_play_services">NoGooglePlayServices</string>
-	<string name="action_settings">Settings</string>
-	<string name="application_ready">You will soon receive your first recommendations and visit reminders.</string>
-	<string name="textExpectedDelivery">Expected delivery</string>
-	<string name="textPatientName">Name</string>
-	<string name="textPhone">Phone</string>
-	<string name="textFacility">Registration Facility</string>
-	<string name="textFacilityPhone">Facility Phone</string>
-	<string name="pregnancy_week">Week</string>
-	<string name="visit_date">Visit date</string>
-	<string name="hospital_visit_reminder">Hospital Visit Reminder</string>
-	<string name="calendar_visit_text">Hospital Visit</string>
-	<string name="pick_action">Choose action</string>
-	<string name="hospital_visit">Hospital Visit </string>
-	<string name="pick_preference_app_sms">I\'d like to receive notifications by</string>
-	<string name="action_app_on">App On/Off</string>
-	<string name="pregnancy_recommendation_share_title">Pregnancy Recommendation</string>
-	<string name="not_by_app">You will receive future notifications by this app.</string>
-	<string name="not_by_sms">You will receive future notifications by SMS.</string>
-	<string name="search_recommendation_hint">Search recommendation text...</string>
-	<string name="search_note_hint">Search diary note text...</string>
-	<item name="searchNote" type="id">Search diary note...</item>
+	<string name="action_settings">Налаштування</string>
+	<string name="application_ready">Ви скоро отримаєте ваші перші рекомендації та відвідати нагадування.</string>
+	<string name="textExpectedDelivery">Очікувана доставка</string>
+	<string name="textPatientName">Ім'я</string>
+	<string name="textPhone">Телефон</string>
+	<string name="textFacility">Реєстрація фонд</string>
+	<string name="textFacilityPhone">Об'єкт Телефон</string>
+	<string name="pregnancy_week">Тиждень</string>
+	<string name="visit_date">Дата відвідування</string>
+	<string name="hospital_visit_reminder">Лікарня Візит Нагадування</string>
+	<string name="calendar_visit_text">Лікарня Візит</string>
+	<string name="pick_action">Виберіть дію</string>
+	<string name="hospital_visit">Лікарня Візит</string>
+	<string name="pick_preference_app_sms">Я хотів би отримувати повідомлення по</string>
+	<string name="action_app_on">App On / Off</string>
+	<string name="pregnancy_recommendation_share_title">Вагітність Рекомендація</string>
+	<string name="not_by_app">Ви отримаєте майбутніх повідомлень по цим додатком.</string>
+	<string name="not_by_sms">Ви отримаєте майбутніх повідомлень по SMS.</string>
+	<string name="search_recommendation_hint">Пошук рекомендація текст ...</string>
+	<string name="search_note_hint">Пошук щоденник записка текст ...</string>
+	<item name="searchNote" type="id">Пошук щоденник зауваження ...</item>
 
 	<string-array name="action_array">
-		<item>Share text</item>
-		<item>Save event to calendar</item>
+		<item>Частка текст</item>
+		<item>Зберегти подія в календар</item>
 	</string-array>
 	<string-array name="action_array_preference_app_sms">
-		<item>... this app</item>
-		<item>... SMS (turn app off)</item>
+		<item>... це додаток</item>
+		<item>... SMS (включити додаток с)</item>
 	</string-array>
 
 	<string-array name="note_action_array">
-		<item>Edit note</item>
-		<item>Delete note</item>
-		<item>Share note</item>
+		<item>Змінити замітку</item>
+		<item>Видалити замітку</item>
+		<item>Поділитися примітка</item>
 	</string-array>
 
-	<string name="diary_confirm">Save note</string>
-	<string name="first_note">This is the very first diary note. This diary is personal, but you can let your doctor know about it when visiting.\'</string>
-	<string name="note_share_title">Pregnancy Diary</string>
-	<string name="hint_add_note">Add a note</string>
-	<string name="widget_title_pregnancy_week">Pregnancy Week: </string>
-	<string name="no_recommendations">There are currently no recommendations for your pregnancy week.</string>
-	<string name="edit_note">Edit Note</string>
+	<string name="diary_confirm">Зберегти примітка</string>
+	<string name="first_note">Це найперший щоденник зауваження. Цей щоденник є особистим, але ви можете повідомити Вашому докторові про це при відвідуванні.</string>
+	<string name="note_share_title">Вагітність Щоденник</string>
+	<string name="hint_add_note">Додати примітку</string>
+	<string name="widget_title_pregnancy_week">Вагітність тиждень: </string>
+	<string name="no_recommendations">Там теперішнього часу немає рекомендації для вашого тижня вагітності.</string>
+	<string name="edit_note">Змінити Примітка</string>
+	<string name="date_unknown">Дата невідома</string>
+	<string name="notification_text_new_recommendation">Новий Рекомендація!</string>
+	<string name="notification_text_new_visit">Новий візит нагадування!</string>
+	<string name="search_visit_hint">Пошук візит текст ...</string>
 
 </resources>

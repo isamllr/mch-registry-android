@@ -12,6 +12,7 @@ import java.util.ArrayList;
  */
 public class VisitArrayAdapter extends TwoLineArrayAdapter<Visit> {
 	Context _context;
+
 	public VisitArrayAdapter(Context context, ArrayList<Visit> recommendations) {
 		super(context, recommendations);
 		_context = context;
@@ -26,4 +27,5 @@ public class VisitArrayAdapter extends TwoLineArrayAdapter<Visit> {
 	public String lineTwoText(Visit v) {
 		return v.get_visitText();
 	}
+
 }

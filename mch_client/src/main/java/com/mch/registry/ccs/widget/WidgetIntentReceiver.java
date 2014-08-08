@@ -8,6 +8,7 @@ import android.widget.RemoteViews;
 import com.mch.registry.ccs.app.R;
 import com.mch.registry.ccs.app.Utils;
 import com.mch.registry.ccs.data.entities.Recommendation;
+import com.mch.registry.ccs.data.handler.RecommendationDataHandler;
 
 import java.util.ArrayList;
 
@@ -36,7 +37,8 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
 	}
 
 	private String getDesc(Context context) {
-		ArrayList<Recommendation> recommendations = WidgetUtils.getRecommendationsOfCurrentWeek(context);
+		RecommendationDataHandler rdh = new RecommendationDataHandler(context, null, null, 1);
+		ArrayList<Recommendation> recommendations = rdh.findRecommendationByPregnancyWeek(Utils.getPregnancyWeek(context));
 
 		if (recommendations.size() > 0){
 			if (clickCount >= recommendations.size()) {
