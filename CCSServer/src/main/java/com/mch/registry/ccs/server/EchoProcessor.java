@@ -24,13 +24,13 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
+/** New: Mueller
  * Handles an echo request.
  */
 public class EchoProcessor implements PayloadProcessor{
 
 	private CcsClient client = CcsClient.getInstance();
-	private PseudoDao dao = PseudoDao.getInstance();
+	private Dao dao = Dao.getInstance();
 	public static final Logger logger = Logger.getLogger(EchoProcessor.class.getName());
 
 	@Override
@@ -140,7 +140,7 @@ public class EchoProcessor implements PayloadProcessor{
 			client.send(client.createJsonMessage(gcmRegId, messageId, payload, null, 10000L, true));
 			logger.log(Level.INFO, "Verification message sent. IRegID: " + toRegId + ", Text: " + message);
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Verification message couldnot be sent! RegID: " + toRegId + ", Text: " + message);
+			logger.log(Level.WARNING, "Verification message could not be sent! RegID: " + toRegId + ", Text: " + message);
 		}
 	}
 

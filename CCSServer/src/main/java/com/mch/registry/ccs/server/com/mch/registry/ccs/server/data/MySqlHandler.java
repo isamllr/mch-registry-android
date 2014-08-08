@@ -4,8 +4,6 @@ package com.mch.registry.ccs.server.com.mch.registry.ccs.server.data;
  * Created by Isa on 27.07.2014.
  */
 
-// Do not import com.mysql.jdbc.*!
-
 import com.mch.registry.ccs.server.Config;
 
 import java.math.BigInteger;
@@ -39,7 +37,6 @@ public class MySqlHandler{
 
 	private static void connect(){
 		try {
-			//conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/registry", "root", "");
 			Config config = new Config();
 			conn = DriverManager.getConnection("jdbc:mysql://" + config.getDatabaseurl() + ":" + config.getDbport() + "/" + config.getDbname(), config.getDbuser(), config.getDbpassword());
 
@@ -76,10 +73,11 @@ public class MySqlHandler{
 			String statement = "SELECT "
 					+ "nq.NotificationQueueID, "
 					+ "nq.NotificationText, "
-					+ "preg.GCMRegistrationID "
+					+ "nar.GCMRegistrationID "
 					+ "FROM notificationqueue nq "
 					+ "JOIN patient pat on nq.MobilePhone = pat.MobilePhone "
-					+ "JOIN pregnancy preg on preg.PregnancyID = pat.PregnancyID "
+					+ "JOIN pregnancy preg on preg.PatientID = pat.PatientID "
+					+ "JOIN notificationappregistration nar on preg.PregnancyID = nar.PregnancyID "
 					+ "WHERE preg.MobileApp = 1 "
 					+ "AND Date(nq.LatestBy) >= curdate() "
 					+ "AND nq.NotificationTypeID = " + notificationTypeID + " "
@@ -103,7 +101,7 @@ public class MySqlHandler{
 				notification.setNotificationQueueID(rs.getInt("NotificationQueueID"));
 				notification.setNotificationText(rs.getString("NotificationText"));
 				notificationQueue.add(notification);
-				logger.log(Level.INFO, "getnotifiactionqueue");
+
 			}
 		}
 		catch (SQLException ex){
@@ -116,16 +114,18 @@ public class MySqlHandler{
 			if (rs != null) {
 				try {
 					rs.close();
-				} catch (SQLException sqlEx) { } // ignore
-
+				} catch (SQLException sqlEx) {
+					logger.log(Level.SEVERE, "getq" + sqlEx.getMessage());
+				}
 				rs = null;
 			}
 
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (SQLException sqlEx) { } // ignore
-
+				} catch (SQLException sqlEx) {
+					logger.log(Level.SEVERE, "getq" + sqlEx.getMessage());
+				}
 				stmt = null;
 			}
 		}
@@ -161,7 +161,7 @@ public class MySqlHandler{
 			stmt.execute(statementReplace);
 			stmt.execute(statementDelete);
 			status = true;
-			logger.log(Level.INFO, "moved notification to history");
+			logger.log(Level.INFO, "moved notificationid " + notificationQueueID + " to history");
 		}
 		catch (SQLException ex){
 			System.out.println("SQLException: " + ex.getMessage());
@@ -173,7 +173,9 @@ public class MySqlHandler{
 			if (rs != null) {
 				try {
 					rs.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) {
+					logger.log(Level.SEVERE, "movetohistory1" + sqlEx.getMessage());
+				}
 
 				rs = null;
 			}
@@ -181,7 +183,9 @@ public class MySqlHandler{
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) {
+					logger.log(Level.SEVERE, "movetohistory2" + sqlEx.getMessage());
+				}
 
 				stmt = null;
 			}
@@ -220,7 +224,7 @@ public class MySqlHandler{
 			if (rs != null) {
 				try {
 					rs.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) { logger.log(Level.SEVERE, "prepnextday" + sqlEx.getMessage()); }
 
 				rs = null;
 			}
@@ -228,7 +232,7 @@ public class MySqlHandler{
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) {logger.log(Level.SEVERE, "prepnextday" + sqlEx.getMessage()); }
 
 				stmt = null;
 			}
@@ -237,52 +241,6 @@ public class MySqlHandler{
 		this.close();
 		return status;
 	}
-
-	/*public boolean updateRegID(int pregnancyID, String newRegID){
-		boolean status = false;
-
-		String statement = "UPDATE notificationappregistration"
-				+ " SET"
-				+ " GCMRegistrationID = '" + newRegID +  "'"
-				+ " WHERE PregnancyID` = "+ pregnancyID +";";
-
-		this.connect();
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		try {
-			stmt = conn.createStatement();
-			stmt.execute(statement);
-			status = true;
-			logger.log(Level.INFO, "regid updated");
-		}
-		catch (SQLException ex){
-			System.out.println("SQLException: " + ex.getMessage());
-			System.out.println("SQLState: " + ex.getSQLState());
-			System.out.println("VendorError: " + ex.getErrorCode());
-		}
-		finally {
-
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException sqlEx) { } // ignore
-
-				rs = null;
-			}
-
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException sqlEx) { } // ignore
-
-				stmt = null;
-			}
-		}
-
-		this.close();
-		return status;
-	}*/
 
 	public boolean findRegID(String regID){
 		boolean regIDFound = false;
@@ -317,7 +275,7 @@ public class MySqlHandler{
 			if (rs != null) {
 				try {
 					rs.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) { logger.log(Level.SEVERE, "findregid" + sqlEx.getMessage()); }
 
 				rs = null;
 			}
@@ -325,7 +283,7 @@ public class MySqlHandler{
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) {logger.log(Level.SEVERE, sqlEx.getMessage()); }
 
 				stmt = null;
 			}
@@ -371,7 +329,7 @@ public class MySqlHandler{
 			if (rs != null) {
 				try {
 					rs.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) { logger.log(Level.SEVERE, "pregnar" + sqlEx.getMessage());}
 
 				rs = null;
 			}
@@ -379,7 +337,7 @@ public class MySqlHandler{
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) {logger.log(Level.SEVERE, "pregnar" + sqlEx.getMessage()); }
 
 				stmt = null;
 			}
@@ -434,7 +392,7 @@ public class MySqlHandler{
 			if (rs != null) {
 				try {
 					rs.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) { logger.log(Level.SEVERE, "preginfos" + sqlEx.getMessage());}
 
 				rs = null;
 			}
@@ -442,16 +400,17 @@ public class MySqlHandler{
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) {logger.log(Level.SEVERE, "preginfos2" + sqlEx.getMessage()); }
 
 				stmt = null;
 			}
 		}
 
+		String activationCode = this.createActivationCode();
 		String statement2 = "UPDATE notificationappregistration"
 				+ " SET "
 				+ " PregnancyID = " + pregnancyID + ", "
-				+ " ActivationCode = '" + this.createActivationCode() + "'"
+				+ " ActivationCode = '" + activationCode + "'"
 				+ " WHERE GCMRegistrationID = '" + gcmRegID + "';";
 
 		stmt = null;
@@ -473,7 +432,7 @@ public class MySqlHandler{
 			if (rs != null) {
 				try {
 					rs.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) { logger.log(Level.SEVERE, sqlEx.getMessage());}
 
 				rs = null;
 			}
@@ -481,7 +440,45 @@ public class MySqlHandler{
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) { logger.log(Level.SEVERE, sqlEx.getMessage());}
+
+				stmt = null;
+			}
+		}
+
+		this.close();
+
+		//Recmove old RegIds
+		String statement3 = "DELETE FROM notificationappregistration "
+				+ " WHERE ActivationCode <> '" + activationCode + "'"
+				+ " AND PregnancyID = " + pregnancyID +";";
+
+		this.connect();
+
+		try {
+			stmt = conn.createStatement();
+			stmt.execute(statement3);
+			logger.log(Level.INFO, "deleted old regIDs");
+		}
+		catch (SQLException ex){
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		}
+		finally {
+
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException sqlEx) {logger.log(Level.SEVERE, sqlEx.getMessage()); }
+
+				rs = null;
+			}
+
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException sqlEx) {logger.log(Level.SEVERE, sqlEx.getMessage()); }
 
 				stmt = null;
 			}
@@ -527,7 +524,7 @@ public class MySqlHandler{
 			if (rs != null) {
 				try {
 					rs.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) { logger.log(Level.SEVERE, sqlEx.getMessage());}
 
 				rs = null;
 			}
@@ -535,7 +532,7 @@ public class MySqlHandler{
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) {logger.log(Level.SEVERE, sqlEx.getMessage()); }
 
 				stmt = null;
 			}
@@ -607,7 +604,7 @@ public class MySqlHandler{
 			if (rs != null) {
 				try {
 					rs.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) {logger.log(Level.SEVERE, sqlEx.getMessage()); }
 
 				rs = null;
 			}
@@ -615,7 +612,7 @@ public class MySqlHandler{
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) {logger.log(Level.SEVERE, sqlEx.getMessage()); }
 
 				stmt = null;
 			}
@@ -688,7 +685,7 @@ public class MySqlHandler{
 			if (rs != null) {
 				try {
 					rs.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) {logger.log(Level.SEVERE, sqlEx.getMessage()); }
 
 				rs = null;
 			}
@@ -696,7 +693,7 @@ public class MySqlHandler{
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (SQLException sqlEx) { } // ignore
+				} catch (SQLException sqlEx) { logger.log(Level.SEVERE, sqlEx.getMessage());}
 
 				stmt = null;
 			}
@@ -770,7 +767,7 @@ public class MySqlHandler{
 				if (rs != null) {
 					try {
 						rs.close();
-					} catch (SQLException sqlEx) { } // ignore
+					} catch (SQLException sqlEx) { logger.log(Level.SEVERE, sqlEx.getMessage());}
 
 					rs = null;
 				}
@@ -778,7 +775,7 @@ public class MySqlHandler{
 				if (stmt != null) {
 					try {
 						stmt.close();
-					} catch (SQLException sqlEx) { } // ignore
+					} catch (SQLException sqlEx) { logger.log(Level.SEVERE, sqlEx.getMessage());}
 
 					stmt = null;
 				}

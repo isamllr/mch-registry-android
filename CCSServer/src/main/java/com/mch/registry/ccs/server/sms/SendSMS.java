@@ -32,11 +32,6 @@ public class SendSMS {
 		// in a Properties
 		Properties props = new Properties();
 
-		/*props.setProperty("smsj.clickatell.username", "swisstph");
-		props.setProperty("smsj.clickatell.password", "eBFSBRKUaKgXaP");
-		props.setProperty("smsj.clickatell.apiid", "3475961"); //testing HTTP
-		String sender = "41767658011";*/
-
 		Config config = new Config();
 
 		props.setProperty("smsj.clickatell.username", config.getClickatellUsername());

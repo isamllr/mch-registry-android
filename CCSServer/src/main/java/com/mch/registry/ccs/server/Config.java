@@ -21,6 +21,17 @@ public class Config {
 	String clickatellPassword;
 	String clickatellAPIID;
 
+	String projectId;
+	String key;
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
 	public String getClickatellUsername() {
 		return clickatellUsername;
 	}
@@ -83,6 +94,8 @@ public class Config {
 			clickatellUsername = prop.getProperty("clickatellUsername");
 			clickatellPassword = prop.getProperty("clickatellPassword");
 			clickatellAPIID = prop.getProperty("clickatellAPIID");
+			projectId = prop.getProperty("projectId");
+			key = prop.getProperty("key");
 
 			input.close();
 

@@ -23,19 +23,19 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-public class PseudoDao {
+public class Dao {
     
-    private final static PseudoDao instance = new PseudoDao();
+    private final static Dao instance = new Dao();
     private final static Random sRandom = new Random();
     private final Set<Integer> mMessageIds = new HashSet<Integer>();
     //private final Map<String, List<String>> mUserMap = new HashMap<String, List<String>>();
     //private final List<String> mRegisteredUsers = new ArrayList<String>();
     private final Map<String, String> mNotificationKeyMap = new HashMap<String, String>();
     
-    private PseudoDao() {        
+    private Dao() {
     }
     
-    public static PseudoDao getInstance() {
+    public static Dao getInstance() {
         return instance;
     }
     
@@ -45,19 +45,12 @@ public class PseudoDao {
 	    if (!mysql.findRegID(regId)) {
 		    mysql.saveNewRegID(regId);
         }
-
-	    //TODO
-	   /* if ( mobilePhoneNumber != null) { //Is only available if verified before
-		    if (mysql.findPregnancyIdInNarTable(mobilePhoneNumber)) {
-			    mysql.updateRegID(Integer.parseInt(pregnancyID), regId);
-		    }
-	    }*/
     }
-    
+
     /*public List<String> getAllRegistrationIds() {
         return Collections.unmodifiableList(mRegisteredUsers);
     }*/
-    
+
     /*public List<String> getAllRegistrationIdsForAccount(String account) {
         List<String> regIds = mUserMap.get(account);
         if (regIds != null) {

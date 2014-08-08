@@ -80,7 +80,7 @@
     <string name="timeout">Sorry, the verification timed out. Please try again.</string>
     <string name="title_activity_no_google_play_services">NoGooglePlayServices</string>
     <string name="action_settings">Settings</string>
-    <string name="application_ready">You can now start to use the app by pressing the back button in the upper left corner.</string>
+    <string name="application_ready">You will soon receive your first recommendations and visit reminders.</string>
     <string name="textExpectedDelivery">Expected delivery</string>
     <string name="textPatientName">Name</string>
     <string name="textPhone">Phone</string>

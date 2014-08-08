@@ -27,7 +27,7 @@ public class MessageProcessor implements PayloadProcessor{
 	@Override
 	public void handleMessage(CcsMessage msg) {
 
-		PseudoDao dao = PseudoDao.getInstance();
+		Dao dao = Dao.getInstance();
 		CcsClient client = CcsClient.getInstance();
 		String msgId = dao.getUniqueMessageId();
 		String jsonRequest =
