@@ -51,7 +51,7 @@ public class VisitDataHandler extends SQLiteOpenHelper {
 					    + COLUMN_VISITTEXT + ","
 					    + COLUMN_RECEIVEDDATE+ ","
 					    + COLUMN_VISITDATE
-					    + ")VALUES(null, 'Future visit reminders will be shown here.', date('now'), date('now'));";
+					    + ")VALUES(null, 'Future visit reminders will be shown here.', date('now'), '05.08.2014');";
 	    db.execSQL(INSERT_VISITS_TABLE);
     }
 
@@ -81,7 +81,7 @@ public class VisitDataHandler extends SQLiteOpenHelper {
 		int count = 0;
 		String match = "";
 		try{
-			Matcher m = Pattern.compile("(0[1-9]|1[012])[- ..](0[1-9]|[12][0-9]|3[01])[- ..](19|20)\\d\\d").matcher(visitText);
+			Matcher m = Pattern.compile("(0[1-9]|[12][0-9]|3[01])[- ..](0[1-9]|1[012])[- ..](19|20)\\d\\d").matcher(visitText);
 			m.find();
 			match = m.group();}
 		catch (Exception e){

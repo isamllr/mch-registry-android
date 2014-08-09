@@ -134,6 +134,6 @@ public class VisitsFragment extends Fragment{
 		sharingIntent.setType("text/plain");
 		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.hospital_visit));
 		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, visitText);
-		startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.abc_shareactionprovider_share_with_application)));
+		startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.abc_shareactionprovider_share_with)));
 	}
 }
