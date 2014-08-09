@@ -68,4 +68,8 @@ public class Recommendation {
 	public void set_pregnancyWeek(int _pregnancyWeek) {
 		this._pregnancyWeek = _pregnancyWeek;
 	}
+
+	public String toString(){
+		return this.get_recommendationText();
+	}
 }

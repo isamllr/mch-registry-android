@@ -132,5 +132,6 @@ public class Pregnancy {
 	public void set_loadingProgress(int _loadingProgress) {
 		this._loadingProgress = _loadingProgress;
 	}
+
 }
 

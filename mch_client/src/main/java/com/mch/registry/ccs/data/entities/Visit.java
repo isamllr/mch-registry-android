@@ -56,4 +56,8 @@ public class Visit {
 	public void set_visitDate(String _visitDate) {
 		this._visitDate = _visitDate;
 	}
+
+	public String toString(){
+		return this.get_visitText();
+	}
 }

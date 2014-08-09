@@ -12,7 +12,6 @@ import java.util.ArrayList;
  */
 public class RecommendationArrayAdapter extends TwoLineArrayAdapter<Recommendation> {
 	Context _context;
-	private int[] colors = new int[] { 0x30FF0000, 0x300000FF };
 
 	public RecommendationArrayAdapter(Context context, ArrayList<Recommendation> recommendations) {
 		super(context, recommendations);

@@ -34,7 +34,8 @@ public class VisitsFragment extends Fragment{
 
 	View rootView;
 	VisitArrayAdapter visitAdapter;
-	EditText inputSearch;
+	EditText inputSearchV;
+	VisitDataHandler vdh;
 
 	public VisitsFragment(){}
 	
@@ -43,27 +44,26 @@ public class VisitsFragment extends Fragment{
  
         rootView = inflater.inflate(R.layout.fragment_visits, container, false);
 
-			final VisitDataHandler vdh = new VisitDataHandler(getActivity(),"visit list", null, 1);
+			vdh = new VisitDataHandler(getActivity(),"visit list", null, 1);
 			ArrayList<Visit> visits = vdh.getAllVisits();
 
-			final ListView visitsLV = (ListView)rootView.findViewById(R.id.listView);
+			ListView visitsLV = (ListView)rootView.findViewById(R.id.listView);
 			visitAdapter = new VisitArrayAdapter(getActivity(), visits);
 			visitsLV.setAdapter(visitAdapter);
 
 			visitsLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					vdh = new VisitDataHandler(getActivity(),"visit list", null, 1);
 					Visit vis = visitAdapter.getItem(position);
 					showDialog(vdh.findVisitById(vis.getID()).get_visitDate(), vdh.findVisitById(vis.getID()).get_visitText());
 			}
 		});
 
-		EditText inputSearch = (EditText)rootView.findViewById(R.id.searchVisit);
-		inputSearch.addTextChangedListener(new TextWatcher() {
-
+		inputSearchV = (EditText)rootView.findViewById(R.id.searchVisit);
+		inputSearchV.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-
 				// When user changed the Text
 				visitAdapter.getFilter().filter(cs);
 			}

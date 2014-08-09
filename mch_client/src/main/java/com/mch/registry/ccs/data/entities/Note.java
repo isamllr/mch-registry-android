@@ -14,7 +14,7 @@ public class Note {
 	}
 
 	public String toString(){
-		return this._noteText;
+		return this.get_noteText();
 	}
 
 	public Note(String _noteText, int _noteDay, String _createdDate) {
