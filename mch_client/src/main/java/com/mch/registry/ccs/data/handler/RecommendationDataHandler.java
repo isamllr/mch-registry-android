@@ -119,18 +119,16 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
         Cursor cursor = db.rawQuery(query, null);
         Recommendation recommendation = new Recommendation();
 
-        if (cursor.moveToFirst()) {
-	        do {
-            cursor.moveToNext();
+	    if (cursor.moveToFirst()) {
+		    cursor.moveToFirst();
             recommendation.set_id(Integer.parseInt(cursor.getString(0)));
             recommendation.set_recommendationText(cursor.getString(1));
             recommendation.set_recommendationDay(Integer.parseInt(cursor.getString(2)));
             recommendation.set_receivedDate(cursor.getString(3));
 	        recommendation.set_pregnancyWeek(Integer.parseInt(cursor.getString(4)));
             cursor.close();
-	        }while (cursor.moveToNext());
-        }
-        db.close();
+	    }
+	    db.close();
 
         return recommendation;
     }
