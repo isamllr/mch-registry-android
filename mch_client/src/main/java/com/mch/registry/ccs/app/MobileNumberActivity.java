@@ -22,7 +22,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -187,13 +186,6 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 				}
 
 				if (pdh.getPregnancy().get_isVerified()==1) {
-					Handler mHandler = new Handler(getMainLooper());
-					mHandler.post(new Runnable() {
-						@Override
-						public void run() {
-							Toast.makeText(getApplicationContext(), getString(R.string.application_ready), Toast.LENGTH_LONG).show();
-						}
-					});
 
 					// sleep 2 seconds, so you can see the 100%
 					try {
@@ -234,13 +226,6 @@ public class MobileNumberActivity extends Activity implements View.OnClickListen
 				Crouton.showText(this, getString(R.string.number_invalid), Style.ALERT);
 			}
 		}
-
-	/*	long waitTime = 3 * 60 * 1000;
-		new Handler().postDelayed(new Runnable() {
-			public void run() {
-				Toast.makeText(getApplicationContext(), getString(R.string.timeout), Toast.LENGTH_LONG).show();
-			}
-		}, waitTime);*/
 	}
 
 	private boolean validatePhoneNumber(String mobileNumber) {

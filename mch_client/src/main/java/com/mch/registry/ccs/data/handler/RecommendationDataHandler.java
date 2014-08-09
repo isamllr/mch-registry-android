@@ -65,13 +65,13 @@ public class RecommendationDataHandler extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public void addRecommendation(String recommendationText, int noteDay, Date today, int pregnancyWeek) {
+    public void addRecommendation(String recommendationText, int recommendationDay, Date today, int pregnancyWeek) {
 
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss");
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_RECOMMENDATIONTEXT,recommendationText);
-        values.put(COLUMN_RECOMMENDATIONDAY, noteDay);
+        values.put(COLUMN_RECOMMENDATIONDAY, recommendationDay);
         values.put(COLUMN_RECEIVEDDATE, dateFormat.format(today));
 	    values.put(COLUMN_PREGNANCYWEEK, pregnancyWeek);
 

@@ -128,7 +128,7 @@ public class GcmIntentService extends IntentService {
 			                @Override
 			                public void run() {
 				                PregnancyDataHandler pdh = new PregnancyDataHandler(getApplicationContext(),"Msg received", null, 1);
-				                Toast.makeText(getApplicationContext(),getString(R.string.number_verified), Toast.LENGTH_LONG).show();
+				                Toast.makeText(getApplicationContext(), getString(R.string.application_ready), Toast.LENGTH_LONG).show();
 				                pdh.setVerified(true);
 				                pdh.setLoadingProgress(pdh.getPregnancy().get_loadingProgress()+1);
 			                }
