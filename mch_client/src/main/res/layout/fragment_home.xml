@@ -5,6 +5,10 @@
     android:layout_height="wrap_content"
 	android:background="@drawable/abc_cab_background_bottom_holo_light">
 
+	<RelativeLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+
 	<ImageView
 		android:id="@+id/imageView1"
 		android:layout_width="150dip"
@@ -200,9 +204,6 @@
 		android:layout_centerHorizontal="true"
 		android:layout_margin="20dip"/>
 
-	<RelativeLayout
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
 	</RelativeLayout>
 
 </ScrollView>
