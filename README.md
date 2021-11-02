@@ -3,6 +3,8 @@
 This project is an extension of the existing MCH-Registry of the Swiss Tropical and Health Institute which is an open source web-based software tool that supports health care providers to keep in touch with pregnant women. Pregnancy related information is collected for visits to the facility, tests, medication prescribed, hospitalizations, and as well as on delivery and newborn. The extension described sends notifications to patients, doctors and hospital stays based on this data. The seven message types sent
 by this application include visit reminders, recommendations, discharge notifications or monthly reports.
 
+![image](https://user-images.githubusercontent.com/3903316/139925220-473cd5d6-23e6-40e5-9a12-f20121e659fe.png)
+
 The projects consists of two parts: The SMS Service, which is designed to reach patients, doctors and hospital stays on simple mobile phones and the Pregnancy Guide mobile application for Android using Google Cloud Messaging which is directed to patients only. It is the choice of the patient which one to use.
 
 
