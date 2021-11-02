@@ -6,6 +6,8 @@ by this application include visit reminders, recommendations, discharge notifica
 The projects consists of two parts: The SMS Service, which is designed to reach patients, doctors and hospital sta↵ on simple mobile phones and the Pregnancy Guide mobile ap-
 plication for Android using Google Cloud Messaging which is directed to patients only. It is the choice of the patient which one to use.
 
+![image](https://user-images.githubusercontent.com/3903316/139924754-3a677955-b14e-49c9-81d7-35bf4cbb3ccc.png)
+
 Keywords: GCM, Google Cloud Messaging, SMS, XMPP, Android SDK, Web application, PHP, crontab, cron, smack
 
 Also see  https://github.com/isamllr/mch-registry-android/blob/master/FHNW_Poster_63.pdf
